@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "985947424591",
+    "project_id": "saglamuglumuhasebe",
+    "storage_bucket": "saglamuglumuhasebe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985947424591:android:7f652641b4a8763c49e73a",
+        "android_client_info": {
+          "package_name": "com.fisis.saglamoglu.muhasebe.saglamoglu_muhasebe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNlCUwIV2H3FrrBTNnkKyj9G7Cv7a0rWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985947424591:android:95d486ae4c16ae8949e73a",
+        "android_client_info": {
+          "package_name": "com.fisis.saglamoglu.muhasebe.saglamuoglu_muhasebe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNlCUwIV2H3FrrBTNnkKyj9G7Cv7a0rWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
