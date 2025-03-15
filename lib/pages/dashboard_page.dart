@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/today_widget.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -10,6 +11,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  String frontIdPath = Texts.fronstImgPath;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

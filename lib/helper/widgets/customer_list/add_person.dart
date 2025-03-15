@@ -45,6 +45,8 @@ class _AddPersonState extends State<AddPerson> {
 
   String frontIdPath = Texts.fronstImgPath;
 
+  Future<void> chechkUrl(String url) async {}
+
   String backIdPath = Texts.backImgPath;
   Future<void> pickFrontImageButton() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);

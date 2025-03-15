@@ -5,6 +5,7 @@ import 'package:saglamoglu_muhasebe/helper/widgets/side_bar_buttons.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/customers_list.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/delivery_docs_list.dart';
 import 'package:saglamoglu_muhasebe/pages/dashboard_page.dart';
+import 'package:saglamoglu_muhasebe/pages/insructions/insructions_page.dart';
 import 'package:saglamoglu_muhasebe/pages/messages.dart';
 import 'package:saglamoglu_muhasebe/pages/request_page.dart';
 
@@ -21,6 +22,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
     const RequestPage(),
     const CustomersList(),
     const DeliveryDocsList(),
+    const InsructionsPage(),
     const Messages(),
   ];
 
@@ -105,6 +107,20 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       btnFunc: () {
                         setState(() {
                           pageIndex = 3;
+                        });
+                      }),
+                  SideBarButtons(
+                      btnColor: pageIndex == 4
+                          ? CustomColors.customGrey
+                          : Colors.transparent,
+                      childColor: pageIndex == 4
+                          ? CustomColors.customBlack
+                          : CustomColors.customWhite,
+                      btnName: "Talimatlar",
+                      btnIcon: Icons.request_page_rounded,
+                      btnFunc: () {
+                        setState(() {
+                          pageIndex = 4;
                         });
                       }),
                   SideBarButtons(
