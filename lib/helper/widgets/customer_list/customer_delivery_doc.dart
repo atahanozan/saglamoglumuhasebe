@@ -1,7 +1,9 @@
+// ignore: deprecated_member_use
+import 'dart:html' as web;
+
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'dart:html' as web;
 
 import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 

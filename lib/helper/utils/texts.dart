@@ -36,4 +36,27 @@ class Texts {
         return "";
     }
   }
+
+  static String bankName(String bank) {
+    switch (bank) {
+      case "Vakıfbank":
+        return "vakifbank";
+      case "İş Bankası":
+        return "isbankasi";
+      case "Denizbank":
+        return "denizbank";
+      case "Ziraat Bankası":
+        return "ziraatbank";
+      default:
+        return "vakifbank";
+    }
+  }
+
+  static String date(String day) {
+    if (day.length == 1) {
+      return "0$day";
+    } else {
+      return day;
+    }
+  }
 }

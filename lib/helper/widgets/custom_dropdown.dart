@@ -25,7 +25,7 @@ class CustomDropdown extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         alignment: Alignment.centerLeft,
         value: btnValue,
-        underline: Text(""),
+        underline: const Text(""),
         items: valueList
             .map((String companies) => DropdownMenuItem(
                   value: companies,

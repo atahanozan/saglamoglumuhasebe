@@ -1,8 +1,11 @@
+// ignore: deprecated_member_use
+import 'dart:html' as web;
+
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
 import 'package:saglamoglu_muhasebe/helper/custom_widget.dart';
-import 'dart:html' as web;
 
 class CustomerInfoFunctions {
   Future<void> downloadCustomerInfo(

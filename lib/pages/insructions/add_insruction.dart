@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/helper/utils/lists.dart';
+import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/custom_dropdown.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/textfield_line.dart';
 import 'package:saglamoglu_muhasebe/pages/insructions/money_transfer.dart';
@@ -14,6 +16,7 @@ class AddInsruction extends StatefulWidget {
 class _AddInsructionState extends State<AddInsruction> {
   String btnCompaniesValue = "---";
   String btnBanksValue = "---";
+  String firebaseBankName = "---";
   String btnCurrencyValue = "TL";
   String companyIban = "";
   String name = "";
@@ -25,6 +28,7 @@ class _AddInsructionState extends State<AddInsruction> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ibanController = TextEditingController();
   final TextEditingController commentController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void dispose() {
@@ -44,6 +48,7 @@ class _AddInsructionState extends State<AddInsruction> {
       body: Container(
         padding: const EdgeInsets.all(12),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Para Transferi",
@@ -67,73 +72,74 @@ class _AddInsructionState extends State<AddInsruction> {
             Flexible(
               child: Visibility(
                 visible: visibility,
-                child: MoneyTransfer(
-                  banks: ListsUtilities.banks(),
-                  currency: ListsUtilities.currency(),
-                  bankValue: btnBanksValue,
-                  currencyValue: btnCurrencyValue,
-                  bankBranch: "bankBranch",
-                  companyIban: companyIban,
-                  price: price,
-                  iban: iban,
-                  name: name,
-                  comment: comment,
-                  onBankChange: (vaule) {
-                    setState(() {
-                      btnBanksValue = vaule.toString();
-                    });
-                  },
-                  onCurrencyChange: (vaule) {
-                    setState(() {
-                      btnCurrencyValue = vaule.toString();
-                    });
-                  },
-                  onNameChange: (vaule) {
-                    setState(() {
-                      name = nameController.text;
-                    });
-                  },
-                  onIbanChange: (vaule) {
-                    setState(() {
-                      iban = "TR${ibanController.text}";
-                    });
-                  },
-                  onCommentChange: (vaule) {
-                    setState(() {
-                      comment = commentController.text;
-                    });
-                  },
-                  priceController: priceController,
-                  nameController: nameController,
-                  ibanController: ibanController,
-                  commentController: commentController,
-                  onPriceChange: (String? value) {
-                    setState(() {
-                      price = priceController.text;
-                    });
+                child: StreamBuilder(
+                  stream: _firestore
+                      .collection("companies")
+                      .where("name", isEqualTo: btnCompaniesValue)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    return !snapshot.hasData
+                        ? const CircularProgressIndicator()
+                        : ListView.builder(
+                            itemCount: snapshot.data?.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot data =
+                                  snapshot.data!.docs[index];
+
+                              return MoneyTransfer(
+                                banks: ListsUtilities.banks(),
+                                currency: ListsUtilities.currency(),
+                                bankValue: btnBanksValue,
+                                currencyValue: btnCurrencyValue,
+                                bankBranch: data["banksInfos"]
+                                    [Texts.bankName(btnBanksValue)]["branch"],
+                                companyIban: data["banksInfos"]
+                                        [Texts.bankName(btnBanksValue)]
+                                    [btnCurrencyValue],
+                                price: price,
+                                iban: iban,
+                                name: name,
+                                comment: comment,
+                                onBankChange: (vaule) {
+                                  setState(() {
+                                    btnBanksValue = vaule.toString();
+                                  });
+                                },
+                                onCurrencyChange: (vaule) {
+                                  setState(() {
+                                    btnCurrencyValue = vaule.toString();
+                                  });
+                                },
+                                onNameChange: (vaule) {
+                                  setState(() {
+                                    name = nameController.text;
+                                  });
+                                },
+                                onIbanChange: (vaule) {
+                                  setState(() {
+                                    iban = "TR${ibanController.text}";
+                                  });
+                                },
+                                onCommentChange: (vaule) {
+                                  setState(() {
+                                    comment = commentController.text;
+                                  });
+                                },
+                                priceController: priceController,
+                                nameController: nameController,
+                                ibanController: ibanController,
+                                commentController: commentController,
+                                onPriceChange: (String? value) {
+                                  setState(() {
+                                    price = priceController.text;
+                                  });
+                                },
+                                authorized: data["authorized"],
+                              );
+                            },
+                          );
                   },
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Yazdır"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text("İndir"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Kaydet"),
-                  ),
-                ],
               ),
             ),
           ],

@@ -44,7 +44,7 @@ class WaitingDocs extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [

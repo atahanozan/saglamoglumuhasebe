@@ -11,7 +11,7 @@ class SearchState extends StatefulWidget {
 class _SearchStateState extends State<SearchState> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Column(
         children: [
           CustomSearchbar(),

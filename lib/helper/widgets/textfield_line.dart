@@ -6,15 +6,17 @@ class TextfieldLine extends StatelessWidget {
     super.key,
     required this.controller,
     required this.header,
-    required this.onChangeValue,
+    this.onChangeValue,
     this.formatter,
     this.lastWidget,
     this.textField,
     this.prefixText,
+    this.onSubmittedValue,
   });
 
   final TextEditingController controller;
-  final Function(String? value) onChangeValue;
+  final Function(String? value)? onChangeValue;
+  final Function(String? value)? onSubmittedValue;
   final String header;
   final List<TextInputFormatter>? formatter;
   final Widget? lastWidget;
@@ -24,8 +26,8 @@ class TextfieldLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8),
-      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(6),
+      margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white70,
@@ -33,7 +35,7 @@ class TextfieldLine extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             flex: 1,
@@ -52,6 +54,7 @@ class TextfieldLine extends StatelessWidget {
                       TextField(
                         controller: controller,
                         onChanged: onChangeValue,
+                        onSubmitted: onSubmittedValue,
                         inputFormatters: formatter,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(

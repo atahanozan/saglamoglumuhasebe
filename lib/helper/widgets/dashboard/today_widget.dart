@@ -13,7 +13,7 @@ class TodayWidget extends StatelessWidget {
       height: 200,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         color: CustomColors.customWhite,
       ),
       child: Column(

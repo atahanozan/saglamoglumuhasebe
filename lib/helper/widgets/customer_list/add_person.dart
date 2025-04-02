@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -141,6 +142,14 @@ class _AddPersonState extends State<AddPerson> {
                     height: 100,
                     width: 200,
                   ),
+                ),
+              ),
+              Expanded(
+                child: CachedNetworkImage(
+                  imageUrl: backIdPath,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               Expanded(

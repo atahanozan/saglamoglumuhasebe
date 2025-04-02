@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/helper/custom_widget.dart';
-import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/download_customer_info.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/pdf/download_customer_info.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/custom_dialog.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/customer_info_table.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/send_customer_doc.dart';

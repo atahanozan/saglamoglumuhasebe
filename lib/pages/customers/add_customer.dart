@@ -25,7 +25,7 @@ class _AddCustomerState extends State<AddCustomer> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text("Müşteri Ekle"),
+        title: const Text("Müşteri Ekle"),
       ),
       body: Container(
         alignment: Alignment.center,

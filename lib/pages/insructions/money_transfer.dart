@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/custom_dropdown.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/pdf/download_insruction.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/textfield_line.dart';
 
 class MoneyTransfer extends StatelessWidget {
@@ -26,6 +29,7 @@ class MoneyTransfer extends StatelessWidget {
     required this.ibanController,
     required this.commentController,
     required this.onPriceChange,
+    required this.authorized,
   });
 
   final List<String> banks;
@@ -38,6 +42,7 @@ class MoneyTransfer extends StatelessWidget {
   final String iban;
   final String name;
   final String comment;
+  final String authorized;
   final Function(String? value) onBankChange;
   final Function(String? value) onCurrencyChange;
   final Function(String? value) onNameChange;
@@ -51,6 +56,8 @@ class MoneyTransfer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime now = DateTime.now();
+
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.all(8),
@@ -59,6 +66,7 @@ class MoneyTransfer extends StatelessWidget {
         color: Colors.amber.shade100,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,13 +128,14 @@ class MoneyTransfer extends StatelessWidget {
                 child: TextfieldLine(
                   controller: ibanController,
                   header: "Alıcı Iban",
-                  onChangeValue: onIbanChange,
+                  onSubmittedValue: onIbanChange,
                   formatter: [
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      return newValue.copyWith(
-                          text: newValue.text.toUpperCase());
-                    })
+                    MaskTextInputFormatter(
+                      mask: '## #### #### #### #### #### ##',
+                      filter: {'#': RegExp(r'[0-9]')},
+                    )
                   ],
+                  prefixText: "TR",
                 ),
               ),
             ],
@@ -141,6 +150,19 @@ class MoneyTransfer extends StatelessWidget {
               })
             ],
           ),
+          ElevatedButton(
+            onPressed: () {
+              DownloadInsruction().downloadInsruction(
+                context,
+                bankValue,
+                "$bankBranch Şubesine,",
+                "Şubenizde bulunan $companyIban nolu $currencyValue hesabımızdan $price $currencyValue'nin, $iban nolu ibana ait, $name'a, $comment açıklaması ile transfer edilmesini rica ederim.",
+                authorized,
+                "${Texts.date(now.day.toString())}.${Texts.date(now.month.toString())}.${now.year.toString()}",
+              );
+            },
+            child: const Text("indir"),
+          ),
           Flexible(
             child: Container(
               padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
@@ -152,14 +174,24 @@ class MoneyTransfer extends StatelessWidget {
               ),
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                            "${Texts.date(now.day.toString())}.${Texts.date(now.month.toString())}.${now.year.toString()}")),
                     Text(bankValue),
-                    const SizedBox(height: 10),
-                    Text("$bankBranch Şubesine,"),
+                    const SizedBox(height: 6),
+                    Text("$bankBranch Şubesine"),
                     const SizedBox(height: 35),
                     Text(
                       "Şubenizde bulunan $companyIban nolu $currencyValue hesabımızdan $price $currencyValue'nin, $iban nolu ibana ait, $name'a, $comment açıklaması ile transfer edilmesini rica ederim.",
                       textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 35),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(authorized),
                     ),
                   ],
                 ),

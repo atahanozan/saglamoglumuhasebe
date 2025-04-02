@@ -17,17 +17,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const Color customBlack = Color(0xff212121);
+    const Color customWhite = Color(0xffFAFAFA);
     return MaterialApp(
       title: 'Sağlamoğlu Muhasebe',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: false,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xffFFC400),
-              foregroundColor: const Color(0xff212121)),
-        ),
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: false,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xffFFC400),
+                foregroundColor: const Color(0xff212121)),
+          ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: customBlack,
+            foregroundColor: customWhite,
+          )),
       debugShowCheckedModeBanner: false,
       home: const HomeNavigatePage(),
     );
