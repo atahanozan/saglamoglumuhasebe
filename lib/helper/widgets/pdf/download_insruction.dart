@@ -65,7 +65,7 @@ class DownloadInsruction {
             child: pw.Text(
               authorized,
               style: pw.TextStyle(
-                font: fontHeader,
+                font: font,
                 fontSize: 12,
               ),
             ),

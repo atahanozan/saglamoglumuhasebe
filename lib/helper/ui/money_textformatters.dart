@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class MoneyTextInputFormatter extends TextInputFormatter {
+class MoneyTextInputFormatter extends MaskTextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,

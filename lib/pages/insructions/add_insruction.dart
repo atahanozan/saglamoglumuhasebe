@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/utils/lists.dart';
 import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/custom_dropdown.dart';
@@ -24,6 +25,7 @@ class _AddInsructionState extends State<AddInsruction> {
   String price = "";
   String comment = "";
   bool visibility = false;
+  bool addComment = false;
   final TextEditingController priceController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ibanController = TextEditingController();
@@ -87,7 +89,7 @@ class _AddInsructionState extends State<AddInsruction> {
                                   snapshot.data!.docs[index];
 
                               return MoneyTransfer(
-                                banks: ListsUtilities.banks(),
+                                banks: data["banks"],
                                 currency: ListsUtilities.currency(),
                                 bankValue: btnBanksValue,
                                 currencyValue: btnCurrencyValue,
@@ -110,31 +112,31 @@ class _AddInsructionState extends State<AddInsruction> {
                                     btnCurrencyValue = vaule.toString();
                                   });
                                 },
-                                onNameChange: (vaule) {
-                                  setState(() {
-                                    name = nameController.text;
-                                  });
-                                },
-                                onIbanChange: (vaule) {
-                                  setState(() {
-                                    iban = "TR${ibanController.text}";
-                                  });
-                                },
-                                onCommentChange: (vaule) {
-                                  setState(() {
-                                    comment = commentController.text;
-                                  });
-                                },
                                 priceController: priceController,
                                 nameController: nameController,
                                 ibanController: ibanController,
                                 commentController: commentController,
-                                onPriceChange: (String? value) {
+                                authorized: data["authorized"],
+                                addPage: () {
                                   setState(() {
+                                    comment = addComment
+                                        ? "${commentController.text} açıklaması ile"
+                                        : "";
+                                    name = nameController.text;
+                                    iban = "TR${ibanController.text}";
                                     price = priceController.text;
                                   });
                                 },
-                                authorized: data["authorized"],
+                                moneyFormat: MaskTextInputFormatter(
+                                  mask: '###.###.###.###.###',
+                                  filter: {'#': RegExp(r'[0-9]')},
+                                ),
+                                addComment: addComment,
+                                commentBtn: () {
+                                  setState(() {
+                                    addComment = !addComment;
+                                  });
+                                },
                               );
                             },
                           );

@@ -11,18 +11,6 @@ class ListsUtilities {
     return customList;
   }
 
-  static List<String> banks() {
-    final customList = [
-      "---",
-      "Vakıfbank",
-      "İş Bankası",
-      "Denizbank",
-      "Ziraat Bankası",
-    ];
-
-    return customList;
-  }
-
   static List<String> currency() {
     final customList = [
       "TL",

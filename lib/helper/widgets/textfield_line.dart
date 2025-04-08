@@ -12,6 +12,7 @@ class TextfieldLine extends StatelessWidget {
     this.textField,
     this.prefixText,
     this.onSubmittedValue,
+    this.txtAlign,
   });
 
   final TextEditingController controller;
@@ -22,6 +23,7 @@ class TextfieldLine extends StatelessWidget {
   final Widget? lastWidget;
   final Widget? textField;
   final String? prefixText;
+  final TextAlign? txtAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class TextfieldLine extends StatelessWidget {
                 Expanded(
                   child: textField ??
                       TextField(
+                        textAlign: txtAlign ?? TextAlign.start,
                         controller: controller,
                         onChanged: onChangeValue,
                         onSubmitted: onSubmittedValue,

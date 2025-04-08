@@ -47,6 +47,22 @@ class Texts {
         return "denizbank";
       case "Ziraat Bankası":
         return "ziraatbank";
+      case "Akbank":
+        return "akbank";
+      case "Aktifbank":
+        return "aktifbank";
+      case "Albaraka":
+        return "albaraka";
+      case "Anadolubank":
+        return "anadolubank";
+      case "Halkbank":
+        return "halkbank";
+      case "TEB":
+        return "teb";
+      case "Vakıf Katılım":
+        return "vakifkatilim";
+      case "Yapı Kredi":
+        return "yapikredi";
       default:
         return "vakifbank";
     }

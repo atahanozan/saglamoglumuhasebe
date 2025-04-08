@@ -21,18 +21,18 @@ class MoneyTransfer extends StatelessWidget {
     required this.comment,
     required this.onBankChange,
     required this.onCurrencyChange,
-    required this.onNameChange,
-    required this.onIbanChange,
-    required this.onCommentChange,
     required this.priceController,
     required this.nameController,
     required this.ibanController,
     required this.commentController,
-    required this.onPriceChange,
     required this.authorized,
+    required this.addPage,
+    required this.moneyFormat,
+    required this.addComment,
+    required this.commentBtn,
   });
 
-  final List<String> banks;
+  final List<dynamic> banks;
   final List<String> currency;
   final String bankValue;
   final String currencyValue;
@@ -45,14 +45,14 @@ class MoneyTransfer extends StatelessWidget {
   final String authorized;
   final Function(String? value) onBankChange;
   final Function(String? value) onCurrencyChange;
-  final Function(String? value) onNameChange;
-  final Function(String? value) onIbanChange;
-  final Function(String? value) onCommentChange;
-  final Function(String? value) onPriceChange;
   final TextEditingController priceController;
   final TextEditingController nameController;
   final TextEditingController ibanController;
   final TextEditingController commentController;
+  final VoidCallback addPage;
+  final VoidCallback commentBtn;
+  final TextInputFormatter moneyFormat;
+  final bool addComment;
 
   @override
   Widget build(BuildContext context) {
@@ -87,16 +87,16 @@ class MoneyTransfer extends StatelessWidget {
                   textField: CustomDropdown(
                       btnValue: bankValue,
                       onchangeFun: onBankChange,
-                      valueList: banks),
+                      valueList: List<String>.from(banks)),
                 ),
               ),
               Expanded(
                 child: TextfieldLine(
+                  txtAlign: TextAlign.end,
                   controller: priceController,
                   header: "Tutar",
-                  onChangeValue: onPriceChange,
                   formatter: [
-                    FilteringTextInputFormatter.digitsOnly,
+                    moneyFormat,
                   ],
                   lastWidget: CustomDropdown(
                       btnValue: currencyValue,
@@ -115,7 +115,6 @@ class MoneyTransfer extends StatelessWidget {
                 child: TextfieldLine(
                   controller: nameController,
                   header: "Alıcı Adı",
-                  onChangeValue: onNameChange,
                   formatter: [
                     TextInputFormatter.withFunction((oldValue, newValue) {
                       return newValue.copyWith(
@@ -128,7 +127,6 @@ class MoneyTransfer extends StatelessWidget {
                 child: TextfieldLine(
                   controller: ibanController,
                   header: "Alıcı Iban",
-                  onSubmittedValue: onIbanChange,
                   formatter: [
                     MaskTextInputFormatter(
                       mask: '## #### #### #### #### #### ##',
@@ -140,28 +138,40 @@ class MoneyTransfer extends StatelessWidget {
               ),
             ],
           ),
-          TextfieldLine(
-            controller: commentController,
-            header: "Açıklama",
-            onChangeValue: onCommentChange,
-            formatter: [
-              TextInputFormatter.withFunction((oldValue, newValue) {
-                return newValue.copyWith(text: newValue.text.toUpperCase());
-              })
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Visibility(
+                visible: addComment,
+                child: Expanded(
+                  child: TextfieldLine(
+                    controller: commentController,
+                    header: "Açıklama",
+                    formatter: [
+                      TextInputFormatter.withFunction((oldValue, newValue) {
+                        return newValue.copyWith(
+                            text: newValue.text.toUpperCase());
+                      })
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: commentBtn,
+                  child: addComment
+                      ? const Text("Açıklamasız Gönder")
+                      : const Text("Açıklama Ekle"),
+                ),
+              ),
             ],
           ),
           ElevatedButton(
-            onPressed: () {
-              DownloadInsruction().downloadInsruction(
-                context,
-                bankValue,
-                "$bankBranch Şubesine,",
-                "Şubenizde bulunan $companyIban nolu $currencyValue hesabımızdan $price $currencyValue'nin, $iban nolu ibana ait, $name'a, $comment açıklaması ile transfer edilmesini rica ederim.",
-                authorized,
-                "${Texts.date(now.day.toString())}.${Texts.date(now.month.toString())}.${now.year.toString()}",
-              );
-            },
-            child: const Text("indir"),
+            onPressed: addPage,
+            child: const Text("Güncelle"),
           ),
           Flexible(
             child: Container(
@@ -178,14 +188,40 @@ class MoneyTransfer extends StatelessWidget {
                   children: [
                     Container(
                         alignment: Alignment.centerRight,
-                        child: Text(
-                            "${Texts.date(now.day.toString())}.${Texts.date(now.month.toString())}.${now.year.toString()}")),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                DownloadInsruction().downloadInsruction(
+                                  context,
+                                  bankValue,
+                                  "$bankBranch Şubesine,",
+                                  "Şubenizde bulunan $companyIban nolu $currencyValue hesabımızdan $price $currencyValue'nin, $iban nolu ibana ait, $name'a, $comment transfer edilmesini rica ederim.",
+                                  authorized,
+                                  "${Texts.date(now.day.toString())}.${Texts.date(now.month.toString())}.${now.year.toString()}",
+                                );
+                              },
+                              child: const Text("indir"),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            OutlinedButton(
+                              onPressed: () {},
+                              child: const Text("Yazdır"),
+                            ),
+                            const Spacer(),
+                            Text(
+                                "${Texts.date(now.day.toString())}.${Texts.date(now.month.toString())}.${now.year.toString()}"),
+                          ],
+                        )),
                     Text(bankValue),
                     const SizedBox(height: 6),
                     Text("$bankBranch Şubesine"),
                     const SizedBox(height: 35),
                     Text(
-                      "Şubenizde bulunan $companyIban nolu $currencyValue hesabımızdan $price $currencyValue'nin, $iban nolu ibana ait, $name'a, $comment açıklaması ile transfer edilmesini rica ederim.",
+                      "Şubenizde bulunan $companyIban nolu $currencyValue hesabımızdan $price $currencyValue'nin, $iban nolu ibana ait, $name'a, $comment transfer edilmesini rica ederim.",
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox(height: 35),
