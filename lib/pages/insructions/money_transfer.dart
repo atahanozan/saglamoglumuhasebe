@@ -4,6 +4,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/custom_dropdown.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pdf/download_insruction.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/pdf/print_insruction.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/textfield_line.dart';
 
 class MoneyTransfer extends StatelessWidget {
@@ -204,11 +205,20 @@ class MoneyTransfer extends StatelessWidget {
                               },
                               child: const Text("indir"),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 15,
                             ),
                             OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                PrintInsruction().printInsruction(
+                                  context,
+                                  bankValue,
+                                  "$bankBranch Şubesine,",
+                                  "Şubenizde bulunan $companyIban nolu $currencyValue hesabımızdan $price $currencyValue'nin, $iban nolu ibana ait, $name'a, $comment transfer edilmesini rica ederim.",
+                                  authorized,
+                                  "${Texts.date(now.day.toString())}.${Texts.date(now.month.toString())}.${now.year.toString()}",
+                                );
+                              },
                               child: const Text("Yazdır"),
                             ),
                             const Spacer(),

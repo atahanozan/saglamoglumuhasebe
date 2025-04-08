@@ -7,8 +7,8 @@ import 'package:printing/printing.dart';
 
 import 'package:saglamoglu_muhasebe/helper/custom_widget.dart';
 
-class DownloadInsruction {
-  Future<void> downloadInsruction(
+class PrintInsruction {
+  Future<void> printInsruction(
     BuildContext context,
     String bank,
     String bankBranch,
@@ -75,19 +75,6 @@ class DownloadInsruction {
 
     var savedFile = await pdf.save();
 
-    final blob = web.Blob([savedFile], 'application/pdf');
-    final url = web.Url.createObjectUrlFromBlob(blob);
-    final anchor = web.document.createElement('a') as web.AnchorElement
-      ..href = url
-      ..style.display = 'none'
-      ..download = '$bank.pdf';
-    web.document.body!.children.add(anchor);
-    anchor.click();
-
-    if (!context.mounted) return;
-    customWidgets.customSnackBar(
-      context,
-      "$bank.pdf Dosyası İndirildi.",
-    );
+    await Printing.layoutPdf(onLayout: (format) async => pdf.save());
   }
 }
