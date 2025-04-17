@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_choice.dart';
-import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/add_person.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/add_new_customer.dart';
 
 class AddCustomer extends StatefulWidget {
   const AddCustomer({super.key});
@@ -12,30 +12,40 @@ class AddCustomer extends StatefulWidget {
 
 class _AddCustomerState extends State<AddCustomer> {
   List<Widget> pages = [
-    const AddPerson(),
+    const AddNewCustomer(),
+    const AddNewCustomer(),
+    const AddNewCustomer(),
+    const AddNewCustomer(),
   ];
+
+  int pageNumber = 3;
 
   Color btn1Color = CustomColors.customYellow;
   Color btn2Color = CustomColors.customGrey;
-  Color btn3Color = CustomColors.customGrey;
-  Color btn4Color = CustomColors.customGrey;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text("Müşteri Ekle"),
-      ),
+      appBar: AppBar(),
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(30),
+              child: Text(
+                "Müşteri Ekle",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+            Flexible(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,48 +54,36 @@ class _AddCustomerState extends State<AddCustomer> {
                     child: CustomerChoice(
                       bnt1Fun: () {
                         setState(() {
-                          btn1Color = CustomColors.customYellow;
-                          btn2Color = CustomColors.customGrey;
-                          btn3Color = CustomColors.customGrey;
-                          btn4Color = CustomColors.customGrey;
+                          pageNumber = 0;
                         });
                       },
                       bnt2Fun: () {
                         setState(() {
-                          btn1Color = CustomColors.customGrey;
-                          btn2Color = CustomColors.customYellow;
-                          btn3Color = CustomColors.customGrey;
-                          btn4Color = CustomColors.customGrey;
+                          pageNumber = 1;
                         });
                       },
-                      btn1Color: btn1Color,
-                      btn2Color: btn2Color,
+                      btn1Color: pageNumber == 0 ? btn1Color : btn2Color,
+                      btn2Color: pageNumber == 1 ? btn1Color : btn2Color,
                       bnt3Fun: () {
                         setState(() {
-                          btn1Color = CustomColors.customGrey;
-                          btn2Color = CustomColors.customGrey;
-                          btn3Color = CustomColors.customYellow;
-                          btn4Color = CustomColors.customGrey;
+                          pageNumber = 2;
                         });
                       },
                       bnt4Fun: () {
                         setState(() {
-                          btn1Color = CustomColors.customGrey;
-                          btn2Color = CustomColors.customGrey;
-                          btn3Color = CustomColors.customGrey;
-                          btn4Color = CustomColors.customYellow;
+                          pageNumber = 3;
                         });
                       },
-                      btn3Color: btn3Color,
-                      btn4Color: btn4Color,
+                      btn3Color: pageNumber == 2 ? btn1Color : btn2Color,
+                      btn4Color: pageNumber == 3 ? btn1Color : btn2Color,
                     ),
                   ),
                   const VerticalDivider(),
-                  Expanded(child: pages[0]),
+                  Expanded(child: pages[pageNumber]),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

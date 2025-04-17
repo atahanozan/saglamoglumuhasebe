@@ -111,7 +111,7 @@ class CustomerChoice extends StatelessWidget {
                 color: btn4Color,
               ),
               child: Text(
-                "Adi Ortaklık",
+                "Teslim Müşterisi",
                 style: btnText,
               ),
             ),

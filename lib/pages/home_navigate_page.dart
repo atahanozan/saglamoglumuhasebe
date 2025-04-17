@@ -6,7 +6,6 @@ import 'package:saglamoglu_muhasebe/pages/customers/customers_list.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/delivery_docs_list.dart';
 import 'package:saglamoglu_muhasebe/pages/dashboard_page.dart';
 import 'package:saglamoglu_muhasebe/pages/insructions/insructions_page.dart';
-import 'package:saglamoglu_muhasebe/pages/messages.dart';
 import 'package:saglamoglu_muhasebe/pages/request_page.dart';
 
 class HomeNavigatePage extends StatefulWidget {
@@ -19,11 +18,9 @@ class HomeNavigatePage extends StatefulWidget {
 class _HomeNavigatePageState extends State<HomeNavigatePage> {
   List<Widget> pages = [
     const DashboardPage(),
-    const RequestPage(),
     const CustomersList(),
     const DeliveryDocsList(),
     const InsructionsPage(),
-    const Messages(),
   ];
 
   int pageIndex = 0;
@@ -74,8 +71,8 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       childColor: pageIndex == 1
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
-                      btnName: "Talepler",
-                      btnIcon: Icons.request_page,
+                      btnName: "Müşteriler",
+                      btnIcon: Icons.list_alt,
                       btnFunc: () {
                         setState(() {
                           pageIndex = 1;
@@ -88,8 +85,8 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       childColor: pageIndex == 2
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
-                      btnName: "Müşteriler",
-                      btnIcon: Icons.list_alt,
+                      btnName: "Teslim Dosyaları",
+                      btnIcon: Icons.group_add,
                       btnFunc: () {
                         setState(() {
                           pageIndex = 2;
@@ -102,39 +99,11 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       childColor: pageIndex == 3
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
-                      btnName: "Teslim Dosyaları",
-                      btnIcon: Icons.group_add,
-                      btnFunc: () {
-                        setState(() {
-                          pageIndex = 3;
-                        });
-                      }),
-                  SideBarButtons(
-                      btnColor: pageIndex == 4
-                          ? CustomColors.customGrey
-                          : Colors.transparent,
-                      childColor: pageIndex == 4
-                          ? CustomColors.customBlack
-                          : CustomColors.customWhite,
                       btnName: "Talimatlar",
                       btnIcon: Icons.request_page_rounded,
                       btnFunc: () {
                         setState(() {
-                          pageIndex = 4;
-                        });
-                      }),
-                  SideBarButtons(
-                      btnColor: pageIndex == 5
-                          ? CustomColors.customGrey
-                          : Colors.transparent,
-                      childColor: pageIndex == 5
-                          ? CustomColors.customBlack
-                          : CustomColors.customWhite,
-                      btnName: "Mesajlar",
-                      btnIcon: Icons.mail,
-                      btnFunc: () {
-                        setState(() {
-                          pageIndex = 5;
+                          pageIndex = 3;
                         });
                       }),
                   const Spacer(),

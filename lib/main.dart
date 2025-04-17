@@ -26,7 +26,17 @@ class MyApp extends StatelessWidget {
           useMaterial3: false,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 backgroundColor: const Color(0xffFFC400),
+                foregroundColor: const Color(0xff212121)),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 foregroundColor: const Color(0xff212121)),
           ),
           appBarTheme: const AppBarTheme(
