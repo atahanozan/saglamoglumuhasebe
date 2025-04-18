@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/firebase_options.dart';
-import 'package:saglamoglu_muhasebe/pages/home_navigate_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:saglamoglu_muhasebe/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: customWhite,
           )),
       debugShowCheckedModeBanner: false,
-      home: const HomeNavigatePage(),
+      home: const SplashPage(),
     );
   }
 }

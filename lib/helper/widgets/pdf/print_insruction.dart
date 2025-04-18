@@ -1,11 +1,6 @@
-// ignore: deprecated_member_use, avoid_web_libraries_in_flutter
-import 'dart:html' as web;
-
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-
-import 'package:saglamoglu_muhasebe/helper/custom_widget.dart';
 
 class PrintInsruction {
   Future<void> printInsruction(
@@ -18,7 +13,6 @@ class PrintInsruction {
   ) async {
     final pdf = pw.Document();
     final font = await PdfGoogleFonts.poppinsLight();
-    final CustomWidgets customWidgets = CustomWidgets();
 
     // final frontImage = await networkImage(frontidimg);
     // final backImage = await networkImage(backidimg);
@@ -72,8 +66,6 @@ class PrintInsruction {
         ]);
       },
     ));
-
-    var savedFile = await pdf.save();
 
     await Printing.layoutPdf(onLayout: (format) async => pdf.save());
   }

@@ -1,26 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/favorite_buttons.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/today_widget.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
 import 'package:saglamoglu_muhasebe/pages/insructions/add_insruction.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key, this.name = ""});
 
-  @override
-  State<DashboardPage> createState() => _DashboardPageState();
-}
+  final String name;
 
-class _DashboardPageState extends State<DashboardPage> {
-  String frontIdPath = Texts.fronstImgPath;
-
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     final TextTheme pageStyle = Theme.of(context).textTheme;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -35,7 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hoş geldin Ozan",
+                  "Hoş geldin $name",
                   style: GoogleFonts.raleway(fontSize: 25),
                 ),
                 const Spacer(),

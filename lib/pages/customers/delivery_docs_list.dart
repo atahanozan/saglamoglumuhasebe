@@ -81,7 +81,6 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                   customSnapshot = FirebaseFirestore.instance
                       .collection("deliverydocs")
                       .where("name", isGreaterThan: name)
-                      .orderBy("id", descending: true)
                       .snapshots();
                 });
               },

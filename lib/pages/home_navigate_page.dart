@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
@@ -6,7 +8,8 @@ import 'package:saglamoglu_muhasebe/pages/customers/customers_list.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/delivery_docs_list.dart';
 import 'package:saglamoglu_muhasebe/pages/dashboard_page.dart';
 import 'package:saglamoglu_muhasebe/pages/insructions/insructions_page.dart';
-import 'package:saglamoglu_muhasebe/pages/request_page.dart';
+import 'package:saglamoglu_muhasebe/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeNavigatePage extends StatefulWidget {
   const HomeNavigatePage({super.key});
@@ -17,13 +20,44 @@ class HomeNavigatePage extends StatefulWidget {
 
 class _HomeNavigatePageState extends State<HomeNavigatePage> {
   List<Widget> pages = [
-    const DashboardPage(),
+    DashboardPage(),
     const CustomersList(),
     const DeliveryDocsList(),
     const InsructionsPage(),
   ];
+  String uid = "";
+  String name = "";
+
+  Future<void> getUid() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      uid = prefs.getString("useruid") ?? "";
+    });
+  }
+
+  bool admin = false;
+
+  Future<void> getUserAdmin() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((value) {
+      setState(() {
+        admin = value["admin"];
+      });
+    });
+  }
 
   int pageIndex = 0;
+
+  @override
+  void initState() {
+    getUid();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,8 +108,22 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       btnName: "Müşteriler",
                       btnIcon: Icons.list_alt,
                       btnFunc: () {
-                        setState(() {
-                          pageIndex = 1;
+                        getUserAdmin().then((value) {
+                          if (admin) {
+                            setState(() {
+                              pageIndex = 1;
+                            });
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Bu alan için yetkiniz bulunmamaktadır !"),
+                                  backgroundColor: Colors.redAccent.shade200,
+                                ),
+                              );
+                            }
+                          }
                         });
                       }),
                   SideBarButtons(
@@ -121,7 +169,17 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       childColor: CustomColors.customYellow,
                       btnName: "Çıkış",
                       btnIcon: Icons.exit_to_app,
-                      btnFunc: () {}),
+                      btnFunc: () async {
+                        await FirebaseAuth.instance.signOut();
+                        if (context.mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => LoginPage(),
+                            ),
+                          );
+                        }
+                      }),
                 ],
               ),
             ),

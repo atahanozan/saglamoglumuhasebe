@@ -41,37 +41,39 @@ class DeliveryDocInfoLine extends StatelessWidget {
           Expanded(child: Text(price)),
           const SizedBox(width: 20),
           Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    CustomerDeliveryDoc().downloadCustomerDeliveryDoc(
-                      name,
-                      tcknvkn,
-                      company,
-                      price,
-                      context,
-                      DateTime.parse(date),
-                    );
-                  },
-                  child: const Icon(Icons.save),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    PrintDeliverDocs().printDeliveryDocs(
-                      name,
-                      tcknvkn,
-                      company,
-                      price,
-                      context,
-                      DateTime.parse(date),
-                    );
-                  },
-                  child: const Icon(Icons.print),
-                ),
-                IconButton(onPressed: deleteDoc, icon: Icon(Icons.delete))
-              ],
+            child: FittedBox(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      CustomerDeliveryDoc().downloadCustomerDeliveryDoc(
+                        name,
+                        tcknvkn,
+                        company,
+                        price,
+                        context,
+                        DateTime.parse(date),
+                      );
+                    },
+                    child: const Icon(Icons.save),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      PrintDeliverDocs().printDeliveryDocs(
+                        name,
+                        tcknvkn,
+                        company,
+                        price,
+                        context,
+                        DateTime.parse(date),
+                      );
+                    },
+                    child: const Icon(Icons.print),
+                  ),
+                  IconButton(onPressed: deleteDoc, icon: Icon(Icons.delete))
+                ],
+              ),
             ),
           ),
         ],

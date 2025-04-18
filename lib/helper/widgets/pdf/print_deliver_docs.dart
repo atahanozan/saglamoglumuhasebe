@@ -480,8 +480,6 @@ class PrintDeliverDocs {
       ),
     );
 
-    var savedFile = await pdf.save();
-
     await Printing.layoutPdf(onLayout: (format) async => pdf.save());
   }
 }
