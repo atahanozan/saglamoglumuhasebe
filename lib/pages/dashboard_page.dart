@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/favorite_buttons.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/today_widget.dart';
-import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
-import 'package:saglamoglu_muhasebe/pages/insructions/add_insruction.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key, this.name = ""});
@@ -59,30 +57,30 @@ class DashboardPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
                       const Divider(),
-                      ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const AddInsruction(),
-                            ),
-                          );
-                        },
-                        title: const Text("Talimat Ekle"),
-                      ),
-                      const Divider(),
-                      ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const AddCustomer(),
-                            ),
-                          );
-                        },
-                        title: const Text("Müşteri Ekle"),
-                      ),
-                      const Divider(),
+                      // ListTile(
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (_) => const AddInsruction(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   title: const Text("Talimat Ekle"),
+                      // ),
+                      // const Divider(),
+                      // ListTile(
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (_) => const AddCustomer(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   title: const Text("Müşteri Ekle"),
+                      // ),
+                      // const Divider(),
                     ],
                   ),
                 )),

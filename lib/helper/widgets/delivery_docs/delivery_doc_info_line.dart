@@ -11,6 +11,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
     required this.price,
     required this.tcknvkn,
     required this.deleteDoc,
+    required this.statu,
   });
 
   final String date;
@@ -19,16 +20,20 @@ class DeliveryDocInfoLine extends StatelessWidget {
   final String price;
   final String tcknvkn;
   final VoidCallback deleteDoc;
+  final bool statu;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-        color: Colors.grey.shade300,
-      ))),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.shade300,
+          ),
+        ),
+        color: statu ? Colors.green.shade100 : Colors.red.shade100,
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [

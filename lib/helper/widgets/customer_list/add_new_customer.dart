@@ -114,6 +114,7 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                       nameController.text.isNotEmpty &&
                       tcknController.text.length > 9) {
                     firestore.collection("deliverycustomers").add({
+                      "id": DateTime.now().millisecondsSinceEpoch,
                       "date": DateTime.now().toString(),
                       "tcknvkn": tcknController.text,
                       "name": nameController.text,

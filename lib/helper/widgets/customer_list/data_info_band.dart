@@ -125,6 +125,7 @@ class _DataInfoBandState extends State<DataInfoBand> {
                         "price": widget.priceController.text,
                         "tcknvkn": widget.tcknvkn,
                         "id": DateTime.now().millisecondsSinceEpoch,
+                        "statu": false,
                       });
                       setState(() {
                         visibility = false;

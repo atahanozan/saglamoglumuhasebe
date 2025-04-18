@@ -161,8 +161,22 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       btnName: "Talimatlar",
                       btnIcon: Icons.request_page_rounded,
                       btnFunc: () {
-                        setState(() {
-                          pageIndex = 3;
+                        getUserAdmin().then((value) {
+                          if (admin) {
+                            setState(() {
+                              pageIndex = 3;
+                            });
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Bu alan için yetkiniz bulunmamaktadır !"),
+                                  backgroundColor: Colors.redAccent.shade200,
+                                ),
+                              );
+                            }
+                          }
                         });
                       }),
                   const Spacer(),

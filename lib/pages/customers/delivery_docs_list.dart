@@ -225,6 +225,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                   }
                                 }
                               },
+                              statu: data["statu"],
                             );
                           },
                         );

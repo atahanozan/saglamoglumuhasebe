@@ -26,6 +26,12 @@ class _CustomersListState extends State<CustomersList> {
   int customerCount = 0;
   bool visibility = false;
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> customerSnap = FirebaseFirestore
+      .instance
+      .collection("deliverycustomers")
+      .orderBy("id", descending: true)
+      .snapshots();
+
   Future<void> addTckn() async {
     await firestore.collection("deliverycustomers").get().then((value) {
       for (var element in value.docs) {
@@ -121,17 +127,16 @@ class _CustomersListState extends State<CustomersList> {
               ),
               onChanged: (value) {
                 setState(() {
-                  name = value;
+                  customerSnap = firestore
+                      .collection("deliverycustomers")
+                      .where("name", isGreaterThan: value)
+                      .snapshots();
                 });
               },
             ),
             Flexible(
               child: StreamBuilder(
-                stream: firestore
-                    .collection("deliverycustomers")
-                    .where("name", isGreaterThan: name)
-                    .orderBy("name", descending: false)
-                    .snapshots(),
+                stream: customerSnap,
                 builder: (context, snapshot) {
                   return !snapshot.hasData
                       ? const CircularProgressIndicator()
