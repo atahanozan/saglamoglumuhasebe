@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/delivery_doc_info_line.dart';
 
 class DeliveryDocsList extends StatefulWidget {
-  const DeliveryDocsList({super.key});
+  const DeliveryDocsList({super.key, this.admin = false});
+
+  final bool admin;
 
   @override
   State<DeliveryDocsList> createState() => _DeliveryDocsListState();
@@ -181,10 +183,47 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                               price: data["price"],
                               tcknvkn: data["tcknvkn"],
                               deleteDoc: () {
-                                _firestore
-                                    .collection("deliverydocs")
-                                    .doc(data.id)
-                                    .delete();
+                                if (widget.admin) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      title: Text(data["name"]),
+                                      content:
+                                          const Text("Teslim dosyasını sil ?"),
+                                      actions: [
+                                        OutlinedButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text("İptal"),
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              _firestore
+                                                  .collection("deliverydocs")
+                                                  .doc(data.id)
+                                                  .delete()
+                                                  .whenComplete(() {
+                                                if (context.mounted) {
+                                                  Navigator.pop(context);
+                                                }
+                                              });
+                                            },
+                                            child: const Text("Sil"))
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Bu alan için yetkiniz bulunmamaktadır !"),
+                                        backgroundColor:
+                                            Colors.redAccent.shade200,
+                                      ),
+                                    );
+                                  }
+                                }
                               },
                             );
                           },

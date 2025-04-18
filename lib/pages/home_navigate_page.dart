@@ -21,7 +21,7 @@ class HomeNavigatePage extends StatefulWidget {
 class _HomeNavigatePageState extends State<HomeNavigatePage> {
   List<Widget> pages = [
     DashboardPage(),
-    const CustomersList(),
+    CustomersList(),
     const DeliveryDocsList(),
     const InsructionsPage(),
   ];
@@ -46,6 +46,15 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
         .then((value) {
       setState(() {
         admin = value["admin"];
+        name = value["name"];
+        pages = [
+          DashboardPage(
+            name: name,
+          ),
+          const CustomersList(),
+          DeliveryDocsList(admin: admin),
+          const InsructionsPage(),
+        ];
       });
     });
   }
@@ -55,6 +64,8 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
   @override
   void initState() {
     getUid();
+    Future.delayed(const Duration(seconds: 1), () => getUserAdmin());
+
     super.initState();
   }
 
