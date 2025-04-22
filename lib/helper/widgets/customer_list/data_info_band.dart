@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class DataInfoBand extends StatefulWidget {
   const DataInfoBand({
@@ -36,7 +36,7 @@ class DataInfoBand extends StatefulWidget {
 }
 
 class _DataInfoBandState extends State<DataInfoBand> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final DataServices dataServices = DataServices();
   bool visibility = false;
   String btnNameDeliv = "Teslim";
   @override
@@ -117,16 +117,14 @@ class _DataInfoBandState extends State<DataInfoBand> {
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
-                    onPressed: () async {
-                      await _firestore.collection("deliverydocs").add({
-                        "date": widget.date,
-                        "name": widget.customerName,
-                        "company": widget.value,
-                        "price": widget.priceController.text,
-                        "tcknvkn": widget.tcknvkn,
-                        "id": DateTime.now().millisecondsSinceEpoch,
-                        "statu": false,
-                      });
+                    onPressed: () {
+                      dataServices.addDeliveryDoc(
+                        widget.customerName,
+                        widget.tcknvkn,
+                        widget.priceController.text,
+                        widget.value,
+                        widget.date,
+                      );
                       setState(() {
                         visibility = false;
                         widget.priceController.clear();

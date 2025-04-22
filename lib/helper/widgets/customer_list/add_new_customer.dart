@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
+import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class AddNewCustomer extends StatefulWidget {
   const AddNewCustomer({super.key});
@@ -14,6 +15,7 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
   final TextEditingController tcknController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final DataServices dataServices = DataServices();
   List<String> tckns = [];
 
   Future<void> addTckn() async {
@@ -113,12 +115,9 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                   if (tcknController.text.isNotEmpty &&
                       nameController.text.isNotEmpty &&
                       tcknController.text.length > 9) {
-                    firestore.collection("deliverycustomers").add({
-                      "id": DateTime.now().millisecondsSinceEpoch,
-                      "date": DateTime.now().toString(),
-                      "tcknvkn": tcknController.text,
-                      "name": nameController.text,
-                    }).whenComplete(() {
+                    dataServices
+                        .addCustomer(nameController.text, tcknController.text)
+                        .whenComplete(() {
                       addTckn();
                       setState(() {
                         tcknController.clear();

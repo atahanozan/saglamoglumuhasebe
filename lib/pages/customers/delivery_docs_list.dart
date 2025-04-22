@@ -15,14 +15,22 @@ class DeliveryDocsList extends StatefulWidget {
 class _DeliveryDocsListState extends State<DeliveryDocsList> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _nameController = TextEditingController();
+  final List<String> companies = [
+    "Sağlam",
+    "Elmina",
+  ];
   String name = "";
-  String filterBtnName = "";
+  String filter1 = "Sağlam";
+  String filter2 = "Elmina";
+  String? filter3 = "";
   bool btnVisibility = false;
   Icon filterIcon = const Icon(Icons.arrow_drop_down_circle_outlined);
-  Stream<QuerySnapshot<Map<String, dynamic>>> customSnapshot = FirebaseFirestore
-      .instance
+  var customSnapshot = FirebaseFirestore.instance
       .collection("deliverydocs")
-      .orderBy("id", descending: true)
+      .where(Filter.or(
+        Filter("company", isEqualTo: "Sağlam"),
+        Filter("company", isEqualTo: "Elmina"),
+      ))
       .snapshots();
 
   Future<void> changeFilter(BuildContext myContext) async {
@@ -36,14 +44,32 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
     if (pickedDate != null) {
       setState(() {
         filterIcon = const Icon(Icons.arrow_drop_down_circle_rounded);
-        filterBtnName = pickedDate.toString().split(" ")[0];
+        filter3 = pickedDate.toString().split(" ")[0];
         btnVisibility = true;
         customSnapshot = FirebaseFirestore.instance
             .collection("deliverydocs")
-            .where("date", isEqualTo: pickedDate.toString().split(" ")[0])
+            .where("date", isEqualTo: filter3)
+            .where(Filter.or(
+              Filter("company", isEqualTo: filter1),
+              Filter("company", isEqualTo: filter2),
+            ))
             .snapshots();
       });
     }
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      customSnapshot = FirebaseFirestore.instance
+          .collection("deliverydocs")
+          .where(Filter.or(
+            Filter("company", isEqualTo: filter1),
+            Filter("company", isEqualTo: filter2),
+          ))
+          .snapshots();
+    });
+    super.initState();
   }
 
   @override
@@ -87,53 +113,112 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                 });
               },
             ),
-            Visibility(
-              visible: btnVisibility,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(color: Colors.grey.shade300),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text("Filtreler:   "),
-                    OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          customSnapshot = FirebaseFirestore.instance
-                              .collection("deliverydocs")
-                              .orderBy("id", descending: true)
-                              .snapshots();
-                          btnVisibility = false;
-                          filterBtnName = "";
-                          filterIcon =
-                              const Icon(Icons.arrow_drop_down_circle_outlined);
-                        });
-                      },
-                      child: Text(filterBtnName),
+            Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.shade300,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Text("Tarih"),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(filter3.toString()),
+                          IconButton(
+                            onPressed: () {
+                              changeFilter(context);
+                            },
+                            icon: Icon(Icons.date_range),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(width: 40),
+                  Expanded(
+                    child: Text("Firma"),
+                  ),
+                  Expanded(
+                    child: DropdownButton(
+                        value: filter1,
+                        items: companies.map((company) {
+                          return DropdownMenuItem(
+                            value: company,
+                            child: Text(company),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (filter3 == "") {
+                            setState(() {
+                              filter1 = value.toString();
+                              filter2 = value.toString();
+                              customSnapshot = FirebaseFirestore.instance
+                                  .collection("deliverydocs")
+                                  .where(Filter.or(
+                                    Filter("company", isEqualTo: filter1),
+                                    Filter("company", isEqualTo: filter2),
+                                  ))
+                                  .snapshots();
+                            });
+                          } else {
+                            setState(() {
+                              filter1 = value.toString();
+                              filter2 = value.toString();
+                              customSnapshot = FirebaseFirestore.instance
+                                  .collection("deliverydocs")
+                                  .where("date", isEqualTo: filter3)
+                                  .where(Filter.or(
+                                    Filter("company", isEqualTo: filter1),
+                                    Filter("company", isEqualTo: filter2),
+                                  ))
+                                  .snapshots();
+                            });
+                          }
+                        }),
+                  ),
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        customSnapshot = FirebaseFirestore.instance
+                            .collection("deliverydocs")
+                            .where(Filter.or(
+                              Filter("company", isEqualTo: "Sağlam"),
+                              Filter("company", isEqualTo: "Elmina"),
+                            ))
+                            .snapshots();
+                        btnVisibility = false;
+                        filter3 = "";
+                        filterIcon =
+                            const Icon(Icons.arrow_drop_down_circle_outlined);
+                      });
+                    },
+                    child: Text("Temizle"),
+                  ),
+                ],
               ),
             ),
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                    child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Tarih",
-                      style: pageStyle.titleMedium,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        changeFilter(context);
-                      },
-                      icon: filterIcon,
-                    )
-                  ],
+                    child: Text(
+                  "Tarih",
+                  style: pageStyle.titleMedium,
                 )),
                 const SizedBox(width: 20),
                 Expanded(
@@ -226,6 +311,37 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                 }
                               },
                               statu: data["statu"],
+                              statuIcon: !data["statu"]
+                                  ? Icon(Icons.circle_outlined)
+                                  : Icon(Icons.done),
+                              statuChange: () async {
+                                if (widget.admin) {
+                                  if (data["statu"]) {
+                                    await _firestore
+                                        .collection("deliverydocs")
+                                        .doc(data.id)
+                                        .update({
+                                      "statu": false,
+                                    });
+                                  } else {
+                                    await _firestore
+                                        .collection("deliverydocs")
+                                        .doc(data.id)
+                                        .update({
+                                      "statu": true,
+                                    });
+                                  }
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          "Bu alan için yetkiniz bulunmamaktadır !"),
+                                      backgroundColor:
+                                          Colors.redAccent.shade200,
+                                    ),
+                                  );
+                                }
+                              },
                             );
                           },
                         );

@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/delivery_docs_statu.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/favorite_buttons.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/today_widget.dart';
 
 class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key, this.name = ""});
+  const DashboardPage({
+    super.key,
+    this.name = "",
+    this.statuFalse = 0,
+    this.statuTrue = 0,
+  });
 
   final String name;
+  final int statuTrue;
+  final int statuFalse;
 
   @override
   Widget build(BuildContext context) {
@@ -57,30 +65,6 @@ class DashboardPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
                       const Divider(),
-                      // ListTile(
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (_) => const AddInsruction(),
-                      //       ),
-                      //     );
-                      //   },
-                      //   title: const Text("Talimat Ekle"),
-                      // ),
-                      // const Divider(),
-                      // ListTile(
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (_) => const AddCustomer(),
-                      //       ),
-                      //     );
-                      //   },
-                      //   title: const Text("Müşteri Ekle"),
-                      // ),
-                      // const Divider(),
                     ],
                   ),
                 )),
@@ -89,13 +73,10 @@ class DashboardPage extends StatelessWidget {
                 ),
                 Expanded(
                     child: FavoriteButtons(
-                  childs: Column(
-                    children: [
-                      Text(
-                        "Günlük işlem adetleri ve oranları",
-                        style: pageStyle.titleMedium,
-                      ),
-                    ],
+                  childs: DeliveryDocsStatu(
+                    statuFalse: statuFalse,
+                    statuTrue: statuTrue,
+                    total: statuTrue + statuFalse,
                   ),
                 )),
               ],

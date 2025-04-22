@@ -12,6 +12,8 @@ class DeliveryDocInfoLine extends StatelessWidget {
     required this.tcknvkn,
     required this.deleteDoc,
     required this.statu,
+    required this.statuChange,
+    required this.statuIcon,
   });
 
   final String date;
@@ -20,7 +22,9 @@ class DeliveryDocInfoLine extends StatelessWidget {
   final String price;
   final String tcknvkn;
   final VoidCallback deleteDoc;
+  final VoidCallback statuChange;
   final bool statu;
+  final Icon statuIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +80,8 @@ class DeliveryDocInfoLine extends StatelessWidget {
                     },
                     child: const Icon(Icons.print),
                   ),
-                  IconButton(onPressed: deleteDoc, icon: Icon(Icons.delete))
+                  IconButton(onPressed: deleteDoc, icon: Icon(Icons.delete)),
+                  IconButton(onPressed: statuChange, icon: statuIcon),
                 ],
               ),
             ),

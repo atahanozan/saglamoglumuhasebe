@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/data_info_band.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
+import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class CustomersList extends StatefulWidget {
   const CustomersList({super.key});
@@ -17,6 +18,7 @@ class _CustomersListState extends State<CustomersList> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _tcknController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final DataServices dataServices = DataServices();
   List<String> tckns = [];
   List<String> names = [];
   List<String> companies = ["Sağlam", "Elmina"];
@@ -149,32 +151,10 @@ class _CustomersListState extends State<CustomersList> {
                               customerName: docs['name'],
                               customerId: docs['tcknvkn'],
                               deleteCustomer: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    title: Text(docs["name"]),
-                                    content: const Text("Müşteriyi sil ?"),
-                                    actions: [
-                                      OutlinedButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text("İptal"),
-                                      ),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            firestore
-                                                .collection("deliverycustomers")
-                                                .doc(docs.id)
-                                                .delete()
-                                                .whenComplete(() {
-                                              addTckn();
-                                              if (context.mounted) {
-                                                Navigator.pop(context);
-                                              }
-                                            });
-                                          },
-                                          child: const Text("Sil"))
-                                    ],
-                                  ),
+                                dataServices.deleteCustomer(
+                                  docs.id,
+                                  name,
+                                  context,
                                 );
                               },
                               editCustomer: () {

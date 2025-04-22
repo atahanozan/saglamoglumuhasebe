@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
@@ -16,6 +17,31 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool obsecureText = true;
+  String name = "";
+
+  bool admin = false;
+
+  Future<void> getUserAdmin(String uid) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((value) {
+      setState(() {
+        admin = value["admin"];
+        name = value["name"];
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HomeNavigatePage(
+              admin: admin,
+              name: name,
+            ),
+          ),
+        );
+      });
+    });
+  }
 
   Future<void> setUser(String? uid) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
@@ -104,12 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                       .user(_emailController.text, _passwordController.text);
                   if (context.mounted) {
                     if (message == "Success") {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => HomeNavigatePage(),
-                        ),
-                      );
+                      getUserAdmin(user.user!.uid.toString());
+
                       setUser(user.user?.uid);
                     }
                     ScaffoldMessenger.of(context).showSnackBar(

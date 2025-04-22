@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
@@ -17,6 +18,23 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   String uid = "";
 
+  String name = "";
+
+  bool admin = false;
+
+  Future<void> getUserAdmin(String uid) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((value) {
+      setState(() {
+        admin = value["admin"];
+        name = value["name"];
+      });
+    });
+  }
+
   Future<void> getUid() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -27,7 +45,9 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
-    getUid();
+    getUid().whenComplete(() {
+      getUserAdmin(uid);
+    });
 
     Timer.periodic(const Duration(seconds: 3), (timer) {
       if (uid == "") {
@@ -41,7 +61,10 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => HomeNavigatePage(),
+            builder: (_) => HomeNavigatePage(
+              admin: admin,
+              name: name,
+            ),
           ),
         );
       }

@@ -12,7 +12,14 @@ import 'package:saglamoglu_muhasebe/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeNavigatePage extends StatefulWidget {
-  const HomeNavigatePage({super.key});
+  const HomeNavigatePage({
+    super.key,
+    required this.admin,
+    required this.name,
+  });
+
+  final bool admin;
+  final String name;
 
   @override
   State<HomeNavigatePage> createState() => _HomeNavigatePageState();
@@ -26,7 +33,9 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
     const InsructionsPage(),
   ];
   String uid = "";
-  String name = "";
+  int statuTrueLenght = 0;
+  int statuFalseLenght = 0;
+  int pageIndex = 0;
 
   Future<void> getUid() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -36,35 +45,51 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
     });
   }
 
-  bool admin = false;
-
-  Future<void> getUserAdmin() async {
+  Future<void> getDocStatu() async {
     await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: false)
+        .count()
         .get()
         .then((value) {
       setState(() {
-        admin = value["admin"];
-        name = value["name"];
-        pages = [
-          DashboardPage(
-            name: name,
-          ),
-          const CustomersList(),
-          DeliveryDocsList(admin: admin),
-          const InsructionsPage(),
-        ];
+        statuFalseLenght = value.count!;
       });
+    });
+    await FirebaseFirestore.instance
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: true)
+        .count()
+        .get()
+        .then((value) {
+      setState(() {
+        statuTrueLenght = value.count!;
+      });
+    });
+    setState(() {
+      pages = [
+        DashboardPage(
+          name: widget.name,
+          statuFalse: statuFalseLenght,
+          statuTrue: statuTrueLenght,
+        ),
+        const CustomersList(),
+        DeliveryDocsList(admin: widget.admin),
+        const InsructionsPage(),
+      ];
     });
   }
 
-  int pageIndex = 0;
+  void changePage(int pageNumber) {
+    setState(() {
+      pageIndex = pageNumber;
+    });
+  }
 
   @override
   void initState() {
     getUid();
-    Future.delayed(const Duration(seconds: 1), () => getUserAdmin());
+    getDocStatu();
 
     super.initState();
   }
@@ -105,9 +130,8 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       btnName: "Ana Sayfa",
                       btnIcon: Icons.home,
                       btnFunc: () {
-                        setState(() {
-                          pageIndex = 0;
-                        });
+                        getDocStatu();
+                        changePage(0);
                       }),
                   SideBarButtons(
                       btnColor: pageIndex == 1
@@ -119,23 +143,19 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       btnName: "Müşteriler",
                       btnIcon: Icons.list_alt,
                       btnFunc: () {
-                        getUserAdmin().then((value) {
-                          if (admin) {
-                            setState(() {
-                              pageIndex = 1;
-                            });
-                          } else {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Bu alan için yetkiniz bulunmamaktadır !"),
-                                  backgroundColor: Colors.redAccent.shade200,
-                                ),
-                              );
-                            }
+                        if (widget.admin) {
+                          changePage(1);
+                        } else {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Bu alan için yetkiniz bulunmamaktadır !"),
+                                backgroundColor: Colors.redAccent.shade200,
+                              ),
+                            );
                           }
-                        });
+                        }
                       }),
                   SideBarButtons(
                       btnColor: pageIndex == 2
@@ -147,9 +167,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       btnName: "Teslim Dosyaları",
                       btnIcon: Icons.group_add,
                       btnFunc: () {
-                        setState(() {
-                          pageIndex = 2;
-                        });
+                        changePage(2);
                       }),
                   SideBarButtons(
                       btnColor: pageIndex == 3
@@ -161,23 +179,19 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       btnName: "Talimatlar",
                       btnIcon: Icons.request_page_rounded,
                       btnFunc: () {
-                        getUserAdmin().then((value) {
-                          if (admin) {
-                            setState(() {
-                              pageIndex = 3;
-                            });
-                          } else {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Bu alan için yetkiniz bulunmamaktadır !"),
-                                  backgroundColor: Colors.redAccent.shade200,
-                                ),
-                              );
-                            }
+                        if (widget.admin) {
+                          changePage(3);
+                        } else {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Bu alan için yetkiniz bulunmamaktadır !"),
+                                backgroundColor: Colors.redAccent.shade200,
+                              ),
+                            );
                           }
-                        });
+                        }
                       }),
                   const Spacer(),
                   const Divider(
