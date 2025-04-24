@@ -15,11 +15,13 @@ class DeliveryDocsList extends StatefulWidget {
 class _DeliveryDocsListState extends State<DeliveryDocsList> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
   final List<String> companies = [
     "Sağlam",
     "Elmina",
   ];
   String name = "";
+  String price = "";
   String filter1 = "Sağlam";
   String filter2 = "Elmina";
   String? filter3 = "";
@@ -75,6 +77,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
   @override
   void dispose() {
     _nameController.dispose();
+    _priceController.dispose();
     super.dispose();
   }
 
@@ -123,14 +126,15 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Expanded(
-                    child: Text("Tarih"),
-                  ),
+                  Text("Tarih", style: pageStyle.bodySmall),
+                  SizedBox(width: 15),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        border: Border.all(),
+                        border: Border.all(
+                          color: Colors.grey.shade500,
+                        ),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -149,46 +153,79 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                     ),
                   ),
                   SizedBox(width: 40),
+                  Text("Firma", style: pageStyle.bodySmall),
+                  SizedBox(width: 15),
                   Expanded(
-                    child: Text("Firma"),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade500,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: DropdownButton(
+                          value: filter1,
+                          underline: SizedBox(),
+                          items: companies.map((company) {
+                            return DropdownMenuItem(
+                              value: company,
+                              child: Text(company),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (filter3 == "") {
+                              setState(() {
+                                filter1 = value.toString();
+                                filter2 = value.toString();
+                                customSnapshot = FirebaseFirestore.instance
+                                    .collection("deliverydocs")
+                                    .where(Filter.or(
+                                      Filter("company", isEqualTo: filter1),
+                                      Filter("company", isEqualTo: filter2),
+                                    ))
+                                    .snapshots();
+                              });
+                            } else {
+                              setState(() {
+                                filter1 = value.toString();
+                                filter2 = value.toString();
+                                customSnapshot = FirebaseFirestore.instance
+                                    .collection("deliverydocs")
+                                    .where("date", isEqualTo: filter3)
+                                    .where(Filter.or(
+                                      Filter("company", isEqualTo: filter1),
+                                      Filter("company", isEqualTo: filter2),
+                                    ))
+                                    .snapshots();
+                              });
+                            }
+                          }),
+                    ),
                   ),
+                  SizedBox(width: 40),
+                  Text(
+                    "Tutar",
+                    style: pageStyle.bodySmall,
+                  ),
+                  SizedBox(width: 15),
                   Expanded(
-                    child: DropdownButton(
-                        value: filter1,
-                        items: companies.map((company) {
-                          return DropdownMenuItem(
-                            value: company,
-                            child: Text(company),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          if (filter3 == "") {
-                            setState(() {
-                              filter1 = value.toString();
-                              filter2 = value.toString();
-                              customSnapshot = FirebaseFirestore.instance
-                                  .collection("deliverydocs")
-                                  .where(Filter.or(
-                                    Filter("company", isEqualTo: filter1),
-                                    Filter("company", isEqualTo: filter2),
-                                  ))
-                                  .snapshots();
-                            });
-                          } else {
-                            setState(() {
-                              filter1 = value.toString();
-                              filter2 = value.toString();
-                              customSnapshot = FirebaseFirestore.instance
-                                  .collection("deliverydocs")
-                                  .where("date", isEqualTo: filter3)
-                                  .where(Filter.or(
-                                    Filter("company", isEqualTo: filter1),
-                                    Filter("company", isEqualTo: filter2),
-                                  ))
-                                  .snapshots();
-                            });
-                          }
-                        }),
+                    child: TextField(
+                      controller: _priceController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      )),
+                      onChanged: (value) {
+                        setState(() {
+                          price = value;
+                          customSnapshot = FirebaseFirestore.instance
+                              .collection("deliverydocs")
+                              .where("price", isGreaterThan: price)
+                              .snapshots();
+                        });
+                      },
+                    ),
                   ),
                   SizedBox(width: 20),
                   ElevatedButton(
@@ -205,6 +242,8 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                         filter3 = "";
                         filterIcon =
                             const Icon(Icons.arrow_drop_down_circle_outlined);
+                        _priceController.clear();
+                        _nameController.clear();
                       });
                     },
                     child: Text("Temizle"),

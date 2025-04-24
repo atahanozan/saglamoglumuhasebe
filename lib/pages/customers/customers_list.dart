@@ -119,22 +119,40 @@ class _CustomersListState extends State<CustomersList> {
               ],
             ),
             const Divider(),
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        customerSnap = firestore
+                            .collection("deliverycustomers")
+                            .where("name", isGreaterThan: value)
+                            .snapshots();
+                      });
+                    },
+                  ),
                 ),
-                prefixIcon: const Icon(Icons.search),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  customerSnap = firestore
-                      .collection("deliverycustomers")
-                      .where("name", isGreaterThan: value)
-                      .snapshots();
-                });
-              },
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      customerSnap = firestore
+                          .collection("deliverycustomers")
+                          .orderBy("id", descending: true)
+                          .snapshots();
+                    });
+                  },
+                  child: Text("Temizle"),
+                ),
+              ],
             ),
             Flexible(
               child: StreamBuilder(
@@ -143,7 +161,7 @@ class _CustomersListState extends State<CustomersList> {
                   return !snapshot.hasData
                       ? const CircularProgressIndicator()
                       : ListView.builder(
-                          itemCount: snapshot.data?.docs.length,
+                          itemCount: 50,
                           itemBuilder: (context, index) {
                             DocumentSnapshot docs = snapshot.data!.docs[index];
 
