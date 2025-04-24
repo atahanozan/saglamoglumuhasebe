@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 
 class DataServices {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -88,6 +89,83 @@ class DataServices {
             onPressed: () => Navigator.pop(context),
             child: Text("İptal"),
           ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> editCustomer(
+      BuildContext context,
+      TextEditingController tcknController,
+      String tcknvkn,
+      TextEditingController nameController,
+      String name,
+      String? docId) async {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Düzenle"),
+        content: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          width: 450,
+          child: Column(
+            children: [
+              const Divider(),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Expanded(flex: 1, child: Text("TCKN / VKN")),
+                  const SizedBox(width: 15),
+                  Expanded(
+                      flex: 3,
+                      child: TextField(
+                        controller: tcknController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            hintText: tcknvkn),
+                      ))
+                ],
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Expanded(flex: 1, child: Text("İsim")),
+                  const SizedBox(width: 15),
+                  Expanded(
+                      flex: 3,
+                      child: TextField(
+                        controller: nameController,
+                        inputFormatters: [UppercaseTextFormatter()],
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            hintText: name),
+                      ))
+                ],
+              )
+            ],
+          ),
+        ),
+        actions: [
+          OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("İptal"),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                _firestore.collection("deliverycustomers").doc(docId).set({
+                  "name": nameController.text,
+                  "tcknvkn": tcknController.text,
+                });
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text("Düzenle"))
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
+import 'package:saglamoglu_muhasebe/helper/utils/customer_list.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class AddNewCustomer extends StatefulWidget {
@@ -137,6 +138,18 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                 }
               },
               child: const Text("Kaydet")),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              for (var i = 0; i < CustomerList.customerList.length; i++) {
+                dataServices.addCustomer(
+                  CustomerList.customerList[i]["name"],
+                  CustomerList.customerList[i]["tcknvkn"],
+                );
+              }
+            },
+            child: Text("Toplu Müşteri Ekle"),
+          ),
         ],
       ),
     );

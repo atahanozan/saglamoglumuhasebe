@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/data_info_band.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
@@ -26,12 +26,14 @@ class _CustomersListState extends State<CustomersList> {
   String companyName = "Sağlam";
   String date = DateTime.now().toString().split(" ")[0];
   int customerCount = 0;
+  int allCustomers = 0;
   bool visibility = false;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> customerSnap = FirebaseFirestore
       .instance
       .collection("deliverycustomers")
       .orderBy("id", descending: true)
+      .limit(20)
       .snapshots();
 
   Future<void> addTckn() async {
@@ -65,9 +67,22 @@ class _CustomersListState extends State<CustomersList> {
     }
   }
 
+  Future<void> allCusomterCounts() async {
+    await FirebaseFirestore.instance
+        .collection("deliverycustomers")
+        .count()
+        .get()
+        .then((value) {
+      setState(() {
+        allCustomers = value.count!;
+      });
+    });
+  }
+
   @override
   void initState() {
     addTckn();
+    allCusomterCounts();
     super.initState();
   }
 
@@ -81,8 +96,22 @@ class _CustomersListState extends State<CustomersList> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme pageStyle = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: Colors.transparent,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: CustomColors.customYellow,
+        foregroundColor: CustomColors.customBlack,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddCustomer(),
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.topCenter,
@@ -102,19 +131,9 @@ class _CustomersListState extends State<CustomersList> {
                 OutlinedButton(
                   onPressed: () {
                     addTckn();
+                    allCusomterCounts();
                   },
-                  child: const Text("Yenile"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AddCustomer(),
-                      ),
-                    );
-                  },
-                  child: const Text("Müşteri Ekle"),
+                  child: Icon(Icons.refresh),
                 ),
               ],
             ),
@@ -136,6 +155,7 @@ class _CustomersListState extends State<CustomersList> {
                         customerSnap = firestore
                             .collection("deliverycustomers")
                             .where("name", isGreaterThan: value)
+                            .limit(20)
                             .snapshots();
                       });
                     },
@@ -147,13 +167,49 @@ class _CustomersListState extends State<CustomersList> {
                       customerSnap = firestore
                           .collection("deliverycustomers")
                           .orderBy("id", descending: true)
+                          .limit(20)
                           .snapshots();
+                      _nameController.clear();
                     });
                   },
                   child: Text("Temizle"),
                 ),
               ],
             ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              child: Text(
+                "Toplam müşteri adedi: $allCustomers",
+                style: pageStyle.bodySmall,
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                    child: Text(
+                  "TCKN / VKN",
+                  style: pageStyle.titleMedium,
+                )),
+                Expanded(
+                    child: Text(
+                  "İsim / Ünvan",
+                  style: pageStyle.titleMedium,
+                )),
+                Expanded(
+                    child: Text(
+                  "İşlemler",
+                  style: pageStyle.titleMedium,
+                )),
+              ],
+            ),
+            Divider(),
             Flexible(
               child: StreamBuilder(
                 stream: customerSnap,
@@ -161,7 +217,7 @@ class _CustomersListState extends State<CustomersList> {
                   return !snapshot.hasData
                       ? const CircularProgressIndicator()
                       : ListView.builder(
-                          itemCount: 50,
+                          itemCount: snapshot.data?.docs.length,
                           itemBuilder: (context, index) {
                             DocumentSnapshot docs = snapshot.data!.docs[index];
 
@@ -180,92 +236,14 @@ class _CustomersListState extends State<CustomersList> {
                                   _nameController.text = docs["name"];
                                   _tcknController.text = docs["tcknvkn"];
                                 });
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    title: const Text("Düzenle"),
-                                    content: SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.6,
-                                      width: 450,
-                                      child: Column(
-                                        children: [
-                                          const Divider(),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              const Expanded(
-                                                  flex: 1,
-                                                  child: Text("TCKN / VKN")),
-                                              const SizedBox(width: 15),
-                                              Expanded(
-                                                  flex: 3,
-                                                  child: TextField(
-                                                    controller: _tcknController,
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                        ),
-                                                        hintText:
-                                                            docs["tcknvkn"]),
-                                                  ))
-                                            ],
-                                          ),
-                                          const SizedBox(height: 25),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              const Expanded(
-                                                  flex: 1, child: Text("İsim")),
-                                              const SizedBox(width: 15),
-                                              Expanded(
-                                                  flex: 3,
-                                                  child: TextField(
-                                                    controller: _nameController,
-                                                    inputFormatters: [
-                                                      UppercaseTextFormatter()
-                                                    ],
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                        ),
-                                                        hintText: docs["name"]),
-                                                  ))
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    actions: [
-                                      OutlinedButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text("İptal"),
-                                      ),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            firestore
-                                                .collection("deliverycustomers")
-                                                .doc(docs.id)
-                                                .set({
-                                              "name": _nameController.text,
-                                              "tcknvkn": _tcknController.text,
-                                            }).whenComplete(() {
-                                              addTckn();
-                                              if (context.mounted) {
-                                                Navigator.pop(context);
-                                              }
-                                            });
-                                          },
-                                          child: const Text("Düzenle"))
-                                    ],
-                                  ),
+
+                                dataServices.editCustomer(
+                                  context,
+                                  _tcknController,
+                                  docs["tcknvkn"],
+                                  _nameController,
+                                  docs["name"],
+                                  docs.id,
                                 );
                               },
                               visibility: visibility,
@@ -287,10 +265,6 @@ class _CustomersListState extends State<CustomersList> {
                         );
                 },
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text("Daha Fazla Göster"),
             ),
           ],
         ),

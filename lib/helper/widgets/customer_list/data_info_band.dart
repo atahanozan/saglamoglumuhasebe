@@ -46,7 +46,7 @@ class _DataInfoBandState extends State<DataInfoBand> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Colors.black12,
+            color: Colors.white,
           ),
         ),
       ),
@@ -148,25 +148,31 @@ class _DataInfoBandState extends State<DataInfoBand> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               )),
-              const SizedBox(width: 50),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    visibility = !visibility;
-                    btnNameDeliv = visibility ? "Kapat" : "Teslim";
-                  });
-                },
-                child: Text(btnNameDeliv),
-              ),
-              const SizedBox(width: 10),
-              OutlinedButton(
-                onPressed: widget.editCustomer,
-                child: const Text("Düzenle"),
-              ),
-              const SizedBox(width: 10),
-              IconButton(
-                onPressed: widget.deleteCustomer,
-                icon: const Icon(Icons.delete),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          visibility = !visibility;
+                          btnNameDeliv = visibility ? "Kapat" : "Teslim";
+                        });
+                      },
+                      child: Text(btnNameDeliv),
+                    ),
+                    const SizedBox(width: 10),
+                    OutlinedButton(
+                      onPressed: widget.editCustomer,
+                      child: const Text("Düzenle"),
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      onPressed: widget.deleteCustomer,
+                      icon: const Icon(Icons.delete),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

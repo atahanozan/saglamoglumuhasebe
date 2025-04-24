@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:saglamoglu_muhasebe/pages/splash_page.dart';
@@ -42,6 +43,23 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             backgroundColor: customBlack,
             foregroundColor: customWhite,
+          ),
+          textTheme: TextTheme(
+            bodySmall: GoogleFonts.raleway(),
+            bodyLarge: GoogleFonts.raleway(),
+            bodyMedium: GoogleFonts.raleway(),
+            titleLarge: GoogleFonts.raleway(),
+            titleMedium: GoogleFonts.raleway(),
+            titleSmall: GoogleFonts.raleway(),
+            headlineLarge: GoogleFonts.raleway(),
+            headlineMedium: GoogleFonts.raleway(),
+            headlineSmall: GoogleFonts.raleway(),
+            displayLarge: GoogleFonts.raleway(),
+            displayMedium: GoogleFonts.raleway(),
+            displaySmall: GoogleFonts.raleway(),
+            labelLarge: GoogleFonts.raleway(),
+            labelMedium: GoogleFonts.raleway(),
+            labelSmall: GoogleFonts.raleway(),
           )),
       debugShowCheckedModeBanner: false,
       home: const SplashPage(),
