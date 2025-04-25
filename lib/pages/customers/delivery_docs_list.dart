@@ -33,6 +33,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
         Filter("company", isEqualTo: "Sağlam"),
         Filter("company", isEqualTo: "Elmina"),
       ))
+      .limit(50)
       .snapshots();
 
   Future<void> changeFilter(BuildContext myContext) async {
@@ -55,6 +56,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
               Filter("company", isEqualTo: filter1),
               Filter("company", isEqualTo: filter2),
             ))
+            .limit(50)
             .snapshots();
       });
     }
@@ -69,6 +71,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
             Filter("company", isEqualTo: filter1),
             Filter("company", isEqualTo: filter2),
           ))
+          .limit(50)
           .snapshots();
     });
     super.initState();
@@ -112,6 +115,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                   customSnapshot = FirebaseFirestore.instance
                       .collection("deliverydocs")
                       .where("name", isGreaterThan: name)
+                      .limit(50)
                       .snapshots();
                 });
               },
@@ -184,6 +188,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                       Filter("company", isEqualTo: filter1),
                                       Filter("company", isEqualTo: filter2),
                                     ))
+                                    .limit(50)
                                     .snapshots();
                               });
                             } else {
@@ -197,6 +202,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                       Filter("company", isEqualTo: filter1),
                                       Filter("company", isEqualTo: filter2),
                                     ))
+                                    .limit(50)
                                     .snapshots();
                               });
                             }
@@ -222,6 +228,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                           customSnapshot = FirebaseFirestore.instance
                               .collection("deliverydocs")
                               .where("price", isGreaterThan: price)
+                              .limit(50)
                               .snapshots();
                         });
                       },
@@ -237,6 +244,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                               Filter("company", isEqualTo: "Sağlam"),
                               Filter("company", isEqualTo: "Elmina"),
                             ))
+                            .limit(50)
                             .snapshots();
                         btnVisibility = false;
                         filter3 = "";

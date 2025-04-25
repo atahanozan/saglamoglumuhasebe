@@ -33,7 +33,7 @@ class _CustomersListState extends State<CustomersList> {
       .instance
       .collection("deliverycustomers")
       .orderBy("id", descending: true)
-      .limit(20)
+      .limit(50)
       .snapshots();
 
   Future<void> addTckn() async {
@@ -155,7 +155,7 @@ class _CustomersListState extends State<CustomersList> {
                         customerSnap = firestore
                             .collection("deliverycustomers")
                             .where("name", isGreaterThan: value)
-                            .limit(20)
+                            .limit(50)
                             .snapshots();
                       });
                     },
@@ -167,7 +167,7 @@ class _CustomersListState extends State<CustomersList> {
                       customerSnap = firestore
                           .collection("deliverycustomers")
                           .orderBy("id", descending: true)
-                          .limit(20)
+                          .limit(50)
                           .snapshots();
                       _nameController.clear();
                     });
