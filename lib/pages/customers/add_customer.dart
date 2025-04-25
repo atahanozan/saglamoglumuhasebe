@@ -4,7 +4,9 @@ import 'package:saglamoglu_muhasebe/helper/widgets/customer_choice.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/add_new_customer.dart';
 
 class AddCustomer extends StatefulWidget {
-  const AddCustomer({super.key});
+  const AddCustomer({super.key, required this.tckns});
+
+  final List<String> tckns;
 
   @override
   State<AddCustomer> createState() => _AddCustomerState();
@@ -12,16 +14,45 @@ class AddCustomer extends StatefulWidget {
 
 class _AddCustomerState extends State<AddCustomer> {
   List<Widget> pages = [
-    const AddNewCustomer(),
-    const AddNewCustomer(),
-    const AddNewCustomer(),
-    const AddNewCustomer(),
+    const AddNewCustomer(
+      tckns: [],
+    ),
+    const AddNewCustomer(
+      tckns: [],
+    ),
+    const AddNewCustomer(
+      tckns: [],
+    ),
+    const AddNewCustomer(
+      tckns: [],
+    ),
   ];
 
   int pageNumber = 3;
 
   Color btn1Color = CustomColors.customYellow;
   Color btn2Color = CustomColors.customGrey;
+
+  @override
+  void initState() {
+    setState(() {
+      pages = [
+        AddNewCustomer(
+          tckns: widget.tckns,
+        ),
+        AddNewCustomer(
+          tckns: widget.tckns,
+        ),
+        AddNewCustomer(
+          tckns: widget.tckns,
+        ),
+        AddNewCustomer(
+          tckns: widget.tckns,
+        ),
+      ];
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

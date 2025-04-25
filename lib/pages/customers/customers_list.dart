@@ -25,7 +25,6 @@ class _CustomersListState extends State<CustomersList> {
   String name = "";
   String companyName = "Sağlam";
   String date = DateTime.now().toString().split(" ")[0];
-  int customerCount = 0;
   int allCustomers = 0;
   bool visibility = false;
 
@@ -38,16 +37,13 @@ class _CustomersListState extends State<CustomersList> {
 
   Future<void> addTckn() async {
     await firestore.collection("deliverycustomers").get().then((value) {
+      setState(() {
+        allCustomers = value.docs.length;
+      });
+
       for (var element in value.docs) {
         tckns.add(element["tcknvkn"]);
         names.add(element["name"]);
-        setState(() {
-          if (value.docs.length < 50) {
-            customerCount = value.docs.length;
-          } else {
-            customerCount = 50;
-          }
-        });
       }
     });
   }
@@ -67,24 +63,17 @@ class _CustomersListState extends State<CustomersList> {
     }
   }
 
-  Future<void> allCusomterCounts() async {
-    await FirebaseFirestore.instance
-        .collection("deliverycustomers")
-        .count()
-        .get()
-        .then((value) {
-      setState(() {
-        allCustomers = value.count!;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    addTckn();
-    allCusomterCounts();
-    super.initState();
-  }
+  // Future<void> allCusomterCounts() async {
+  //   await FirebaseFirestore.instance
+  //       .collection("deliverycustomers")
+  //       .count()
+  //       .get()
+  //       .then((value) {
+  //     setState(() {
+  //       allCustomers = value.count!;
+  //     });
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -106,7 +95,9 @@ class _CustomersListState extends State<CustomersList> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const AddCustomer(),
+              builder: (_) => AddCustomer(
+                tckns: tckns,
+              ),
             ),
           );
         },
@@ -129,10 +120,7 @@ class _CustomersListState extends State<CustomersList> {
                 ),
                 const Spacer(),
                 OutlinedButton(
-                  onPressed: () {
-                    addTckn();
-                    allCusomterCounts();
-                  },
+                  onPressed: () {},
                   child: Icon(Icons.refresh),
                 ),
               ],
@@ -212,7 +200,11 @@ class _CustomersListState extends State<CustomersList> {
             Divider(),
             Flexible(
               child: StreamBuilder(
-                stream: customerSnap,
+                stream: firestore
+                    .collection("deliverycustomers")
+                    .orderBy("id", descending: true)
+                    .limit(50)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   return !snapshot.hasData
                       ? const CircularProgressIndicator()

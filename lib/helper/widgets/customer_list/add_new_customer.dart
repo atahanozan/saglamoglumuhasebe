@@ -6,7 +6,9 @@ import 'package:saglamoglu_muhasebe/helper/utils/customer_list.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class AddNewCustomer extends StatefulWidget {
-  const AddNewCustomer({super.key});
+  const AddNewCustomer({super.key, required this.tckns});
+
+  final List<String> tckns;
 
   @override
   State<AddNewCustomer> createState() => _AddNewCustomerState();
@@ -17,21 +19,6 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
   final TextEditingController nameController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final DataServices dataServices = DataServices();
-  List<String> tckns = [];
-
-  Future<void> addTckn() async {
-    await firestore.collection("deliverycustomers").get().then((value) {
-      for (var element in value.docs) {
-        tckns.add(element["tcknvkn"]);
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    addTckn();
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -106,7 +93,7 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
               style:
                   ElevatedButton.styleFrom(fixedSize: Size(pageSize.width, 20)),
               onPressed: () {
-                if (tckns.contains(tcknController.text)) {
+                if (widget.tckns.contains(tcknController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("Bu müşteri daha önce eklenmiş !"),
@@ -119,7 +106,6 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                     dataServices
                         .addCustomer(nameController.text, tcknController.text)
                         .whenComplete(() {
-                      addTckn();
                       setState(() {
                         tcknController.clear();
                         nameController.clear();
