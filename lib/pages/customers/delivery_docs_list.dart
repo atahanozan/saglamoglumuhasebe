@@ -56,25 +56,9 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
               Filter("company", isEqualTo: filter1),
               Filter("company", isEqualTo: filter2),
             ))
-            .limit(50)
             .snapshots();
       });
     }
-  }
-
-  @override
-  void initState() {
-    setState(() {
-      customSnapshot = FirebaseFirestore.instance
-          .collection("deliverydocs")
-          .where(Filter.or(
-            Filter("company", isEqualTo: filter1),
-            Filter("company", isEqualTo: filter2),
-          ))
-          .limit(50)
-          .snapshots();
-    });
-    super.initState();
   }
 
   @override
@@ -202,7 +186,6 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                       Filter("company", isEqualTo: filter1),
                                       Filter("company", isEqualTo: filter2),
                                     ))
-                                    .limit(50)
                                     .snapshots();
                               });
                             }
@@ -222,15 +205,13 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                           border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       )),
-                      onChanged: (value) {
-                        setState(() {
-                          price = value;
-                          customSnapshot = FirebaseFirestore.instance
-                              .collection("deliverydocs")
-                              .where("price", isGreaterThan: price)
-                              .limit(50)
-                              .snapshots();
-                        });
+                      onEditingComplete: () {
+                        customSnapshot = FirebaseFirestore.instance
+                            .collection("deliverydocs")
+                            .where("price",
+                                isGreaterThan: _priceController.text)
+                            .limit(50)
+                            .snapshots();
                       },
                     ),
                   ),

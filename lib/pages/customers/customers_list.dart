@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/data_info_band.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
@@ -63,17 +64,17 @@ class _CustomersListState extends State<CustomersList> {
     }
   }
 
-  // Future<void> allCusomterCounts() async {
-  //   await FirebaseFirestore.instance
-  //       .collection("deliverycustomers")
-  //       .count()
-  //       .get()
-  //       .then((value) {
-  //     setState(() {
-  //       allCustomers = value.count!;
-  //     });
-  //   });
-  // }
+  Future<void> allCusomterCounts() async {
+    await FirebaseFirestore.instance
+        .collection("deliverycustomers")
+        .count()
+        .get()
+        .then((value) {
+      setState(() {
+        allCustomers = value.count!;
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -120,7 +121,9 @@ class _CustomersListState extends State<CustomersList> {
                 ),
                 const Spacer(),
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    allCusomterCounts();
+                  },
                   child: Icon(Icons.refresh),
                 ),
               ],
@@ -132,24 +135,32 @@ class _CustomersListState extends State<CustomersList> {
                 Expanded(
                   child: TextField(
                     controller: _nameController,
+                    inputFormatters: [
+                      UppercaseTextFormatter(),
+                    ],
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                       prefixIcon: const Icon(Icons.search),
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        customerSnap = firestore
-                            .collection("deliverycustomers")
-                            .where("name", isGreaterThan: value)
-                            .limit(50)
-                            .snapshots();
-                      });
-                    },
                   ),
                 ),
+                SizedBox(width: 20),
                 ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      customerSnap = firestore
+                          .collection("deliverycustomers")
+                          .where("name", isGreaterThan: _nameController.text)
+                          .limit(10)
+                          .snapshots();
+                    });
+                  },
+                  child: Icon(Icons.search_rounded),
+                ),
+                SizedBox(width: 10),
+                OutlinedButton(
                   onPressed: () {
                     setState(() {
                       customerSnap = firestore
@@ -160,7 +171,7 @@ class _CustomersListState extends State<CustomersList> {
                       _nameController.clear();
                     });
                   },
-                  child: Text("Temizle"),
+                  child: Icon(Icons.clear_rounded),
                 ),
               ],
             ),
@@ -200,11 +211,7 @@ class _CustomersListState extends State<CustomersList> {
             Divider(),
             Flexible(
               child: StreamBuilder(
-                stream: firestore
-                    .collection("deliverycustomers")
-                    .orderBy("id", descending: true)
-                    .limit(50)
-                    .snapshots(),
+                stream: customerSnap,
                 builder: (context, snapshot) {
                   return !snapshot.hasData
                       ? const CircularProgressIndicator()
