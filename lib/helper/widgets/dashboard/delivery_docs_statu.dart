@@ -19,7 +19,7 @@ class DeliveryDocsStatu extends StatelessWidget {
       children: [
         Text(
           "Teslim Dosya Durumu",
-          style: pageStyle.headlineSmall,
+          style: pageStyle.titleMedium,
         ),
         Divider(),
         Row(

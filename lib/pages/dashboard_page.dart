@@ -10,15 +10,20 @@ class DashboardPage extends StatelessWidget {
     this.name = "",
     this.statuFalse = 0,
     this.statuTrue = 0,
+    this.customerCount = 0,
+    this.admin = false,
   });
 
   final String name;
   final int statuTrue;
   final int statuFalse;
+  final int customerCount;
+  final bool admin;
 
   @override
   Widget build(BuildContext context) {
     final TextTheme pageStyle = Theme.of(context).textTheme;
+    const double gridSize = 20;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -52,25 +57,52 @@ class DashboardPage extends StatelessWidget {
                 const Expanded(
                   child: TodayWidget(),
                 ),
-                const SizedBox(
-                  width: 50,
-                ),
+                const SizedBox(width: gridSize),
                 Expanded(
-                    child: FavoriteButtons(
-                  childs: Column(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(
-                        "Sık Kullanılanlar",
-                        style: pageStyle.headlineSmall,
+                      FavoriteButtons(
+                        childs: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Sık Kullanılanlar",
+                              style: pageStyle.titleMedium,
+                            ),
+                            const Divider(),
+                            Text(
+                                "En çok kullanılan sekmeler burada listelenecektir.")
+                          ],
+                        ),
+                        admin: admin,
                       ),
-                      const SizedBox(height: 30),
-                      const Divider(),
+                      SizedBox(height: gridSize),
+                      FavoriteButtons(
+                        childs: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Toplam Müşteri Adedi",
+                              style: pageStyle.titleMedium,
+                            ),
+                            Divider(),
+                            Text(
+                              "$customerCount",
+                              style: pageStyle.headlineMedium,
+                            )
+                          ],
+                        ),
+                        admin: true,
+                      ),
                     ],
                   ),
-                )),
-                const SizedBox(
-                  width: 50,
                 ),
+                const SizedBox(width: gridSize),
                 Expanded(
                     child: FavoriteButtons(
                   childs: DeliveryDocsStatu(
@@ -78,6 +110,7 @@ class DashboardPage extends StatelessWidget {
                     statuTrue: statuTrue,
                     total: statuTrue + statuFalse,
                   ),
+                  admin: true,
                 )),
               ],
             ),

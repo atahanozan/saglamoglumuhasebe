@@ -170,4 +170,49 @@ class DataServices {
       ),
     );
   }
+
+  Future<void> editDeliveryDocStatu(
+    BuildContext context,
+    String name,
+    bool statu,
+    String? docId,
+  ) async {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(name),
+        content: statu
+            ? Text("Gelmedi olarak işaretle?")
+            : Text("Geldi olarak işaretle?"),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              if (statu) {
+                await _firestore
+                    .collection("deliverydocs")
+                    .doc(docId)
+                    .update({"statu": false});
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              } else {
+                await _firestore
+                    .collection("deliverydocs")
+                    .doc(docId)
+                    .update({"statu": true});
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              }
+            },
+            child: Text("Tamam"),
+          ),
+          OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("İptal"),
+          ),
+        ],
+      ),
+    );
+  }
 }

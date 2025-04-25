@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
 
 class FavoriteButtons extends StatelessWidget {
-  const FavoriteButtons({super.key, required this.childs});
+  const FavoriteButtons({super.key, required this.childs, required this.admin});
 
   final Widget childs;
+  final bool admin;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,8 @@ class FavoriteButtons extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: CustomColors.customWhite,
       ),
-      child: childs,
+      child:
+          admin ? childs : Text("En çok kullanılan sekmeler burada listelenir"),
     );
   }
 }

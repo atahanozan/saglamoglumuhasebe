@@ -7,6 +7,7 @@ import 'package:saglamoglu_muhasebe/helper/widgets/side_bar_buttons.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/customers_list.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/delivery_docs_list.dart';
 import 'package:saglamoglu_muhasebe/pages/dashboard_page.dart';
+import 'package:saglamoglu_muhasebe/pages/done_delivery_docs.dart';
 import 'package:saglamoglu_muhasebe/pages/insructions/insructions_page.dart';
 import 'package:saglamoglu_muhasebe/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,11 +31,13 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
     DashboardPage(),
     CustomersList(),
     const DeliveryDocsList(),
+    const DoneDeliveryDocs(),
     const InsructionsPage(),
   ];
   String uid = "";
   int statuTrueLenght = 0;
   int statuFalseLenght = 0;
+  int customerCount = 0;
   int pageIndex = 0;
 
   Future<void> getUid() async {
@@ -66,15 +69,27 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
         statuTrueLenght = value.count!;
       });
     });
+    await FirebaseFirestore.instance
+        .collection("deliverycustomers")
+        .count()
+        .get()
+        .then((value) {
+      setState(() {
+        customerCount = value.count!;
+      });
+    });
     setState(() {
       pages = [
         DashboardPage(
           name: widget.name,
           statuFalse: statuFalseLenght,
           statuTrue: statuTrueLenght,
+          admin: widget.admin,
+          customerCount: customerCount,
         ),
         const CustomersList(),
         DeliveryDocsList(admin: widget.admin),
+        DoneDeliveryDocs(admin: widget.admin),
         const InsructionsPage(),
       ];
     });
@@ -164,7 +179,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       childColor: pageIndex == 2
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
-                      btnName: "Teslim Dosyaları",
+                      btnName: "Bekleyen Teslimler",
                       btnIcon: Icons.group_add,
                       btnFunc: () {
                         changePage(2);
@@ -176,11 +191,23 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       childColor: pageIndex == 3
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
+                      btnName: "Gelen Teslimler",
+                      btnIcon: Icons.group_add,
+                      btnFunc: () {
+                        changePage(3);
+                      }),
+                  SideBarButtons(
+                      btnColor: pageIndex == 4
+                          ? CustomColors.customGrey
+                          : Colors.transparent,
+                      childColor: pageIndex == 4
+                          ? CustomColors.customBlack
+                          : CustomColors.customWhite,
                       btnName: "Talimatlar",
                       btnIcon: Icons.request_page_rounded,
                       btnFunc: () {
                         if (widget.admin) {
-                          changePage(3);
+                          changePage(4);
                         } else {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
