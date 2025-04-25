@@ -77,6 +77,12 @@ class _CustomersListState extends State<CustomersList> {
   }
 
   @override
+  void initState() {
+    allCusomterCounts();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     _tcknController.dispose();
@@ -144,22 +150,18 @@ class _CustomersListState extends State<CustomersList> {
                       ),
                       prefixIcon: const Icon(Icons.search),
                     ),
+                    onEditingComplete: () {
+                      setState(() {
+                        customerSnap = firestore
+                            .collection("deliverycustomers")
+                            .where("name", isGreaterThan: _nameController.text)
+                            .limit(10)
+                            .snapshots();
+                      });
+                    },
                   ),
                 ),
                 SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      customerSnap = firestore
-                          .collection("deliverycustomers")
-                          .where("name", isGreaterThan: _nameController.text)
-                          .limit(10)
-                          .snapshots();
-                    });
-                  },
-                  child: Icon(Icons.search_rounded),
-                ),
-                SizedBox(width: 10),
                 OutlinedButton(
                   onPressed: () {
                     setState(() {

@@ -85,24 +85,30 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
               style: GoogleFonts.raleway(fontSize: 25),
             ),
             const Divider(),
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onEditingComplete: () {
+                      setState(() {
+                        customSnapshot = FirebaseFirestore.instance
+                            .collection("deliverydocs")
+                            .where("name", isGreaterThan: _nameController.text)
+                            .limit(50)
+                            .snapshots();
+                      });
+                    },
+                  ),
                 ),
-                prefixIcon: const Icon(Icons.search),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  name = value;
-                  customSnapshot = FirebaseFirestore.instance
-                      .collection("deliverydocs")
-                      .where("name", isGreaterThan: name)
-                      .limit(50)
-                      .snapshots();
-                });
-              },
+              ],
             ),
             Container(
               padding: const EdgeInsets.all(12),
@@ -206,12 +212,14 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                         borderRadius: BorderRadius.circular(20),
                       )),
                       onEditingComplete: () {
-                        customSnapshot = FirebaseFirestore.instance
-                            .collection("deliverydocs")
-                            .where("price",
-                                isGreaterThan: _priceController.text)
-                            .limit(50)
-                            .snapshots();
+                        setState(() {
+                          customSnapshot = FirebaseFirestore.instance
+                              .collection("deliverydocs")
+                              .where("price",
+                                  isGreaterThan: _priceController.text)
+                              .limit(50)
+                              .snapshots();
+                        });
                       },
                     ),
                   ),
