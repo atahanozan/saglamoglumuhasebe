@@ -1,25 +1,110 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class DeliveryDocsStatu extends StatelessWidget {
-  const DeliveryDocsStatu({
-    super.key,
-    required this.statuFalse,
-    required this.statuTrue,
-    required this.total,
-  });
+class DeliveryDocsStatu extends StatefulWidget {
+  const DeliveryDocsStatu({super.key});
 
-  final int statuTrue;
-  final int statuFalse;
-  final int total;
+  @override
+  State<DeliveryDocsStatu> createState() => _DeliveryDocsStatuState();
+}
+
+class _DeliveryDocsStatuState extends State<DeliveryDocsStatu> {
+  final FirebaseFirestore firebase = FirebaseFirestore.instance;
+  int statuFalseLenght = 0;
+  int statuTrueLenght = 0;
+  String btnName = DateTime.now().toString().split(" ")[0];
+
+  Future<void> getDocStatu() async {
+    await FirebaseFirestore.instance
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: false)
+        .count()
+        .get()
+        .then((value) {
+      setState(() {
+        statuFalseLenght = value.count!;
+      });
+    });
+    await FirebaseFirestore.instance
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: true)
+        .count()
+        .get()
+        .then((value) {
+      setState(() {
+        statuTrueLenght = value.count!;
+      });
+    });
+  }
+
+  Future<void> pickDate(BuildContext myContext) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: myContext,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      await FirebaseFirestore.instance
+          .collection("deliverydocs")
+          .where("date", isEqualTo: pickedDate.toString().split(" ")[0])
+          .where("statu", isEqualTo: false)
+          .count()
+          .get()
+          .then((value) {
+        setState(() {
+          statuFalseLenght = value.count!;
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection("deliverydocs")
+          .where("date", isEqualTo: pickedDate.toString().split(" ")[0])
+          .where("statu", isEqualTo: true)
+          .count()
+          .get()
+          .then((value) {
+        setState(() {
+          statuTrueLenght = value.count!;
+        });
+      });
+      setState(() {
+        btnName = pickedDate.toString().split(" ")[0];
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getDocStatu();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final TextTheme pageStyle = Theme.of(context).textTheme;
     return Column(
       children: [
-        Text(
-          "Teslim Dosya Durumu",
-          style: pageStyle.titleMedium,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Text(
+                "Teslim Dosya Durumu",
+                style: pageStyle.titleMedium,
+              ),
+            ),
+            FittedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  pickDate(context);
+                },
+                child: Text(btnName),
+              ),
+            ),
+          ],
         ),
         Divider(),
         Row(
@@ -31,7 +116,7 @@ class DeliveryDocsStatu extends StatelessWidget {
                 children: [
                   Text("Geldi"),
                   Text(
-                    "$statuTrue",
+                    "$statuTrueLenght",
                     style: pageStyle.headlineSmall
                         ?.copyWith(color: Colors.green.shade800),
                   ),
@@ -44,7 +129,7 @@ class DeliveryDocsStatu extends StatelessWidget {
                 children: [
                   Text("Bekleniyor"),
                   Text(
-                    "$statuFalse",
+                    "$statuFalseLenght",
                     style: pageStyle.headlineSmall
                         ?.copyWith(color: Colors.red.shade800),
                   ),
@@ -54,7 +139,8 @@ class DeliveryDocsStatu extends StatelessWidget {
           ],
         ),
         const Divider(),
-        Text("$total", style: pageStyle.headlineMedium),
+        Text("${statuFalseLenght + statuTrueLenght}",
+            style: pageStyle.headlineMedium),
       ],
     );
   }

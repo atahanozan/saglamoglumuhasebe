@@ -16,11 +16,13 @@ class DataInfoBand extends StatefulWidget {
     required this.value,
     required this.priceController,
     required this.tcknvkn,
+    required this.customerDate,
   });
 
   final String customerId;
   final String customerName;
   final String date;
+  final String customerDate;
   final String value;
   final String tcknvkn;
   final VoidCallback deleteCustomer;
@@ -141,6 +143,8 @@ class _DataInfoBandState extends State<DataInfoBand> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(widget.customerDate),
+              const SizedBox(width: 20),
               Expanded(child: Text(widget.customerId)),
               Expanded(
                   child: Text(
@@ -162,9 +166,11 @@ class _DataInfoBandState extends State<DataInfoBand> {
                       child: Text(btnNameDeliv),
                     ),
                     const SizedBox(width: 10),
-                    OutlinedButton(
+                    IconButton(
                       onPressed: widget.editCustomer,
-                      child: const Text("Düzenle"),
+                      icon: Icon(
+                        Icons.edit_rounded,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     IconButton(

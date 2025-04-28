@@ -193,6 +193,11 @@ class _CustomersListState extends State<CustomersList> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
+                Text(
+                  " Tarih    ",
+                  style: pageStyle.titleMedium,
+                ),
+                SizedBox(width: 40),
                 Expanded(
                     child: Text(
                   "TCKN / VKN",
@@ -261,6 +266,7 @@ class _CustomersListState extends State<CustomersList> {
                               value: companyName,
                               priceController: _priceController,
                               tcknvkn: docs["tcknvkn"],
+                              customerDate: docs["date"],
                             );
                           },
                         );

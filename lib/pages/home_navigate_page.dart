@@ -35,6 +35,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
     const InsructionsPage(),
   ];
   String uid = "";
+  String btnName = DateTime.now().toString().split(" ")[0];
   int statuTrueLenght = 0;
   int statuFalseLenght = 0;
   int customerCount = 0;
@@ -50,26 +51,6 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
 
   Future<void> getDocStatu() async {
     await FirebaseFirestore.instance
-        .collection("deliverydocs")
-        .where("statu", isEqualTo: false)
-        .count()
-        .get()
-        .then((value) {
-      setState(() {
-        statuFalseLenght = value.count!;
-      });
-    });
-    await FirebaseFirestore.instance
-        .collection("deliverydocs")
-        .where("statu", isEqualTo: true)
-        .count()
-        .get()
-        .then((value) {
-      setState(() {
-        statuTrueLenght = value.count!;
-      });
-    });
-    await FirebaseFirestore.instance
         .collection("deliverycustomers")
         .count()
         .get()
@@ -82,8 +63,6 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
       pages = [
         DashboardPage(
           name: widget.name,
-          statuFalse: statuFalseLenght,
-          statuTrue: statuTrueLenght,
           admin: widget.admin,
           customerCount: customerCount,
         ),

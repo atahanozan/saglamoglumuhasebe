@@ -8,15 +8,11 @@ class DashboardPage extends StatelessWidget {
   const DashboardPage({
     super.key,
     this.name = "",
-    this.statuFalse = 0,
-    this.statuTrue = 0,
     this.customerCount = 0,
     this.admin = false,
   });
 
   final String name;
-  final int statuTrue;
-  final int statuFalse;
   final int customerCount;
   final bool admin;
 
@@ -105,11 +101,7 @@ class DashboardPage extends StatelessWidget {
                 const SizedBox(width: gridSize),
                 Expanded(
                     child: FavoriteButtons(
-                  childs: DeliveryDocsStatu(
-                    statuFalse: statuFalse,
-                    statuTrue: statuTrue,
-                    total: statuTrue + statuFalse,
-                  ),
+                  childs: DeliveryDocsStatu(),
                   admin: true,
                 )),
               ],

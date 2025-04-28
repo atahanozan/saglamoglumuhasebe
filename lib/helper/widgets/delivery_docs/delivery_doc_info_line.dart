@@ -43,7 +43,12 @@ class DeliveryDocInfoLine extends StatelessWidget {
         children: [
           Expanded(child: Text(date)),
           const SizedBox(width: 20),
-          Expanded(child: Text(name)),
+          Expanded(
+              child: Text(
+            name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          )),
           const SizedBox(width: 20),
           Expanded(child: Text(company)),
           const SizedBox(width: 20),
@@ -67,6 +72,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
                     },
                     child: const Icon(Icons.save),
                   ),
+                  SizedBox(width: 15),
                   ElevatedButton(
                     onPressed: () {
                       PrintDeliverDocs().printDeliveryDocs(
@@ -80,7 +86,9 @@ class DeliveryDocInfoLine extends StatelessWidget {
                     },
                     child: const Icon(Icons.print),
                   ),
+                  SizedBox(width: 15),
                   IconButton(onPressed: deleteDoc, icon: Icon(Icons.delete)),
+                  SizedBox(width: 15),
                   IconButton(onPressed: statuChange, icon: statuIcon),
                 ],
               ),

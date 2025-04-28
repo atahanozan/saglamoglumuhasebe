@@ -36,6 +36,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
         Filter("company", isEqualTo: "Sağlam"),
         Filter("company", isEqualTo: "Elmina"),
       ))
+      .orderBy("id", descending: true)
       .limit(50)
       .snapshots();
 
@@ -60,6 +61,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
               Filter("company", isEqualTo: filter1),
               Filter("company", isEqualTo: filter2),
             ))
+            .orderBy("id", descending: true)
             .snapshots();
       });
     }
@@ -108,6 +110,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                             .where("statu", isEqualTo: true)
                             .where("name", isGreaterThan: _nameController.text)
                             .limit(50)
+                            .orderBy("id", descending: true)
                             .snapshots();
                       });
                     },
@@ -184,6 +187,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                       Filter("company", isEqualTo: filter1),
                                       Filter("company", isEqualTo: filter2),
                                     ))
+                                    .orderBy("id", descending: true)
                                     .limit(50)
                                     .snapshots();
                               });
@@ -199,6 +203,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                       Filter("company", isEqualTo: filter1),
                                       Filter("company", isEqualTo: filter2),
                                     ))
+                                    .orderBy("id", descending: true)
                                     .snapshots();
                               });
                             }
@@ -225,6 +230,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                               .where("statu", isEqualTo: true)
                               .where("price",
                                   isGreaterThan: _priceController.text)
+                              .orderBy("id", descending: true)
                               .limit(50)
                               .snapshots();
                         });
@@ -242,6 +248,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                               Filter("company", isEqualTo: "Sağlam"),
                               Filter("company", isEqualTo: "Elmina"),
                             ))
+                            .orderBy("id", descending: true)
                             .limit(50)
                             .snapshots();
                         btnVisibility = false;
