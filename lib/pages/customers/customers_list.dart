@@ -19,6 +19,7 @@ class _CustomersListState extends State<CustomersList> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _tcknController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _editNameController = TextEditingController();
   final DataServices dataServices = DataServices();
   List<String> tckns = [];
   List<String> names = [];
@@ -87,6 +88,7 @@ class _CustomersListState extends State<CustomersList> {
     _nameController.dispose();
     _tcknController.dispose();
     _priceController.dispose();
+    _editNameController.dispose();
     super.dispose();
   }
 
@@ -247,7 +249,7 @@ class _CustomersListState extends State<CustomersList> {
                                   context,
                                   _tcknController,
                                   docs["tcknvkn"],
-                                  _nameController,
+                                  _editNameController,
                                   docs["name"],
                                   docs.id,
                                 );

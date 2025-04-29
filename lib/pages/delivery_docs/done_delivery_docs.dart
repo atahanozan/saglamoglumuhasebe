@@ -4,16 +4,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/delivery_doc_info_line.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
-class DeliveryDocsList extends StatefulWidget {
-  const DeliveryDocsList({super.key, this.admin = false});
+class DoneDeliveryDocs extends StatefulWidget {
+  const DoneDeliveryDocs({super.key, this.admin = false});
 
   final bool admin;
 
   @override
-  State<DeliveryDocsList> createState() => _DeliveryDocsListState();
+  State<DoneDeliveryDocs> createState() => _DoneDeliveryDocsState();
 }
 
-class _DeliveryDocsListState extends State<DeliveryDocsList> {
+class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -31,7 +31,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
   Icon filterIcon = const Icon(Icons.arrow_drop_down_circle_outlined);
   var customSnapshot = FirebaseFirestore.instance
       .collection("deliverydocs")
-      .where("statu", isEqualTo: false)
+      .where("statu", isEqualTo: true)
       .where(Filter.or(
         Filter("company", isEqualTo: "Sağlam"),
         Filter("company", isEqualTo: "Elmina"),
@@ -55,7 +55,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
         btnVisibility = true;
         customSnapshot = FirebaseFirestore.instance
             .collection("deliverydocs")
-            .where("statu", isEqualTo: false)
+            .where("statu", isEqualTo: true)
             .where("date", isEqualTo: filter3)
             .where(Filter.or(
               Filter("company", isEqualTo: filter1),
@@ -107,9 +107,8 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                       setState(() {
                         customSnapshot = FirebaseFirestore.instance
                             .collection("deliverydocs")
-                            .where("statu", isEqualTo: false)
+                            .where("statu", isEqualTo: true)
                             .where("name", isGreaterThan: _nameController.text)
-                            .orderBy("id", descending: true)
                             .limit(50)
                             .snapshots();
                       });
@@ -182,7 +181,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                 filter2 = value.toString();
                                 customSnapshot = FirebaseFirestore.instance
                                     .collection("deliverydocs")
-                                    .where("statu", isEqualTo: false)
+                                    .where("statu", isEqualTo: true)
                                     .where(Filter.or(
                                       Filter("company", isEqualTo: filter1),
                                       Filter("company", isEqualTo: filter2),
@@ -197,7 +196,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                 filter2 = value.toString();
                                 customSnapshot = FirebaseFirestore.instance
                                     .collection("deliverydocs")
-                                    .where("statu", isEqualTo: false)
+                                    .where("statu", isEqualTo: true)
                                     .where("date", isEqualTo: filter3)
                                     .where(Filter.or(
                                       Filter("company", isEqualTo: filter1),
@@ -227,10 +226,9 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                         setState(() {
                           customSnapshot = FirebaseFirestore.instance
                               .collection("deliverydocs")
-                              .where("statu", isEqualTo: false)
+                              .where("statu", isEqualTo: true)
                               .where("price",
                                   isGreaterThan: _priceController.text)
-                              .orderBy("id", descending: true)
                               .limit(50)
                               .snapshots();
                         });
@@ -243,7 +241,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                       setState(() {
                         customSnapshot = FirebaseFirestore.instance
                             .collection("deliverydocs")
-                            .where("statu", isEqualTo: false)
+                            .where("statu", isEqualTo: true)
                             .where(Filter.or(
                               Filter("company", isEqualTo: "Sağlam"),
                               Filter("company", isEqualTo: "Elmina"),
@@ -385,6 +383,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                   );
                                 }
                               },
+                              editDoc: () {},
                             );
                           },
                         );

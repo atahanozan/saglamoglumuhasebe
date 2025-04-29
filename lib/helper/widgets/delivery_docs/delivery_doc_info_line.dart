@@ -11,6 +11,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
     required this.price,
     required this.tcknvkn,
     required this.deleteDoc,
+    required this.editDoc,
     required this.statu,
     required this.statuChange,
     required this.statuIcon,
@@ -22,6 +23,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
   final String price;
   final String tcknvkn;
   final VoidCallback deleteDoc;
+  final VoidCallback editDoc;
   final VoidCallback statuChange;
   final bool statu;
   final Icon statuIcon;
@@ -87,7 +89,15 @@ class DeliveryDocInfoLine extends StatelessWidget {
                     child: const Icon(Icons.print),
                   ),
                   SizedBox(width: 15),
-                  IconButton(onPressed: deleteDoc, icon: Icon(Icons.delete)),
+                  IconButton(
+                    onPressed: editDoc,
+                    icon: Icon(Icons.edit_rounded),
+                  ),
+                  SizedBox(width: 15),
+                  IconButton(
+                    onPressed: deleteDoc,
+                    icon: Icon(Icons.delete_rounded),
+                  ),
                   SizedBox(width: 15),
                   IconButton(onPressed: statuChange, icon: statuIcon),
                 ],

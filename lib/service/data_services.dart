@@ -157,7 +157,7 @@ class DataServices {
           ),
           ElevatedButton(
               onPressed: () {
-                _firestore.collection("deliverycustomers").doc(docId).set({
+                _firestore.collection("deliverycustomers").doc(docId).update({
                   "name": nameController.text,
                   "tcknvkn": tcknController.text,
                 });
@@ -214,5 +214,12 @@ class DataServices {
         ],
       ),
     );
+  }
+
+  Future<void> editDeliveryDoc(
+    String? docId,
+    Map<String, dynamic> newData,
+  ) async {
+    await _firestore.collection("deliverydocs").doc(docId).update(newData);
   }
 }

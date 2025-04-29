@@ -39,6 +39,10 @@ class DashboardPage extends StatelessWidget {
                   style: GoogleFonts.raleway(fontSize: 25),
                 ),
                 const Spacer(),
+                Text(
+                  "Sürüm: 1",
+                  style: pageStyle.bodySmall,
+                ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.notifications_none),

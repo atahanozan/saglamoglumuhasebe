@@ -4,19 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/delivery_doc_info_line.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
-class DoneDeliveryDocs extends StatefulWidget {
-  const DoneDeliveryDocs({super.key, this.admin = false});
+class DeliveryDocsList extends StatefulWidget {
+  const DeliveryDocsList({super.key, this.admin = false});
 
   final bool admin;
 
   @override
-  State<DoneDeliveryDocs> createState() => _DoneDeliveryDocsState();
+  State<DeliveryDocsList> createState() => _DeliveryDocsListState();
 }
 
-class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
+class _DeliveryDocsListState extends State<DeliveryDocsList> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _editPriceController = TextEditingController();
   final DataServices dataServices = DataServices();
   final List<String> companies = [
     "Sağlam",
@@ -27,11 +28,13 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
   String filter1 = "Sağlam";
   String filter2 = "Elmina";
   String? filter3 = "";
+
   bool btnVisibility = false;
+  bool editVisibility = false;
   Icon filterIcon = const Icon(Icons.arrow_drop_down_circle_outlined);
   var customSnapshot = FirebaseFirestore.instance
       .collection("deliverydocs")
-      .where("statu", isEqualTo: true)
+      .where("statu", isEqualTo: false)
       .where(Filter.or(
         Filter("company", isEqualTo: "Sağlam"),
         Filter("company", isEqualTo: "Elmina"),
@@ -55,7 +58,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
         btnVisibility = true;
         customSnapshot = FirebaseFirestore.instance
             .collection("deliverydocs")
-            .where("statu", isEqualTo: true)
+            .where("statu", isEqualTo: false)
             .where("date", isEqualTo: filter3)
             .where(Filter.or(
               Filter("company", isEqualTo: filter1),
@@ -67,10 +70,29 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
     }
   }
 
+  Future<void> editDate(BuildContext myContext, String? docId) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: myContext,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      DataServices().editDeliveryDoc(
+        docId,
+        {
+          "date": pickedDate.toString().split(" ")[0],
+        },
+      );
+    }
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
+    _editPriceController.dispose();
     super.dispose();
   }
 
@@ -107,10 +129,10 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                       setState(() {
                         customSnapshot = FirebaseFirestore.instance
                             .collection("deliverydocs")
-                            .where("statu", isEqualTo: true)
+                            .where("statu", isEqualTo: false)
                             .where("name", isGreaterThan: _nameController.text)
-                            .limit(50)
                             .orderBy("id", descending: true)
+                            .limit(50)
                             .snapshots();
                       });
                     },
@@ -182,7 +204,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                 filter2 = value.toString();
                                 customSnapshot = FirebaseFirestore.instance
                                     .collection("deliverydocs")
-                                    .where("statu", isEqualTo: true)
+                                    .where("statu", isEqualTo: false)
                                     .where(Filter.or(
                                       Filter("company", isEqualTo: filter1),
                                       Filter("company", isEqualTo: filter2),
@@ -197,7 +219,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                 filter2 = value.toString();
                                 customSnapshot = FirebaseFirestore.instance
                                     .collection("deliverydocs")
-                                    .where("statu", isEqualTo: true)
+                                    .where("statu", isEqualTo: false)
                                     .where("date", isEqualTo: filter3)
                                     .where(Filter.or(
                                       Filter("company", isEqualTo: filter1),
@@ -227,7 +249,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                         setState(() {
                           customSnapshot = FirebaseFirestore.instance
                               .collection("deliverydocs")
-                              .where("statu", isEqualTo: true)
+                              .where("statu", isEqualTo: false)
                               .where("price",
                                   isGreaterThan: _priceController.text)
                               .orderBy("id", descending: true)
@@ -243,7 +265,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                       setState(() {
                         customSnapshot = FirebaseFirestore.instance
                             .collection("deliverydocs")
-                            .where("statu", isEqualTo: true)
+                            .where("statu", isEqualTo: false)
                             .where(Filter.or(
                               Filter("company", isEqualTo: "Sağlam"),
                               Filter("company", isEqualTo: "Elmina"),
@@ -313,44 +335,71 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                           itemBuilder: (context, index) {
                             DocumentSnapshot data = snapshot.data!.docs[index];
 
-                            return DeliveryDocInfoLine(
-                              date: data["date"],
-                              name: data["name"],
-                              company: data["company"],
-                              price: data["price"],
-                              tcknvkn: data["tcknvkn"],
-                              deleteDoc: () {
-                                if (widget.admin) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      title: Text(data["name"]),
-                                      content:
-                                          const Text("Teslim dosyasını sil ?"),
-                                      actions: [
-                                        OutlinedButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text("İptal"),
+                            return Visibility(
+                              visible: !editVisibility,
+                              child: DeliveryDocInfoLine(
+                                date: data["date"],
+                                name: data["name"],
+                                company: data["company"],
+                                price: data["price"],
+                                tcknvkn: data["tcknvkn"],
+                                deleteDoc: () {
+                                  if (widget.admin) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: Text(data["name"]),
+                                        content: const Text(
+                                            "Teslim dosyasını sil ?"),
+                                        actions: [
+                                          OutlinedButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text("İptal"),
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                _firestore
+                                                    .collection("deliverydocs")
+                                                    .doc(data.id)
+                                                    .delete()
+                                                    .whenComplete(() {
+                                                  if (context.mounted) {
+                                                    Navigator.pop(context);
+                                                  }
+                                                });
+                                              },
+                                              child: const Text("Sil"))
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              "Bu alan için yetkiniz bulunmamaktadır !"),
+                                          backgroundColor:
+                                              Colors.redAccent.shade200,
                                         ),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              _firestore
-                                                  .collection("deliverydocs")
-                                                  .doc(data.id)
-                                                  .delete()
-                                                  .whenComplete(() {
-                                                if (context.mounted) {
-                                                  Navigator.pop(context);
-                                                }
-                                              });
-                                            },
-                                            child: const Text("Sil"))
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  if (context.mounted) {
+                                      );
+                                    }
+                                  }
+                                },
+                                statu: data["statu"],
+                                statuIcon: !data["statu"]
+                                    ? Icon(Icons.circle_outlined)
+                                    : Icon(Icons.done),
+                                statuChange: () async {
+                                  if (widget.admin) {
+                                    dataServices.editDeliveryDocStatu(
+                                      context,
+                                      data["name"],
+                                      data["statu"],
+                                      data.id,
+                                    );
+                                  } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
@@ -360,31 +409,13 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                       ),
                                     );
                                   }
-                                }
-                              },
-                              statu: data["statu"],
-                              statuIcon: !data["statu"]
-                                  ? Icon(Icons.circle_outlined)
-                                  : Icon(Icons.done),
-                              statuChange: () async {
-                                if (widget.admin) {
-                                  dataServices.editDeliveryDocStatu(
-                                    context,
-                                    data["name"],
-                                    data["statu"],
-                                    data.id,
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          "Bu alan için yetkiniz bulunmamaktadır !"),
-                                      backgroundColor:
-                                          Colors.redAccent.shade200,
-                                    ),
-                                  );
-                                }
-                              },
+                                },
+                                editDoc: () {
+                                  setState(() {
+                                    editVisibility = !editVisibility;
+                                  });
+                                },
+                              ),
                             );
                           },
                         );
