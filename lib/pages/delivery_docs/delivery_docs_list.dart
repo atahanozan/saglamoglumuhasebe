@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/delivery_doc_info_line.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
@@ -125,13 +126,15 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                       ),
                       prefixIcon: const Icon(Icons.search),
                     ),
+                    inputFormatters: [
+                      UppercaseTextFormatter(),
+                    ],
                     onEditingComplete: () {
                       setState(() {
                         customSnapshot = FirebaseFirestore.instance
                             .collection("deliverydocs")
                             .where("statu", isEqualTo: false)
                             .where("name", isGreaterThan: _nameController.text)
-                            .orderBy("id", descending: true)
                             .limit(50)
                             .snapshots();
                       });
@@ -252,7 +255,6 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                               .where("statu", isEqualTo: false)
                               .where("price",
                                   isGreaterThan: _priceController.text)
-                              .orderBy("id", descending: true)
                               .limit(50)
                               .snapshots();
                         });

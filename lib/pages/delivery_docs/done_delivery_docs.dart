@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/delivery_doc_info_line.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
@@ -103,6 +104,9 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                       ),
                       prefixIcon: const Icon(Icons.search),
                     ),
+                    inputFormatters: [
+                      UppercaseTextFormatter(),
+                    ],
                     onEditingComplete: () {
                       setState(() {
                         customSnapshot = FirebaseFirestore.instance

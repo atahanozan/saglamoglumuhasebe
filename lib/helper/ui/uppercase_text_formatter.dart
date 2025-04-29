@@ -5,7 +5,7 @@ class UppercaseTextFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
-      text: newValue.text.toUpperCase(),
+      text: newValue.text.replaceAll("i", "İ").toUpperCase(),
       selection: newValue.selection,
     );
   }

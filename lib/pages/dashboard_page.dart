@@ -40,7 +40,7 @@ class DashboardPage extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  "Sürüm: 1",
+                  "Sürüm: 2",
                   style: pageStyle.bodySmall,
                 ),
                 IconButton(
