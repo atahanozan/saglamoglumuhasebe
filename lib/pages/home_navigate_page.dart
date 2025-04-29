@@ -103,6 +103,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme pageStyle = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: CustomColors.customGrey,
       body: Row(
@@ -124,6 +125,12 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                     colorFilter: const ColorFilter.mode(
                       CustomColors.customYellow,
                       BlendMode.srcIn,
+                    ),
+                  ),
+                  Text(
+                    "Sürüm: 4",
+                    style: pageStyle.bodySmall?.copyWith(
+                      color: CustomColors.customYellow,
                     ),
                   ),
                   const SizedBox(height: 50),

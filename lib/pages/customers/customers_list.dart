@@ -235,7 +235,7 @@ class _CustomersListState extends State<CustomersList> {
                               deleteCustomer: () {
                                 dataServices.deleteCustomer(
                                   docs.id,
-                                  name,
+                                  docs['name'],
                                   context,
                                 );
                               },
