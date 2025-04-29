@@ -23,11 +23,16 @@ class TodayWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${Texts.date(today.day.toString())}.${Texts.date(today.month.toString())}.${today.year}',
-            style: GoogleFonts.ribeye(
-              fontWeight: FontWeight.bold,
-              fontSize: 34,
+          SizedBox(
+            height: 50,
+            child: FittedBox(
+              child: Text(
+                '${Texts.date(today.day.toString())}.${Texts.date(today.month.toString())}.${today.year}',
+                style: GoogleFonts.ribeye(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 34,
+                ),
+              ),
             ),
           ),
           SizedBox(height: 20),

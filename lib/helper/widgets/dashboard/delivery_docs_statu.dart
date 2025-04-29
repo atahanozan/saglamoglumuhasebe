@@ -12,7 +12,7 @@ class _DeliveryDocsStatuState extends State<DeliveryDocsStatu> {
   final FirebaseFirestore firebase = FirebaseFirestore.instance;
   int statuFalseLenght = 0;
   int statuTrueLenght = 0;
-  String btnName = DateTime.now().toString().split(" ")[0];
+  String btnName = "";
 
   Future<void> getDocStatu() async {
     await FirebaseFirestore.instance
@@ -101,7 +101,8 @@ class _DeliveryDocsStatuState extends State<DeliveryDocsStatu> {
                 onPressed: () {
                   pickDate(context);
                 },
-                child: Text(btnName),
+                child:
+                    btnName == "" ? Icon(Icons.calendar_month) : Text(btnName),
               ),
             ),
           ],

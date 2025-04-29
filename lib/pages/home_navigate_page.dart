@@ -28,7 +28,11 @@ class HomeNavigatePage extends StatefulWidget {
 
 class _HomeNavigatePageState extends State<HomeNavigatePage> {
   List<Widget> pages = [
-    DashboardPage(),
+    DashboardPage(
+      customerList: () {},
+      doneDocs: () {},
+      waitingDocs: () {},
+    ),
     CustomersList(),
     const DeliveryDocsList(),
     const DoneDeliveryDocs(),
@@ -65,6 +69,15 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
           name: widget.name,
           admin: widget.admin,
           customerCount: customerCount,
+          customerList: () {
+            changePage(1);
+          },
+          doneDocs: () {
+            changePage(3);
+          },
+          waitingDocs: () {
+            changePage(2);
+          },
         ),
         const CustomersList(),
         DeliveryDocsList(admin: widget.admin),
