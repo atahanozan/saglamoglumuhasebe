@@ -128,7 +128,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                     ),
                   ),
                   Text(
-                    "Sürüm: 4",
+                    "Sürüm: 5",
                     style: pageStyle.bodySmall?.copyWith(
                       color: CustomColors.customYellow,
                     ),
@@ -142,7 +142,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
                       btnName: "Ana Sayfa",
-                      btnIcon: Icons.home,
+                      btnIcon: Icons.home_rounded,
                       btnFunc: () {
                         getDocStatu();
                         changePage(0);
@@ -155,7 +155,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
                       btnName: "Müşteriler",
-                      btnIcon: Icons.list_alt,
+                      btnIcon: Icons.group_rounded,
                       btnFunc: () {
                         if (widget.admin) {
                           changePage(1);
@@ -179,7 +179,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
                       btnName: "Bekleyen Teslimler",
-                      btnIcon: Icons.group_add,
+                      btnIcon: Icons.list_alt_rounded,
                       btnFunc: () {
                         changePage(2);
                       }),
@@ -191,7 +191,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
                       btnName: "Gelen Teslimler",
-                      btnIcon: Icons.group_add,
+                      btnIcon: Icons.list_alt_rounded,
                       btnFunc: () {
                         changePage(3);
                       }),

@@ -412,11 +412,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                     );
                                   }
                                 },
-                                editDoc: () {
-                                  setState(() {
-                                    editVisibility = !editVisibility;
-                                  });
-                                },
+                                editDoc: () {},
                               ),
                             );
                           },
