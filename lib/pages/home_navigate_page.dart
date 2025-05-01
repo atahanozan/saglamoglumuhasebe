@@ -9,7 +9,6 @@ import 'package:saglamoglu_muhasebe/pages/customers/customers_list.dart';
 import 'package:saglamoglu_muhasebe/pages/delivery_docs/delivery_docs_list.dart';
 import 'package:saglamoglu_muhasebe/pages/dashboard_page.dart';
 import 'package:saglamoglu_muhasebe/pages/delivery_docs/done_delivery_docs.dart';
-import 'package:saglamoglu_muhasebe/pages/insructions/insructions_page.dart';
 import 'package:saglamoglu_muhasebe/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

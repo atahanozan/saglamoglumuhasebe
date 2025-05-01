@@ -53,7 +53,10 @@ class DeliverydocBand extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: priceController,
-              inputFormatters: [MoneyTextFormatter()],
+              textAlign: TextAlign.end,
+              inputFormatters: [
+                MoneyTextFormatter(),
+              ],
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
