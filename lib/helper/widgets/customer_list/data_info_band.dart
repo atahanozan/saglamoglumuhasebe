@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/add_authorized.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/deliverydoc_band.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class DataInfoBand extends StatefulWidget {
@@ -17,6 +19,7 @@ class DataInfoBand extends StatefulWidget {
     required this.priceController,
     required this.tcknvkn,
     required this.customerDate,
+    required this.addAuthorized,
   });
 
   final String customerId;
@@ -28,6 +31,7 @@ class DataInfoBand extends StatefulWidget {
   final VoidCallback deleteCustomer;
   final VoidCallback editCustomer;
   final VoidCallback datePick;
+  final VoidCallback addAuthorized;
   final bool visibility;
   final List<String> drpBtn;
   final Function(String?) onChanged;
@@ -39,8 +43,63 @@ class DataInfoBand extends StatefulWidget {
 
 class _DataInfoBandState extends State<DataInfoBand> {
   final DataServices dataServices = DataServices();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController tcknController = TextEditingController();
   bool visibility = false;
+  bool addAuthVisibility = false;
   String btnNameDeliv = "Teslim";
+  String firstDate = DateTime.now().toString().split(" ")[0];
+  String secondDate =
+      DateTime.now().add(const Duration(days: 365)).toString().split(" ")[0];
+  List<String> dropDownList = [
+    "Talimat",
+    "Vekalet",
+  ];
+  String addAuthValue = "Talimat";
+
+  Future<void> pickFirstDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      setState(() {
+        firstDate = picked.toString().split(" ")[0];
+        secondDate =
+            picked.add(const Duration(days: 365)).toString().split(" ")[0];
+      });
+    }
+  }
+
+  Future<void> pickSecondDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().add(
+        const Duration(days: 365),
+      ),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now().add(
+        const Duration(days: 730),
+      ),
+    );
+
+    if (picked != null) {
+      setState(() {
+        secondDate = picked.toString().split(" ")[0];
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    tcknController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,89 +114,86 @@ class _DataInfoBandState extends State<DataInfoBand> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Visibility(
-            visible: visibility,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Text("Tarih  "),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(9),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: TextButton(
-                        onPressed: widget.datePick,
-                        child: Text(widget.date),
-                      ),
-                    ),
+          AddAuthorized(
+            addAuthVisibility: addAuthVisibility,
+            dropDownList: dropDownList,
+            drpDownBtnFunc: (value) {
+              setState(() {
+                addAuthValue = value.toString();
+              });
+            },
+            addAuthValue: addAuthValue,
+            firstDate: firstDate,
+            secondDate: secondDate,
+            pickFirstDate: () {
+              pickFirstDate();
+            },
+            pickSecondDate: () {
+              pickSecondDate();
+            },
+            saveFun: () {
+              if (tcknController.text.isNotEmpty &&
+                  nameController.text.isNotEmpty) {
+                dataServices.addAuthorized(
+                  firstDate,
+                  secondDate,
+                  widget.tcknvkn,
+                  widget.customerName,
+                  tcknController.text,
+                  nameController.text,
+                  addAuthValue,
+                );
+                setState(() {
+                  addAuthVisibility = false;
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Lütfen bilgileri esiksiz doldurunuz."),
+                    backgroundColor: Colors.redAccent.shade200,
                   ),
-                  const SizedBox(width: 20),
-                  const Text("Firma  "),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: DropdownButton(
-                        underline: const SizedBox(),
-                        alignment: AlignmentDirectional.centerEnd,
-                        items: widget.drpBtn
-                            .map((companies) => DropdownMenuItem(
-                                  value: companies,
-                                  child: Text(companies),
-                                ))
-                            .toList(),
-                        onChanged: widget.onChanged,
-                        value: widget.value,
-                      ),
-                    ),
+                );
+              }
+            },
+            tcknController: tcknController,
+            nameController: nameController,
+            closeFunc: () {
+              setState(() {
+                addAuthVisibility = false;
+              });
+            },
+          ),
+          DeliverydocBand(
+            visibility: visibility,
+            datePick: widget.datePick,
+            saveFun: () {
+              if (widget.priceController.text.isNotEmpty) {
+                dataServices.addDeliveryDoc(
+                  widget.customerName,
+                  widget.tcknvkn,
+                  widget.priceController.text,
+                  widget.value,
+                  widget.date,
+                );
+                setState(() {
+                  visibility = false;
+                  widget.priceController.clear();
+                  btnNameDeliv = "Teslim";
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Lütfen bilgileri esiksiz doldurunuz."),
+                    backgroundColor: Colors.redAccent.shade200,
                   ),
-                  const SizedBox(width: 20),
-                  const Text("Tutar  "),
-                  Expanded(
-                    child: TextField(
-                      controller: widget.priceController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      )),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      dataServices.addDeliveryDoc(
-                        widget.customerName,
-                        widget.tcknvkn,
-                        widget.priceController.text,
-                        widget.value,
-                        widget.date,
-                      );
-                      setState(() {
-                        visibility = false;
-                        widget.priceController.clear();
-                        btnNameDeliv = "Teslim";
-                      });
-                    },
-                    child: const Icon(Icons.save),
-                  )
-                ],
-              ),
-            ),
+                );
+              }
+            },
+            date: widget.date,
+            value: widget.value,
+            drpBtn: widget.drpBtn,
+            onChanged: widget.onChanged,
+            priceController: widget.priceController,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -164,6 +220,17 @@ class _DataInfoBandState extends State<DataInfoBand> {
                         });
                       },
                       child: Text(btnNameDeliv),
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          addAuthVisibility = true;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.person_add_alt_1_rounded,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     IconButton(

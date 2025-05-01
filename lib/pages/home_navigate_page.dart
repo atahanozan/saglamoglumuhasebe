@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/side_bar_buttons.dart';
+import 'package:saglamoglu_muhasebe/pages/authorized_docs.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/customers_list.dart';
 import 'package:saglamoglu_muhasebe/pages/delivery_docs/delivery_docs_list.dart';
 import 'package:saglamoglu_muhasebe/pages/dashboard_page.dart';
@@ -36,7 +37,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
     CustomersList(),
     const DeliveryDocsList(),
     const DoneDeliveryDocs(),
-    const InsructionsPage(),
+    const AuthorizedDocs(),
   ];
   String uid = "";
   String btnName = DateTime.now().toString().split(" ")[0];
@@ -82,7 +83,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
         const CustomersList(),
         DeliveryDocsList(admin: widget.admin),
         DoneDeliveryDocs(admin: widget.admin),
-        const InsructionsPage(),
+        const AuthorizedDocs(),
       ];
     });
   }
@@ -128,7 +129,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                     ),
                   ),
                   Text(
-                    "Sürüm: 5",
+                    "Sürüm: 6",
                     style: pageStyle.bodySmall?.copyWith(
                       color: CustomColors.customYellow,
                     ),
@@ -202,22 +203,10 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                       childColor: pageIndex == 4
                           ? CustomColors.customBlack
                           : CustomColors.customWhite,
-                      btnName: "Talimatlar",
-                      btnIcon: Icons.request_page_rounded,
+                      btnName: "Yetki Listesi",
+                      btnIcon: Icons.contact_page_rounded,
                       btnFunc: () {
-                        if (widget.admin) {
-                          changePage(4);
-                        } else {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    "Bu alan için yetkiniz bulunmamaktadır !"),
-                                backgroundColor: Colors.redAccent.shade200,
-                              ),
-                            );
-                          }
-                        }
+                        changePage(4);
                       }),
                   const Spacer(),
                   const Divider(

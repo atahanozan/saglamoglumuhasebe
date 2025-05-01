@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pdf/customer_delivery_doc.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pdf/print_deliver_docs.dart';
 
@@ -30,15 +31,15 @@ class DeliveryDocInfoLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme pageStyle = Theme.of(context).textTheme;
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Colors.grey.shade300,
+            color: Colors.white,
           ),
         ),
-        color: statu ? Colors.green.shade100 : Colors.red.shade100,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -52,7 +53,16 @@ class DeliveryDocInfoLine extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           )),
           const SizedBox(width: 20),
-          Expanded(child: Text(company)),
+          Expanded(
+              child: Text(
+            company,
+            style: pageStyle.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: company == "Sağlam"
+                  ? CustomColors.customYellow
+                  : CustomColors.customBlack,
+            ),
+          )),
           const SizedBox(width: 20),
           Expanded(child: Text(price)),
           const SizedBox(width: 20),
@@ -88,17 +98,14 @@ class DeliveryDocInfoLine extends StatelessWidget {
                     },
                     child: const Icon(Icons.print),
                   ),
-                  SizedBox(width: 5),
-                  IconButton(
-                    onPressed: editDoc,
-                    icon: Icon(Icons.edit_rounded),
-                  ),
-                  SizedBox(width: 5),
+                  // IconButton(
+                  //   onPressed: editDoc,
+                  //   icon: Icon(Icons.edit_rounded),
+                  // ),
                   IconButton(
                     onPressed: deleteDoc,
                     icon: Icon(Icons.delete_rounded),
                   ),
-                  SizedBox(width: 5),
                   IconButton(onPressed: statuChange, icon: statuIcon),
                 ],
               ),

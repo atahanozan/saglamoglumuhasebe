@@ -222,4 +222,133 @@ class DataServices {
   ) async {
     await _firestore.collection("deliverydocs").doc(docId).update(newData);
   }
+
+  Future<void> addAuthorized(
+    String firstdate,
+    String seconddate,
+    String customertckn,
+    String customername,
+    String authorizedtckn,
+    String authorizedname,
+    String doctype,
+  ) async {
+    await _firestore.collection("authorizedcustomers").add({
+      "firstdate": firstdate,
+      "seconddate": seconddate,
+      "customertckn": customertckn,
+      "customername": customername,
+      "authorizedtckn": authorizedtckn,
+      "authorizedname": authorizedname,
+      "doctype": doctype,
+    });
+  }
+
+  Stream customersOrderedById() {
+    return _firestore
+        .collection("deliverycustomers")
+        .limit(50)
+        .orderBy("id", descending: true)
+        .snapshots();
+  }
+
+  Stream customersOrderedByName(String name) {
+    return _firestore
+        .collection("deliverycustomers")
+        .limit(50)
+        .where("name", isGreaterThanOrEqualTo: name)
+        .snapshots();
+  }
+
+  Stream deliveryDocsAllFilters(
+    String date,
+    bool statu,
+    String company1,
+    String company2,
+    String name,
+    String price,
+  ) {
+    return _firestore
+        .collection("deliverydocs")
+        .limit(50)
+        .where("statu", isEqualTo: statu)
+        .where("date", isEqualTo: date)
+        .where(Filter.or(
+          Filter("company", isEqualTo: company1),
+          Filter("company", isEqualTo: company2),
+        ))
+        .where(
+          "name",
+          isGreaterThanOrEqualTo: name,
+        )
+        .where(
+          "price",
+          isGreaterThanOrEqualTo: price,
+        )
+        .snapshots();
+  }
+
+  Stream deliveryDocsDateFilter(
+    String date,
+    bool statu,
+    String company1,
+    String company2,
+  ) {
+    return _firestore
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: statu)
+        .where("date", isEqualTo: date)
+        .where(Filter.or(
+          Filter("company", isEqualTo: company1),
+          Filter("company", isEqualTo: company2),
+        ))
+        .orderBy("id", descending: true)
+        .snapshots();
+  }
+
+  Stream deliveryDocsNameFilters(
+    bool statu,
+    String name,
+  ) {
+    return _firestore
+        .collection("deliverydocs")
+        .limit(50)
+        .where("statu", isEqualTo: statu)
+        .where(
+          "name",
+          isGreaterThanOrEqualTo: name,
+        )
+        .snapshots();
+  }
+
+  Stream deliveryDocsPriceFilters(
+    bool statu,
+    String price,
+  ) {
+    return _firestore
+        .collection("deliverydocs")
+        .limit(50)
+        .where("statu", isEqualTo: statu)
+        .where(
+          "price",
+          isGreaterThanOrEqualTo: price,
+        )
+        .snapshots();
+  }
+
+  Stream deliveryDocsCompanyFilters(
+    bool statu,
+    String company1,
+    String company2,
+  ) {
+    return _firestore
+        .collection("deliverydocs")
+        .limit(50)
+        .where("statu", isEqualTo: statu)
+        .where(Filter.or(
+          Filter("company", isEqualTo: company1),
+          Filter("company", isEqualTo: company2),
+        ))
+        .orderBy("id", descending: true)
+        .snapshots();
+  }
 }

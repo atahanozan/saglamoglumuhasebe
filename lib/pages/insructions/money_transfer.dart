@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/utils/texts.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/custom_dropdown.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pdf/download_insruction.dart';
@@ -117,10 +118,7 @@ class MoneyTransfer extends StatelessWidget {
                   controller: nameController,
                   header: "Alıcı Adı",
                   formatter: [
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      return newValue.copyWith(
-                          text: newValue.text.toUpperCase());
-                    })
+                    UppercaseTextFormatter(),
                   ],
                 ),
               ),
@@ -151,10 +149,7 @@ class MoneyTransfer extends StatelessWidget {
                     controller: commentController,
                     header: "Açıklama",
                     formatter: [
-                      TextInputFormatter.withFunction((oldValue, newValue) {
-                        return newValue.copyWith(
-                            text: newValue.text.toUpperCase());
-                      })
+                      UppercaseTextFormatter(),
                     ],
                   ),
                 ),

@@ -79,7 +79,6 @@ class DashboardPage extends StatelessWidget {
                             children: [
                               Text(
                                 "Toplam Müşteri Adedi",
-                                style: pageStyle.titleMedium,
                               ),
                               Divider(),
                               Text(
@@ -99,7 +98,6 @@ class DashboardPage extends StatelessWidget {
                             children: [
                               Text(
                                 "Sık Kullanılanlar",
-                                style: pageStyle.titleMedium,
                               ),
                               const Divider(),
                               SizedBox(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/delivery_doc_info_line.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/pick_date_widget.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class DoneDeliveryDocs extends StatefulWidget {
@@ -30,16 +31,11 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
   String? filter3 = "";
   bool btnVisibility = false;
   Icon filterIcon = const Icon(Icons.arrow_drop_down_circle_outlined);
-  var customSnapshot = FirebaseFirestore.instance
-      .collection("deliverydocs")
-      .where("statu", isEqualTo: true)
-      .where(Filter.or(
-        Filter("company", isEqualTo: "Sağlam"),
-        Filter("company", isEqualTo: "Elmina"),
-      ))
-      .orderBy("id", descending: true)
-      .limit(50)
-      .snapshots();
+  Stream customSnapshot = DataServices().deliveryDocsCompanyFilters(
+    true,
+    "Sağlam",
+    "Elmina",
+  );
 
   Future<void> changeFilter(BuildContext myContext) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -54,16 +50,12 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
         filterIcon = const Icon(Icons.arrow_drop_down_circle_rounded);
         filter3 = pickedDate.toString().split(" ")[0];
         btnVisibility = true;
-        customSnapshot = FirebaseFirestore.instance
-            .collection("deliverydocs")
-            .where("statu", isEqualTo: true)
-            .where("date", isEqualTo: filter3)
-            .where(Filter.or(
-              Filter("company", isEqualTo: filter1),
-              Filter("company", isEqualTo: filter2),
-            ))
-            .orderBy("id", descending: true)
-            .snapshots();
+        customSnapshot = dataServices.deliveryDocsDateFilter(
+          pickedDate.toString().split(" ")[0],
+          true,
+          filter1,
+          filter2,
+        );
       });
     }
   }
@@ -109,12 +101,10 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                     ],
                     onEditingComplete: () {
                       setState(() {
-                        customSnapshot = FirebaseFirestore.instance
-                            .collection("deliverydocs")
-                            .where("statu", isEqualTo: true)
-                            .where("name", isGreaterThan: _nameController.text)
-                            .limit(50)
-                            .snapshots();
+                        customSnapshot = dataServices.deliveryDocsNameFilters(
+                          true,
+                          _nameController.text,
+                        );
                       });
                     },
                   ),
@@ -134,27 +124,11 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                   Text("Tarih", style: pageStyle.bodySmall),
                   SizedBox(width: 15),
                   Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey.shade500,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(filter3.toString()),
-                          IconButton(
-                            onPressed: () {
-                              changeFilter(context);
-                            },
-                            icon: Icon(Icons.date_range),
-                          ),
-                        ],
-                      ),
+                    child: PickDateWidget(
+                      picakedDate: filter3.toString(),
+                      pickDateFunc: () {
+                        changeFilter(context);
+                      },
                     ),
                   ),
                   SizedBox(width: 40),
@@ -183,31 +157,24 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                               setState(() {
                                 filter1 = value.toString();
                                 filter2 = value.toString();
-                                customSnapshot = FirebaseFirestore.instance
-                                    .collection("deliverydocs")
-                                    .where("statu", isEqualTo: true)
-                                    .where(Filter.or(
-                                      Filter("company", isEqualTo: filter1),
-                                      Filter("company", isEqualTo: filter2),
-                                    ))
-                                    .orderBy("id", descending: true)
-                                    .limit(50)
-                                    .snapshots();
+                                customSnapshot =
+                                    dataServices.deliveryDocsCompanyFilters(
+                                  true,
+                                  value.toString(),
+                                  value.toString(),
+                                );
                               });
                             } else {
                               setState(() {
                                 filter1 = value.toString();
                                 filter2 = value.toString();
-                                customSnapshot = FirebaseFirestore.instance
-                                    .collection("deliverydocs")
-                                    .where("statu", isEqualTo: true)
-                                    .where("date", isEqualTo: filter3)
-                                    .where(Filter.or(
-                                      Filter("company", isEqualTo: filter1),
-                                      Filter("company", isEqualTo: filter2),
-                                    ))
-                                    .orderBy("id", descending: true)
-                                    .snapshots();
+                                customSnapshot =
+                                    dataServices.deliveryDocsDateFilter(
+                                  filter3.toString(),
+                                  true,
+                                  value.toString(),
+                                  value.toString(),
+                                );
                               });
                             }
                           }),
@@ -228,13 +195,11 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                       )),
                       onEditingComplete: () {
                         setState(() {
-                          customSnapshot = FirebaseFirestore.instance
-                              .collection("deliverydocs")
-                              .where("statu", isEqualTo: true)
-                              .where("price",
-                                  isGreaterThan: _priceController.text)
-                              .limit(50)
-                              .snapshots();
+                          customSnapshot =
+                              dataServices.deliveryDocsPriceFilters(
+                            true,
+                            _priceController.text,
+                          );
                         });
                       },
                     ),
@@ -243,16 +208,12 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        customSnapshot = FirebaseFirestore.instance
-                            .collection("deliverydocs")
-                            .where("statu", isEqualTo: true)
-                            .where(Filter.or(
-                              Filter("company", isEqualTo: "Sağlam"),
-                              Filter("company", isEqualTo: "Elmina"),
-                            ))
-                            .orderBy("id", descending: true)
-                            .limit(50)
-                            .snapshots();
+                        customSnapshot =
+                            DataServices().deliveryDocsCompanyFilters(
+                          true,
+                          "Sağlam",
+                          "Elmina",
+                        );
                         btnVisibility = false;
                         filter3 = "";
                         filterIcon =
@@ -365,9 +326,10 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                 }
                               },
                               statu: data["statu"],
-                              statuIcon: !data["statu"]
-                                  ? Icon(Icons.circle_outlined)
-                                  : Icon(Icons.done),
+                              statuIcon: Icon(
+                                Icons.done,
+                                color: Colors.green.shade700,
+                              ),
                               statuChange: () async {
                                 if (widget.admin) {
                                   dataServices.editDeliveryDocStatu(

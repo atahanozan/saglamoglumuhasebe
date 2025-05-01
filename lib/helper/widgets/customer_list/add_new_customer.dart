@@ -47,6 +47,39 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                 child: TextField(
                   controller: tcknController,
                   keyboardType: TextInputType.number,
+                  onEditingComplete: () {
+                    if (widget.tckns.contains(tcknController.text)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Bu müşteri daha önce eklenmiş !"),
+                        ),
+                      );
+                    } else {
+                      if (tcknController.text.isNotEmpty &&
+                          nameController.text.isNotEmpty &&
+                          tcknController.text.length > 10) {
+                        dataServices
+                            .addCustomer(
+                                nameController.text, tcknController.text)
+                            .whenComplete(() {
+                          setState(() {
+                            tcknController.clear();
+                            nameController.clear();
+                          });
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text("Lütfen bilgileri eksiksiz doldurunuz !"),
+                          ),
+                        );
+                      }
+                    }
+                  },
                   inputFormatters: [
                     MaskTextInputFormatter(
                       mask: '###########',
@@ -75,6 +108,39 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                 flex: 3,
                 child: TextField(
                   controller: nameController,
+                  onEditingComplete: () {
+                    if (widget.tckns.contains(tcknController.text)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Bu müşteri daha önce eklenmiş !"),
+                        ),
+                      );
+                    } else {
+                      if (tcknController.text.isNotEmpty &&
+                          nameController.text.isNotEmpty &&
+                          tcknController.text.length > 10) {
+                        dataServices
+                            .addCustomer(
+                                nameController.text, tcknController.text)
+                            .whenComplete(() {
+                          setState(() {
+                            tcknController.clear();
+                            nameController.clear();
+                          });
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text("Lütfen bilgileri eksiksiz doldurunuz !"),
+                          ),
+                        );
+                      }
+                    }
+                  },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -101,7 +167,7 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                 } else {
                   if (tcknController.text.isNotEmpty &&
                       nameController.text.isNotEmpty &&
-                      tcknController.text.length > 9) {
+                      tcknController.text.length > 10) {
                     dataServices
                         .addCustomer(nameController.text, tcknController.text)
                         .whenComplete(() {

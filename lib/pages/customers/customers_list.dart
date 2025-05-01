@@ -30,25 +30,7 @@ class _CustomersListState extends State<CustomersList> {
   int allCustomers = 0;
   bool visibility = false;
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> customerSnap = FirebaseFirestore
-      .instance
-      .collection("deliverycustomers")
-      .orderBy("id", descending: true)
-      .limit(50)
-      .snapshots();
-
-  Future<void> addTckn() async {
-    await firestore.collection("deliverycustomers").get().then((value) {
-      setState(() {
-        allCustomers = value.docs.length;
-      });
-
-      for (var element in value.docs) {
-        tckns.add(element["tcknvkn"]);
-        names.add(element["name"]);
-      }
-    });
-  }
+  Stream dataStream = DataServices().customersOrderedById();
 
   Future<void> datePick(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -80,6 +62,7 @@ class _CustomersListState extends State<CustomersList> {
   @override
   void initState() {
     allCusomterCounts();
+
     super.initState();
   }
 
@@ -95,6 +78,7 @@ class _CustomersListState extends State<CustomersList> {
   @override
   Widget build(BuildContext context) {
     final TextTheme pageStyle = Theme.of(context).textTheme;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
@@ -154,11 +138,8 @@ class _CustomersListState extends State<CustomersList> {
                     ),
                     onEditingComplete: () {
                       setState(() {
-                        customerSnap = firestore
-                            .collection("deliverycustomers")
-                            .where("name", isGreaterThan: _nameController.text)
-                            .limit(10)
-                            .snapshots();
+                        dataStream = dataServices
+                            .customersOrderedByName(_nameController.text);
                       });
                     },
                   ),
@@ -167,12 +148,8 @@ class _CustomersListState extends State<CustomersList> {
                 OutlinedButton(
                   onPressed: () {
                     setState(() {
-                      customerSnap = firestore
-                          .collection("deliverycustomers")
-                          .orderBy("id", descending: true)
-                          .limit(50)
-                          .snapshots();
                       _nameController.clear();
+                      dataStream = dataServices.customersOrderedById();
                     });
                   },
                   child: Icon(Icons.clear_rounded),
@@ -220,7 +197,7 @@ class _CustomersListState extends State<CustomersList> {
             Divider(),
             Flexible(
               child: StreamBuilder(
-                stream: customerSnap,
+                stream: dataStream,
                 builder: (context, snapshot) {
                   return !snapshot.hasData
                       ? const CircularProgressIndicator()
@@ -269,6 +246,7 @@ class _CustomersListState extends State<CustomersList> {
                               priceController: _priceController,
                               tcknvkn: docs["tcknvkn"],
                               customerDate: docs["date"],
+                              addAuthorized: () {},
                             );
                           },
                         );

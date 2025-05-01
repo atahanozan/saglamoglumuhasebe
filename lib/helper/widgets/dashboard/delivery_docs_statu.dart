@@ -93,7 +93,6 @@ class _DeliveryDocsStatuState extends State<DeliveryDocsStatu> {
               flex: 3,
               child: Text(
                 "Teslim Dosya Durumu",
-                style: pageStyle.titleMedium,
               ),
             ),
             FittedBox(
