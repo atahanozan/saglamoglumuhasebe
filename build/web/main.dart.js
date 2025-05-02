@@ -110644,7 +110644,7 @@ $0(){var s,r,q=this.a,p=q.d
 if(B.n.q(q.a.c,p.a.a))this.b.am(t.R).f.iB(B.r9)
 else{p=p.a.a
 s=p.length
-s=s!==0&&q.e.a.a.length!==0&&s>10
+s=s!==0&&q.e.a.a.length!==0&&s>9
 r=this.b
 if(s)q.r.u0(q.e.a.a,p).fL(new A.ayt(q,r))
 else r.am(t.R).f.iB(B.r8)}},
@@ -110665,7 +110665,7 @@ $0(){var s,r,q=this.a,p=q.d
 if(B.n.q(q.a.c,p.a.a))this.b.am(t.R).f.iB(B.r9)
 else{p=p.a.a
 s=p.length
-s=s!==0&&q.e.a.a.length!==0&&s>10
+s=s!==0&&q.e.a.a.length!==0&&s>9
 r=this.b
 if(s)q.r.u0(q.e.a.a,p).fL(new A.ays(q,r))
 else r.am(t.R).f.iB(B.r8)}},
@@ -111528,7 +111528,7 @@ this.ld()
 this.b0()},
 R(a){var s,r,q,p,o,n,m,l=this,k=null,j=A.W(a),i=A.aPk("assets/images/saglamoglu_logo.svg",B.ow)
 j=j.p1.Q
-j=A.ae("S\xfcr\xfcm: 8",k,k,k,j==null?k:j.bY(B.cU),k,k,k)
+j=A.ae("S\xfcr\xfcm: 9",k,k,k,j==null?k:j.bY(B.cU),k,k,k)
 s=l.y
 r=s===0
 q=r?B.cV:B.a6
