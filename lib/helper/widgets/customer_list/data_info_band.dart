@@ -82,7 +82,7 @@ class _DataInfoBandState extends State<DataInfoBand> {
       ),
       firstDate: DateTime(2000),
       lastDate: DateTime.now().add(
-        const Duration(days: 730),
+        const Duration(days: 3650),
       ),
     );
 
@@ -134,7 +134,8 @@ class _DataInfoBandState extends State<DataInfoBand> {
             saveFun: () {
               if (tcknController.text.isNotEmpty &&
                   nameController.text.isNotEmpty) {
-                dataServices.addAuthorized(
+                dataServices
+                    .addAuthorized(
                   firstDate,
                   secondDate,
                   widget.tcknvkn,
@@ -142,9 +143,13 @@ class _DataInfoBandState extends State<DataInfoBand> {
                   tcknController.text,
                   nameController.text,
                   addAuthValue,
-                );
-                setState(() {
-                  addAuthVisibility = false;
+                )
+                    .then((value) {
+                  setState(() {
+                    addAuthVisibility = false;
+                    tcknController.clear();
+                    nameController.clear();
+                  });
                 });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -199,6 +204,14 @@ class _DataInfoBandState extends State<DataInfoBand> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Icon(
+                widget.customerId.characters.length == 10
+                    ? Icons.cases_rounded
+                    : Icons.account_circle_rounded,
+                size: 15,
+                color: Colors.black54,
+              ),
+              const SizedBox(width: 8),
               Text(widget.customerDate),
               const SizedBox(width: 20),
               Expanded(child: Text(widget.customerId)),

@@ -82,7 +82,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
         const CustomersList(),
         DeliveryDocsList(admin: widget.admin),
         DoneDeliveryDocs(admin: widget.admin),
-        const AuthorizedDocs(),
+        AuthorizedDocs(admin: widget.admin),
       ];
     });
   }
@@ -128,7 +128,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                     ),
                   ),
                   Text(
-                    "Sürüm: 6",
+                    "Sürüm: 7",
                     style: pageStyle.bodySmall?.copyWith(
                       color: CustomColors.customYellow,
                     ),
@@ -148,6 +148,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                         changePage(0);
                       }),
                   SideBarButtons(
+                      visibility: widget.admin,
                       btnColor: pageIndex == 1
                           ? CustomColors.customGrey
                           : Colors.transparent,
@@ -184,6 +185,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                         changePage(2);
                       }),
                   SideBarButtons(
+                      visibility: widget.admin,
                       btnColor: pageIndex == 3
                           ? CustomColors.customGrey
                           : Colors.transparent,

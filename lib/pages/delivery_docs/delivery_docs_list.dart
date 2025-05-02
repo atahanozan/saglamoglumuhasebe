@@ -300,6 +300,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                             return Visibility(
                               visible: !editVisibility,
                               child: DeliveryDocInfoLine(
+                                admin: widget.admin,
                                 date: data["date"],
                                 name: data["name"],
                                 company: data["company"],
@@ -355,23 +356,12 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                   color: Colors.red.shade700,
                                 ),
                                 statuChange: () async {
-                                  if (widget.admin) {
-                                    dataServices.editDeliveryDocStatu(
-                                      context,
-                                      data["name"],
-                                      data["statu"],
-                                      data.id,
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            "Bu alan için yetkiniz bulunmamaktadır !"),
-                                        backgroundColor:
-                                            Colors.redAccent.shade200,
-                                      ),
-                                    );
-                                  }
+                                  dataServices.editDeliveryDocStatu(
+                                    context,
+                                    data["name"],
+                                    data["statu"],
+                                    data.id,
+                                  );
                                 },
                                 editDoc: () {},
                               ),

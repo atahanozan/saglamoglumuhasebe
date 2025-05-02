@@ -5,7 +5,9 @@ import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/authorized_page/authorized_info_band.dart';
 
 class AuthorizedDocs extends StatefulWidget {
-  const AuthorizedDocs({super.key});
+  const AuthorizedDocs({super.key, this.admin = false});
+
+  final bool admin;
 
   @override
   State<AuthorizedDocs> createState() => _AuthorizedDocsState();
@@ -113,10 +115,13 @@ class _AuthorizedDocsState extends State<AuthorizedDocs> {
                     style: pageStyle.titleMedium,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    "İşlemler",
-                    style: pageStyle.titleMedium,
+                Visibility(
+                  visible: widget.admin,
+                  child: Expanded(
+                    child: Text(
+                      "İşlemler",
+                      style: pageStyle.titleMedium,
+                    ),
                   ),
                 ),
               ],
@@ -145,6 +150,8 @@ class _AuthorizedDocsState extends State<AuthorizedDocs> {
                               docColor: docs["doctype"] == "Talimat"
                                   ? Colors.blue.shade200
                                   : Colors.green.shade200,
+                              docId: docs.id,
+                              admin: widget.admin,
                             );
                           },
                         );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/custom_dropdown.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pick_date_widget.dart';
 
@@ -112,6 +113,7 @@ class AddAuthorized extends StatelessWidget {
                       Expanded(
                         child: TextField(
                           controller: nameController,
+                          inputFormatters: [UppercaseTextFormatter()],
                           decoration: InputDecoration(
                               hintText: "Yetili İsmi",
                               border: OutlineInputBorder(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class AuthorizedInfoBand extends StatelessWidget {
   const AuthorizedInfoBand({
@@ -10,6 +11,8 @@ class AuthorizedInfoBand extends StatelessWidget {
     required this.authorizedName,
     required this.expireDate,
     required this.docColor,
+    required this.docId,
+    required this.admin,
   });
 
   final String docType;
@@ -18,11 +21,14 @@ class AuthorizedInfoBand extends StatelessWidget {
   final String authorizedTckn;
   final String authorizedName;
   final String expireDate;
+  final String? docId;
   final Color docColor;
+  final bool admin;
 
   @override
   Widget build(BuildContext context) {
     final TextTheme pageStyle = Theme.of(context).textTheme;
+    final DataServices dataServices = DataServices();
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -57,8 +63,11 @@ class AuthorizedInfoBand extends StatelessWidget {
               style: pageStyle.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
+          SizedBox(width: 15),
           Expanded(
             child: Text(authorizedTckn),
           ),
@@ -68,23 +77,32 @@ class AuthorizedInfoBand extends StatelessWidget {
           Expanded(
             child: Text(expireDate),
           ),
-          Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.edit_rounded,
+          Visibility(
+            visible: admin,
+            child: Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.edit_rounded,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.delete_rounded,
+                  IconButton(
+                    onPressed: () {
+                      dataServices.deleteAuthorizedDoc(
+                        context,
+                        customerName,
+                        docId,
+                      );
+                    },
+                    icon: Icon(
+                      Icons.delete_rounded,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

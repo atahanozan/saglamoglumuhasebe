@@ -243,6 +243,38 @@ class DataServices {
     });
   }
 
+  Future<void> deleteAuthorizedDoc(
+    BuildContext context,
+    String name,
+    String? docId,
+  ) async {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(name),
+        content: Text("Dosyayı Sil ?"),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              await _firestore
+                  .collection("authorizedcustomers")
+                  .doc(docId)
+                  .delete();
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+            },
+            child: Text("Tamam"),
+          ),
+          OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("İptal"),
+          ),
+        ],
+      ),
+    );
+  }
+
   Stream customersOrderedById() {
     return _firestore
         .collection("deliverycustomers")

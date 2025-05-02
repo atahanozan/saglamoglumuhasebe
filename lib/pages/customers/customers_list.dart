@@ -173,7 +173,7 @@ class _CustomersListState extends State<CustomersList> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  " Tarih    ",
+                  " Tarih          ",
                   style: pageStyle.titleMedium,
                 ),
                 SizedBox(width: 40),

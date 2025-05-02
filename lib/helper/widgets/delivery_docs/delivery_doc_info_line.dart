@@ -16,6 +16,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
     required this.statu,
     required this.statuChange,
     required this.statuIcon,
+    this.admin = false,
   });
 
   final String date;
@@ -28,6 +29,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
   final VoidCallback statuChange;
   final bool statu;
   final Icon statuIcon;
+  final bool admin;
 
   @override
   Widget build(BuildContext context) {
@@ -102,11 +104,17 @@ class DeliveryDocInfoLine extends StatelessWidget {
                   //   onPressed: editDoc,
                   //   icon: Icon(Icons.edit_rounded),
                   // ),
-                  IconButton(
-                    onPressed: deleteDoc,
-                    icon: Icon(Icons.delete_rounded),
+                  Visibility(
+                    visible: admin,
+                    child: IconButton(
+                      onPressed: deleteDoc,
+                      icon: Icon(Icons.delete_rounded),
+                    ),
                   ),
-                  IconButton(onPressed: statuChange, icon: statuIcon),
+                  Visibility(
+                      visible: admin,
+                      child:
+                          IconButton(onPressed: statuChange, icon: statuIcon)),
                 ],
               ),
             ),

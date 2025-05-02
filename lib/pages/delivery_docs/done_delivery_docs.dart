@@ -277,6 +277,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                             DocumentSnapshot data = snapshot.data!.docs[index];
 
                             return DeliveryDocInfoLine(
+                              admin: true,
                               date: data["date"],
                               name: data["name"],
                               company: data["company"],
@@ -331,23 +332,12 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                 color: Colors.green.shade700,
                               ),
                               statuChange: () async {
-                                if (widget.admin) {
-                                  dataServices.editDeliveryDocStatu(
-                                    context,
-                                    data["name"],
-                                    data["statu"],
-                                    data.id,
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          "Bu alan için yetkiniz bulunmamaktadır !"),
-                                      backgroundColor:
-                                          Colors.redAccent.shade200,
-                                    ),
-                                  );
-                                }
+                                dataServices.editDeliveryDocStatu(
+                                  context,
+                                  data["name"],
+                                  data["statu"],
+                                  data.id,
+                                );
                               },
                               editDoc: () {},
                             );
