@@ -46,7 +46,7 @@ class _SplashPageState extends State<SplashPage> {
   late Timer timer;
 
   void getTimer() {
-    timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 3), (time) {
       if (uid == "") {
         Navigator.pushReplacement(
           context,
@@ -55,15 +55,18 @@ class _SplashPageState extends State<SplashPage> {
           ),
         );
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HomeNavigatePage(
-              admin: admin,
-              name: name,
+        getUserAdmin(uid);
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HomeNavigatePage(
+                admin: admin,
+                name: name,
+              ),
             ),
-          ),
-        );
+          );
+        }
       }
     });
   }
@@ -71,10 +74,8 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     getUid().whenComplete(() {
-      getUserAdmin(uid);
+      getTimer();
     });
-
-    getTimer();
 
     super.initState();
   }

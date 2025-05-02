@@ -33,6 +33,7 @@ class DataServices {
       "price": price,
       "company": company,
       "statu": false,
+      "proccesstatu": false,
     });
   }
 

@@ -230,35 +230,39 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Expanded(
-                    child: Text(
-                  "Tarih",
+                SizedBox(width: 38),
+                Text(
+                  "Tarih          ",
                   style: pageStyle.titleMedium,
-                )),
-                const SizedBox(width: 20),
+                ),
+                const SizedBox(width: 30),
                 Expanded(
                     child: Text(
                   "İsim / Ünvan",
+                  textAlign: TextAlign.left,
                   style: pageStyle.titleMedium,
                 )),
                 const SizedBox(width: 20),
-                Expanded(
-                    child: Text(
+                Text(
                   "Şirket",
+                  textAlign: TextAlign.left,
                   style: pageStyle.titleMedium,
-                )),
+                ),
                 const SizedBox(width: 20),
                 Expanded(
                     child: Text(
                   "Tutar",
+                  textAlign: TextAlign.right,
                   style: pageStyle.titleMedium,
                 )),
-                const SizedBox(width: 20),
-                Expanded(
-                    child: Text(
-                  "İşlemler",
-                  style: pageStyle.titleMedium,
-                )),
+                const SizedBox(width: 30),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    "İşlemler",
+                    style: pageStyle.titleMedium,
+                  ),
+                ),
               ],
             ),
             Divider(
@@ -340,6 +344,8 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                 );
                               },
                               editDoc: () {},
+                              proccesStatuChange: () {},
+                              proccesStatu: true,
                             );
                           },
                         );

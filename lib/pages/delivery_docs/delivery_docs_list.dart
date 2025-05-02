@@ -40,6 +40,15 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
     "Elmina",
   );
 
+  Future<void> deliveryDocProccessStatuChange(
+    bool proccessStatu,
+    String? docId,
+  ) async {
+    await _firestore.collection("deliverydocs").doc(docId).update({
+      "proccesstatu": !proccessStatu,
+    });
+  }
+
   Future<void> changeFilter(BuildContext myContext) async {
     final DateTime? pickedDate = await showDatePicker(
       context: myContext,
@@ -251,35 +260,39 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Expanded(
-                    child: Text(
-                  "Tarih",
+                SizedBox(width: 38),
+                Text(
+                  "Tarih          ",
                   style: pageStyle.titleMedium,
-                )),
-                const SizedBox(width: 20),
+                ),
+                const SizedBox(width: 30),
                 Expanded(
                     child: Text(
                   "İsim / Ünvan",
+                  textAlign: TextAlign.left,
                   style: pageStyle.titleMedium,
                 )),
                 const SizedBox(width: 20),
-                Expanded(
-                    child: Text(
+                Text(
                   "Şirket",
+                  textAlign: TextAlign.left,
                   style: pageStyle.titleMedium,
-                )),
+                ),
                 const SizedBox(width: 20),
                 Expanded(
                     child: Text(
                   "Tutar",
+                  textAlign: TextAlign.right,
                   style: pageStyle.titleMedium,
                 )),
-                const SizedBox(width: 20),
-                Expanded(
-                    child: Text(
-                  "İşlemler",
-                  style: pageStyle.titleMedium,
-                )),
+                const SizedBox(width: 30),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    "İşlemler",
+                    style: pageStyle.titleMedium,
+                  ),
+                ),
               ],
             ),
             Divider(
@@ -297,74 +310,77 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                           itemBuilder: (context, index) {
                             DocumentSnapshot data = snapshot.data!.docs[index];
 
-                            return Visibility(
-                              visible: !editVisibility,
-                              child: DeliveryDocInfoLine(
-                                admin: widget.admin,
-                                date: data["date"],
-                                name: data["name"],
-                                company: data["company"],
-                                price: data["price"],
-                                tcknvkn: data["tcknvkn"],
-                                deleteDoc: () {
-                                  if (widget.admin) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) => AlertDialog(
-                                        title: Text(data["name"]),
-                                        content: const Text(
-                                            "Teslim dosyasını sil ?"),
-                                        actions: [
-                                          OutlinedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text("İptal"),
-                                          ),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                _firestore
-                                                    .collection("deliverydocs")
-                                                    .doc(data.id)
-                                                    .delete()
-                                                    .whenComplete(() {
-                                                  if (context.mounted) {
-                                                    Navigator.pop(context);
-                                                  }
-                                                });
-                                              },
-                                              child: const Text("Sil"))
-                                        ],
+                            return DeliveryDocInfoLine(
+                              admin: widget.admin,
+                              date: data["date"],
+                              name: data["name"],
+                              company: data["company"],
+                              price: data["price"],
+                              tcknvkn: data["tcknvkn"],
+                              deleteDoc: () {
+                                if (widget.admin) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      title: Text(data["name"]),
+                                      content:
+                                          const Text("Teslim dosyasını sil ?"),
+                                      actions: [
+                                        OutlinedButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text("İptal"),
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              _firestore
+                                                  .collection("deliverydocs")
+                                                  .doc(data.id)
+                                                  .delete()
+                                                  .whenComplete(() {
+                                                if (context.mounted) {
+                                                  Navigator.pop(context);
+                                                }
+                                              });
+                                            },
+                                            child: const Text("Sil"))
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Bu alan için yetkiniz bulunmamaktadır !"),
+                                        backgroundColor:
+                                            Colors.redAccent.shade200,
                                       ),
                                     );
-                                  } else {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              "Bu alan için yetkiniz bulunmamaktadır !"),
-                                          backgroundColor:
-                                              Colors.redAccent.shade200,
-                                        ),
-                                      );
-                                    }
                                   }
-                                },
-                                statu: data["statu"],
-                                statuIcon: Icon(
-                                  Icons.circle_outlined,
-                                  color: Colors.red.shade700,
-                                ),
-                                statuChange: () async {
-                                  dataServices.editDeliveryDocStatu(
-                                    context,
-                                    data["name"],
-                                    data["statu"],
-                                    data.id,
-                                  );
-                                },
-                                editDoc: () {},
+                                }
+                              },
+                              statu: data["statu"],
+                              statuIcon: Icon(
+                                Icons.circle_outlined,
+                                color: Colors.red.shade700,
                               ),
+                              statuChange: () async {
+                                dataServices.editDeliveryDocStatu(
+                                  context,
+                                  data["name"],
+                                  data["statu"],
+                                  data.id,
+                                );
+                              },
+                              editDoc: () {},
+                              proccesStatuChange: () {
+                                deliveryDocProccessStatuChange(
+                                  data["proccesstatu"],
+                                  data.id,
+                                );
+                              },
+                              proccesStatu: data["proccesstatu"],
                             );
                           },
                         );
