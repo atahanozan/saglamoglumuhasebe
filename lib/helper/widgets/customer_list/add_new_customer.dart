@@ -57,7 +57,7 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                     } else {
                       if (tcknController.text.isNotEmpty &&
                           nameController.text.isNotEmpty &&
-                          tcknController.text.length > 10) {
+                          tcknController.text.length > 9) {
                         dataServices
                             .addCustomer(
                                 nameController.text, tcknController.text)
