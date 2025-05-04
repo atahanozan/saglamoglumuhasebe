@@ -95,8 +95,9 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
 
   @override
   void initState() {
-    getUid();
-    getDocStatu();
+    getUid().whenComplete(() {
+      getDocStatu();
+    });
 
     super.initState();
   }
@@ -128,7 +129,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                     ),
                   ),
                   Text(
-                    "Sürüm: 10",
+                    "Sürüm: 11",
                     style: pageStyle.bodySmall?.copyWith(
                       color: CustomColors.customYellow,
                     ),

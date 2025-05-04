@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pdf/customer_delivery_doc.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pdf/print_deliver_docs.dart';
 

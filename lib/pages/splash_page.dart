@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/pages/home_navigate_page.dart';
 import 'package:saglamoglu_muhasebe/pages/login_page.dart';
+import 'package:saglamoglu_muhasebe/service/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
@@ -16,59 +17,50 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final AuthService authService = AuthService();
   String uid = "";
-
-  String name = "";
-
-  bool admin = false;
-
-  Future<void> getUserAdmin(String uid) async {
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
-        .get()
-        .then((value) {
-      setState(() {
-        admin = value["admin"];
-        name = value["name"];
-      });
-    });
-  }
 
   Future<void> getUid() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      uid = prefs.getString("useruid") ?? "";
+      uid = prefs.getString("uid") ?? "";
     });
   }
 
   late Timer timer;
 
   void getTimer() {
-    timer = Timer.periodic(const Duration(seconds: 3), (time) {
-      if (uid == "") {
+    timer = Timer(const Duration(seconds: 3), () {
+      getUser(uid);
+    });
+  }
+
+  Future<void> getUser(String userUid) async {
+    if (uid == "") {
+      if (context.mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (_) => LoginPage(),
           ),
         );
-      } else {
-        getUserAdmin(uid);
-        if (context.mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => HomeNavigatePage(
-                admin: admin,
-                name: name,
-              ),
-            ),
-          );
-        }
       }
-    });
+    } else {
+      String? name = await authService.getUserName(userUid);
+      bool admin = await authService.getUserAdmin(userUid);
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HomeNavigatePage(
+              admin: admin,
+              name: name.toString(),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override

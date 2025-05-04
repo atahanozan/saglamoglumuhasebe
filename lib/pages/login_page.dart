@@ -16,38 +16,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthService authService = AuthService();
   bool obsecureText = true;
-  String name = "";
-
-  bool admin = false;
-
-  Future<void> getUserAdmin(String uid) async {
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
-        .get()
-        .then((value) {
-      setState(() {
-        admin = value["admin"];
-        name = value["name"];
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HomeNavigatePage(
-              admin: admin,
-              name: name,
-            ),
-          ),
-        );
-      });
-    });
-  }
-
-  Future<void> setUser(String? uid) async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-
-    pref.setString("useruid", uid.toString());
-  }
 
   @override
   void dispose() {
@@ -90,25 +60,12 @@ class _LoginPageState extends State<LoginPage> {
               const Spacer(),
               TextField(
                 controller: _emailController,
-                onEditingComplete: () async {
-                  final message = await AuthService()
-                      .login(_emailController.text, _passwordController.text);
-                  final user = await AuthService()
-                      .user(_emailController.text, _passwordController.text);
-                  if (context.mounted) {
-                    if (message == "Success") {
-                      getUserAdmin(user.user!.uid.toString());
-
-                      setUser(user.user?.uid);
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          message.toString(),
-                        ),
-                      ),
-                    );
-                  }
+                onEditingComplete: () {
+                  authService.userLogin(
+                    _emailController.text,
+                    _passwordController.text,
+                    context,
+                  );
                 },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -124,25 +81,12 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: _passwordController,
                 obscureText: obsecureText,
-                onEditingComplete: () async {
-                  final message = await AuthService()
-                      .login(_emailController.text, _passwordController.text);
-                  final user = await AuthService()
-                      .user(_emailController.text, _passwordController.text);
-                  if (context.mounted) {
-                    if (message == "Success") {
-                      getUserAdmin(user.user!.uid.toString());
-
-                      setUser(user.user?.uid);
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          message.toString(),
-                        ),
-                      ),
-                    );
-                  }
+                onEditingComplete: () {
+                  authService.userLogin(
+                    _emailController.text,
+                    _passwordController.text,
+                    context,
+                  );
                 },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -163,25 +107,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 25),
               ElevatedButton(
-                onPressed: () async {
-                  final message = await AuthService()
-                      .login(_emailController.text, _passwordController.text);
-                  final user = await AuthService()
-                      .user(_emailController.text, _passwordController.text);
-                  if (context.mounted) {
-                    if (message == "Success") {
-                      getUserAdmin(user.user!.uid.toString());
-
-                      setUser(user.user?.uid);
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          message.toString(),
-                        ),
-                      ),
-                    );
-                  }
+                onPressed: () {
+                  authService.userLogin(
+                    _emailController.text,
+                    _passwordController.text,
+                    context,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(
