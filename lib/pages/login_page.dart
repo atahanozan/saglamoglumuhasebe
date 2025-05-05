@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/pages/home_navigate_page.dart';
 import 'package:saglamoglu_muhasebe/service/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

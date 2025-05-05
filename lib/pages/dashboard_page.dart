@@ -5,6 +5,7 @@ import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/delivery_docs_statu
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/favorite_buttons.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/today_widget.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
+import 'package:saglamoglu_muhasebe/pages/docs_test_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({
