@@ -8,7 +8,14 @@ import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class CustomersList extends StatefulWidget {
-  const CustomersList({super.key});
+  const CustomersList({
+    super.key,
+    required this.agentName,
+    required this.agentLastName,
+  });
+
+  final String agentName;
+  final String agentLastName;
 
   @override
   State<CustomersList> createState() => _CustomersListState();
@@ -21,6 +28,7 @@ class _CustomersListState extends State<CustomersList> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _editNameController = TextEditingController();
   final DataServices dataServices = DataServices();
+
   List<String> tckns = [];
   List<String> names = [];
   List<String> companies = ["Sağlam", "Elmina"];
@@ -90,6 +98,8 @@ class _CustomersListState extends State<CustomersList> {
             MaterialPageRoute(
               builder: (_) => AddCustomer(
                 tckns: tckns,
+                agentName: widget.agentName,
+                agentLastname: widget.agentLastName,
               ),
             ),
           );
@@ -204,31 +214,33 @@ class _CustomersListState extends State<CustomersList> {
                       : ListView.builder(
                           itemCount: snapshot.data?.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot docs = snapshot.data!.docs[index];
+                            DocumentSnapshot snapshotData =
+                                snapshot.data!.docs[index];
 
                             return DataInfoBand(
-                              customerName: docs['name'],
-                              customerId: docs['tcknvkn'],
+                              customerName: snapshotData['name'],
+                              customerId: snapshotData['tcknvkn'],
                               deleteCustomer: () {
                                 dataServices.deleteCustomer(
-                                  docs.id,
-                                  docs['name'],
+                                  snapshotData.id,
+                                  snapshotData['name'],
                                   context,
                                 );
                               },
                               editCustomer: () {
                                 setState(() {
-                                  _nameController.text = docs["name"];
-                                  _tcknController.text = docs["tcknvkn"];
+                                  _nameController.text = snapshotData["name"];
+                                  _tcknController.text =
+                                      snapshotData["tcknvkn"];
                                 });
 
                                 dataServices.editCustomer(
                                   context,
                                   _tcknController,
-                                  docs["tcknvkn"],
+                                  snapshotData["tcknvkn"],
                                   _editNameController,
-                                  docs["name"],
-                                  docs.id,
+                                  snapshotData["name"],
+                                  snapshotData.id,
                                 );
                               },
                               visibility: visibility,
@@ -244,9 +256,19 @@ class _CustomersListState extends State<CustomersList> {
                               },
                               value: companyName,
                               priceController: _priceController,
-                              tcknvkn: docs["tcknvkn"],
-                              customerDate: docs["date"],
+                              tcknvkn: snapshotData["tcknvkn"],
+                              customerDate: snapshotData["date"],
                               addAuthorized: () {},
+                              agentName: widget.agentName,
+                              dataAgent: snapshotData
+                                          .data()
+                                          .toString()
+                                          .split(":")
+                                          .length ==
+                                      5
+                                  ? " "
+                                  : "(${snapshotData['agentName']})",
+                              agentLastName: widget.agentLastName,
                             );
                           },
                         );

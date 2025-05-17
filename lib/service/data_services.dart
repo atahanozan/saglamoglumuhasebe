@@ -9,12 +9,16 @@ class DataServices {
   Future<void> addCustomer(
     String name,
     String tcknvkn,
+    String agentName,
+    String agentLastname,
   ) async {
     await _firestore.collection("deliverycustomers").add({
       "id": DateTime.now().millisecondsSinceEpoch,
       "name": name,
       "tcknvkn": tcknvkn,
       "date": date,
+      "agentName": agentName,
+      "agentLastname": agentLastname,
     });
   }
 
@@ -24,6 +28,8 @@ class DataServices {
     String price,
     String company,
     String dateTime,
+    String agentName,
+    String agentLastname,
   ) async {
     await _firestore.collection("deliverydocs").add({
       "id": DateTime.now().millisecondsSinceEpoch,
@@ -34,6 +40,8 @@ class DataServices {
       "company": company,
       "statu": false,
       "proccesstatu": false,
+      "agentName": agentName,
+      "agentLastname": agentLastname,
     });
   }
 

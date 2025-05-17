@@ -18,6 +18,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
     required this.statuIcon,
     required this.proccesStatuChange,
     required this.proccesStatu,
+    required this.agent,
     this.admin = false,
   });
 
@@ -26,6 +27,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
   final String company;
   final String price;
   final String tcknvkn;
+  final String agent;
   final VoidCallback deleteDoc;
   final VoidCallback editDoc;
   final VoidCallback statuChange;
@@ -77,6 +79,13 @@ class DeliveryDocInfoLine extends StatelessWidget {
                 style: pageStyle.titleMedium?.copyWith(
                   color:
                       company == "Sağlam" ? darkYellow : Colors.indigo.shade900,
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  agent,
+                  textAlign: TextAlign.left,
                 ),
               ),
               const SizedBox(width: 20),

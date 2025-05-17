@@ -250,6 +250,14 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                 ),
                 const SizedBox(width: 20),
                 Expanded(
+                  child: Text(
+                    "İlgili",
+                    textAlign: TextAlign.left,
+                    style: pageStyle.titleMedium,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
                     child: Text(
                   "Tutar",
                   textAlign: TextAlign.right,
@@ -346,6 +354,10 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                               editDoc: () {},
                               proccesStatuChange: () {},
                               proccesStatu: true,
+                              agent:
+                                  data.data().toString().split(":").length == 9
+                                      ? ""
+                                      : data["agentName"],
                             );
                           },
                         );

@@ -20,6 +20,9 @@ class DataInfoBand extends StatefulWidget {
     required this.tcknvkn,
     required this.customerDate,
     required this.addAuthorized,
+    required this.agentName,
+    required this.agentLastName,
+    required this.dataAgent,
   });
 
   final String customerId;
@@ -28,6 +31,9 @@ class DataInfoBand extends StatefulWidget {
   final String customerDate;
   final String value;
   final String tcknvkn;
+  final String agentName;
+  final String agentLastName;
+  final String dataAgent;
   final VoidCallback deleteCustomer;
   final VoidCallback editCustomer;
   final VoidCallback datePick;
@@ -179,6 +185,8 @@ class _DataInfoBandState extends State<DataInfoBand> {
                   widget.priceController.text,
                   widget.value,
                   widget.date,
+                  widget.agentName,
+                  widget.agentLastName,
                 );
                 setState(() {
                   visibility = false;
@@ -217,11 +225,11 @@ class _DataInfoBandState extends State<DataInfoBand> {
               Expanded(child: Text(widget.customerId)),
               Expanded(
                   child: Text(
-                widget.customerName,
+                "${widget.customerName} ${widget.dataAgent}",
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               )),
-              const SizedBox(width: 20),
+              const SizedBox(width: 8),
               Expanded(
                 child: Row(
                   children: [

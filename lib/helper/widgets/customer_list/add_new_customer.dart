@@ -5,9 +5,16 @@ import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
 class AddNewCustomer extends StatefulWidget {
-  const AddNewCustomer({super.key, required this.tckns});
+  const AddNewCustomer({
+    super.key,
+    required this.tckns,
+    required this.agentName,
+    required this.agentLastname,
+  });
 
   final List<String> tckns;
+  final String agentName;
+  final String agentLastname;
 
   @override
   State<AddNewCustomer> createState() => _AddNewCustomerState();
@@ -60,7 +67,11 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                           tcknController.text.length > 9) {
                         dataServices
                             .addCustomer(
-                                nameController.text, tcknController.text)
+                          nameController.text,
+                          tcknController.text,
+                          widget.agentName,
+                          widget.agentLastname,
+                        )
                             .whenComplete(() {
                           setState(() {
                             tcknController.clear();
@@ -121,7 +132,11 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                           tcknController.text.length > 9) {
                         dataServices
                             .addCustomer(
-                                nameController.text, tcknController.text)
+                          nameController.text,
+                          tcknController.text,
+                          widget.agentName,
+                          widget.agentLastname,
+                        )
                             .whenComplete(() {
                           setState(() {
                             tcknController.clear();
@@ -169,7 +184,12 @@ class _AddNewCustomerState extends State<AddNewCustomer> {
                       nameController.text.isNotEmpty &&
                       tcknController.text.length > 9) {
                     dataServices
-                        .addCustomer(nameController.text, tcknController.text)
+                        .addCustomer(
+                      nameController.text,
+                      tcknController.text,
+                      widget.agentName,
+                      widget.agentLastname,
+                    )
                         .whenComplete(() {
                       setState(() {
                         tcknController.clear();

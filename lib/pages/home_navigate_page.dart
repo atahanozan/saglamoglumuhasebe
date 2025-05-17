@@ -17,10 +17,12 @@ class HomeNavigatePage extends StatefulWidget {
     super.key,
     required this.admin,
     required this.name,
+    required this.lastName,
   });
 
   final bool admin;
   final String name;
+  final String lastName;
 
   @override
   State<HomeNavigatePage> createState() => _HomeNavigatePageState();
@@ -32,8 +34,12 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
       customerList: () {},
       doneDocs: () {},
       waitingDocs: () {},
+      lastName: '',
     ),
-    CustomersList(),
+    CustomersList(
+      agentName: "",
+      agentLastName: '',
+    ),
     const DeliveryDocsList(),
     const DoneDeliveryDocs(),
     const AuthorizedDocs(),
@@ -78,8 +84,12 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
           waitingDocs: () {
             changePage(2);
           },
+          lastName: widget.lastName,
         ),
-        const CustomersList(),
+        CustomersList(
+          agentName: widget.name,
+          agentLastName: widget.lastName,
+        ),
         DeliveryDocsList(admin: widget.admin),
         DoneDeliveryDocs(admin: widget.admin),
         AuthorizedDocs(admin: widget.admin),
@@ -129,7 +139,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                     ),
                   ),
                   Text(
-                    "Sürüm: 12",
+                    "Sürüm: 13",
                     style: pageStyle.bodySmall?.copyWith(
                       color: CustomColors.customYellow,
                     ),

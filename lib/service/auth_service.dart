@@ -17,6 +17,7 @@ class AuthService {
 
     try {
       final String? name = await getUserName(userCredential.user?.uid);
+      final String? lastName = await getUserLastname(userCredential.user?.uid);
       final bool admin = await getUserAdmin(userCredential.user?.uid);
       final String uid = userCredential.user!.uid.toString();
 
@@ -29,6 +30,7 @@ class AuthService {
             builder: (_) => HomeNavigatePage(
               admin: admin,
               name: name.toString(),
+              lastName: lastName.toString(),
             ),
           ),
         );
@@ -57,6 +59,12 @@ class AuthService {
     var name = await _firestore.collection("users").doc(docId).get();
 
     return name["name"];
+  }
+
+  Future<String?> getUserLastname(String? docId) async {
+    var name = await _firestore.collection("users").doc(docId).get();
+
+    return name["lastname"];
   }
 
   Future<bool> getUserAdmin(String? docId) async {

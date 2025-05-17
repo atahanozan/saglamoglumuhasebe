@@ -47,6 +47,7 @@ class _SplashPageState extends State<SplashPage> {
       }
     } else {
       String? name = await authService.getUserName(userUid);
+      String? lastName = await authService.getUserLastname(userUid);
       bool admin = await authService.getUserAdmin(userUid);
       if (context.mounted) {
         Navigator.pushReplacement(
@@ -55,6 +56,7 @@ class _SplashPageState extends State<SplashPage> {
             builder: (_) => HomeNavigatePage(
               admin: admin,
               name: name.toString(),
+              lastName: lastName.toString(),
             ),
           ),
         );

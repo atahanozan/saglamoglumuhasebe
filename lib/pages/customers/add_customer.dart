@@ -4,9 +4,16 @@ import 'package:saglamoglu_muhasebe/helper/widgets/customer_choice.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/customer_list/add_new_customer.dart';
 
 class AddCustomer extends StatefulWidget {
-  const AddCustomer({super.key, required this.tckns});
+  const AddCustomer({
+    super.key,
+    required this.tckns,
+    required this.agentName,
+    required this.agentLastname,
+  });
 
   final List<String> tckns;
+  final String agentName;
+  final String agentLastname;
 
   @override
   State<AddCustomer> createState() => _AddCustomerState();
@@ -16,15 +23,23 @@ class _AddCustomerState extends State<AddCustomer> {
   List<Widget> pages = [
     const AddNewCustomer(
       tckns: [],
+      agentName: '',
+      agentLastname: '',
     ),
     const AddNewCustomer(
       tckns: [],
+      agentName: '',
+      agentLastname: '',
     ),
     const AddNewCustomer(
       tckns: [],
+      agentName: '',
+      agentLastname: '',
     ),
     const AddNewCustomer(
       tckns: [],
+      agentName: '',
+      agentLastname: '',
     ),
   ];
 
@@ -39,15 +54,23 @@ class _AddCustomerState extends State<AddCustomer> {
       pages = [
         AddNewCustomer(
           tckns: widget.tckns,
+          agentName: widget.agentName,
+          agentLastname: widget.agentLastname,
         ),
         AddNewCustomer(
           tckns: widget.tckns,
+          agentName: widget.agentName,
+          agentLastname: widget.agentLastname,
         ),
         AddNewCustomer(
           tckns: widget.tckns,
+          agentName: widget.agentName,
+          agentLastname: widget.agentLastname,
         ),
         AddNewCustomer(
           tckns: widget.tckns,
+          agentName: widget.agentName,
+          agentLastname: widget.agentLastname,
         ),
       ];
     });

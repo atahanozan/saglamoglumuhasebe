@@ -282,6 +282,14 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                 ),
                 const SizedBox(width: 20),
                 Expanded(
+                  child: Text(
+                    "İlgili",
+                    textAlign: TextAlign.left,
+                    style: pageStyle.titleMedium,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
                     child: Text(
                   "Tutar",
                   textAlign: TextAlign.right,
@@ -383,6 +391,10 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                 );
                               },
                               proccesStatu: data["proccesstatu"],
+                              agent:
+                                  data.data().toString().split(":").length == 9
+                                      ? ""
+                                      : data["agentName"],
                             );
                           },
                         );

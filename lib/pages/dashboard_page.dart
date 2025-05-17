@@ -5,7 +5,6 @@ import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/delivery_docs_statu
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/favorite_buttons.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/dashboard/today_widget.dart';
 import 'package:saglamoglu_muhasebe/pages/customers/add_customer.dart';
-import 'package:saglamoglu_muhasebe/pages/docs_test_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({
@@ -16,9 +15,11 @@ class DashboardPage extends StatelessWidget {
     required this.customerList,
     required this.doneDocs,
     required this.waitingDocs,
+    required this.lastName,
   });
 
   final String name;
+  final String lastName;
   final int customerCount;
   final bool admin;
   final VoidCallback waitingDocs;
@@ -117,6 +118,8 @@ class DashboardPage extends StatelessWidget {
                                                 MaterialPageRoute(
                                                   builder: (_) => AddCustomer(
                                                     tckns: tckns,
+                                                    agentName: name,
+                                                    agentLastname: lastName,
                                                   ),
                                                 ),
                                               );
