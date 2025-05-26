@@ -139,7 +139,7 @@ class _HomeNavigatePageState extends State<HomeNavigatePage> {
                     ),
                   ),
                   Text(
-                    "Sürüm: 13",
+                    "Sürüm: 14",
                     style: pageStyle.bodySmall?.copyWith(
                       color: CustomColors.customYellow,
                     ),

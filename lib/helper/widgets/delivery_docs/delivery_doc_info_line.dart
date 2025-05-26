@@ -19,6 +19,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
     required this.proccesStatuChange,
     required this.proccesStatu,
     required this.agent,
+    required this.currency,
     this.admin = false,
   });
 
@@ -28,6 +29,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
   final String price;
   final String tcknvkn;
   final String agent;
+  final String currency;
   final VoidCallback deleteDoc;
   final VoidCallback editDoc;
   final VoidCallback statuChange;
@@ -91,7 +93,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
               const SizedBox(width: 20),
               Expanded(
                   child: Text(
-                "$price TL",
+                "$price $currency",
                 textAlign: TextAlign.right,
                 style: GoogleFonts.lexendGiga(),
               )),

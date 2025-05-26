@@ -14,6 +14,7 @@ class DeliverydocBand extends StatelessWidget {
     required this.drpBtn,
     required this.onChanged,
     required this.priceController,
+    required this.currencyButton,
   });
 
   final bool visibility;
@@ -24,6 +25,7 @@ class DeliverydocBand extends StatelessWidget {
   final List<String> drpBtn;
   final Function(String?) onChanged;
   final TextEditingController priceController;
+  final Widget currencyButton;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,7 @@ class DeliverydocBand extends StatelessWidget {
               )),
             ),
           ),
+          currencyButton,
           const SizedBox(width: 20),
           ElevatedButton(
             onPressed: saveFun,

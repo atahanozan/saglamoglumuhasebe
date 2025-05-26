@@ -395,6 +395,10 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                   data.data().toString().split(":").length == 9
                                       ? ""
                                       : data["agentName"],
+                              currency:
+                                  data.data().toString().split(":").length == 12
+                                      ? data["currency"]
+                                      : "TL",
                             );
                           },
                         );

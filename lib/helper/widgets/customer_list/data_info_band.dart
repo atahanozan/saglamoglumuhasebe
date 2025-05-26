@@ -61,7 +61,13 @@ class _DataInfoBandState extends State<DataInfoBand> {
     "Talimat",
     "Vekalet",
   ];
+  List<String> currency = [
+    "TL",
+    "EUR",
+    "USD",
+  ];
   String addAuthValue = "Talimat";
+  String currencyValue = "TL";
 
   Future<void> pickFirstDate() async {
     final DateTime? picked = await showDatePicker(
@@ -187,6 +193,7 @@ class _DataInfoBandState extends State<DataInfoBand> {
                   widget.date,
                   widget.agentName,
                   widget.agentLastName,
+                  currencyValue,
                 );
                 setState(() {
                   visibility = false;
@@ -207,6 +214,33 @@ class _DataInfoBandState extends State<DataInfoBand> {
             drpBtn: widget.drpBtn,
             onChanged: widget.onChanged,
             priceController: widget.priceController,
+            currencyButton: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              margin: const EdgeInsets.only(left: 8),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: DropdownButton(
+                value: currencyValue,
+                underline: SizedBox(),
+                items: currency
+                    .map(
+                      (value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    currencyValue = value.toString();
+                  });
+                },
+              ),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

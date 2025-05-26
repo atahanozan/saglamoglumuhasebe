@@ -30,6 +30,7 @@ class DataServices {
     String dateTime,
     String agentName,
     String agentLastname,
+    String currency,
   ) async {
     await _firestore.collection("deliverydocs").add({
       "id": DateTime.now().millisecondsSinceEpoch,
@@ -42,6 +43,7 @@ class DataServices {
       "proccesstatu": false,
       "agentName": agentName,
       "agentLastname": agentLastname,
+      "currency": currency,
     });
   }
 
