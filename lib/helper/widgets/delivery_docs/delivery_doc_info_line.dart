@@ -111,6 +111,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
                             tcknvkn,
                             company,
                             price,
+                            currency,
                             context,
                             DateTime.parse(date),
                           );
@@ -124,6 +125,7 @@ class DeliveryDocInfoLine extends StatelessWidget {
                             tcknvkn,
                             company,
                             price,
+                            currency,
                             context,
                             DateTime.parse(date),
                           );

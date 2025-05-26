@@ -14,6 +14,7 @@ class CustomerDeliveryDoc {
     String tckn,
     String companyName,
     String price,
+    String currency,
     BuildContext context,
     DateTime date,
   ) async {
@@ -159,7 +160,7 @@ class CustomerDeliveryDoc {
                               ))),
                               child: pw.Expanded(
                                 child: pw.Text(
-                                  "$price - TL",
+                                  "$price - $currency",
                                   style: pw.TextStyle(font: fontLigth),
                                 ),
                               ),

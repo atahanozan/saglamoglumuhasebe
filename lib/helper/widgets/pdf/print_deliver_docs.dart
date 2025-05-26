@@ -10,6 +10,7 @@ class PrintDeliverDocs {
     String tckn,
     String companyName,
     String price,
+    String currency,
     BuildContext context,
     DateTime date,
   ) async {
@@ -154,7 +155,7 @@ class PrintDeliverDocs {
                               ))),
                               child: pw.Expanded(
                                 child: pw.Text(
-                                  "$price - TL",
+                                  "$price - $currency",
                                   style: pw.TextStyle(font: fontLigth),
                                 ),
                               ),
