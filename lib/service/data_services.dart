@@ -182,12 +182,8 @@ class DataServices {
     );
   }
 
-  Future<void> editDeliveryDocStatu(
-    BuildContext context,
-    String name,
-    bool statu,
-    String? docId,
-  ) async {
+  Future<void> editDeliveryDocStatu(BuildContext context, String name,
+      bool statu, String? docId, String dateTime) async {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -199,18 +195,18 @@ class DataServices {
           ElevatedButton(
             onPressed: () async {
               if (statu) {
-                await _firestore
-                    .collection("deliverydocs")
-                    .doc(docId)
-                    .update({"statu": false});
+                await _firestore.collection("deliverydocs").doc(docId).update({
+                  "statu": false,
+                  "lastEditedDate": dateTime,
+                });
                 if (context.mounted) {
                   Navigator.pop(context);
                 }
               } else {
-                await _firestore
-                    .collection("deliverydocs")
-                    .doc(docId)
-                    .update({"statu": true});
+                await _firestore.collection("deliverydocs").doc(docId).update({
+                  "statu": true,
+                  "lastEditedDate": dateTime,
+                });
                 if (context.mounted) {
                   Navigator.pop(context);
                 }

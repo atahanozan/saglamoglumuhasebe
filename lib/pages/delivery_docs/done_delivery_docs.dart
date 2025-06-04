@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/helper/ui/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/delivery_doc_info_line.dart';
+import 'package:saglamoglu_muhasebe/helper/widgets/delivery_docs/download_docs_excel.dart';
 import 'package:saglamoglu_muhasebe/helper/widgets/pick_date_widget.dart';
 import 'package:saglamoglu_muhasebe/service/data_services.dart';
 
@@ -227,6 +228,9 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                 ],
               ),
             ),
+            DownloadDocsExcel(
+              statu: true,
+            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -349,6 +353,7 @@ class _DoneDeliveryDocsState extends State<DoneDeliveryDocs> {
                                   data["name"],
                                   data["statu"],
                                   data.id,
+                                  DateTime.now().toString().split(" ")[0],
                                 );
                               },
                               editDoc: () {},

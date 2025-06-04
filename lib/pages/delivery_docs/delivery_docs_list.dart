@@ -258,7 +258,9 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                 ],
               ),
             ),
-            DownloadDocsExcel(),
+            DownloadDocsExcel(
+              statu: false,
+            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -381,6 +383,7 @@ class _DeliveryDocsListState extends State<DeliveryDocsList> {
                                   data["name"],
                                   data["statu"],
                                   data.id,
+                                  DateTime.now().toString().split(" ")[0],
                                 );
                               },
                               editDoc: () {},

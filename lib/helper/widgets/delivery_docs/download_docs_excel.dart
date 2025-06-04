@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/models/delivery_docs_data.dart';
 
 class DownloadDocsExcel extends StatefulWidget {
-  const DownloadDocsExcel({super.key});
+  const DownloadDocsExcel({super.key, required this.statu});
+
+  final bool statu;
 
   @override
   State<DownloadDocsExcel> createState() => _DownloadDocsExcelState();
@@ -16,11 +18,11 @@ class _DownloadDocsExcelState extends State<DownloadDocsExcel> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<DeliveryDocsData> allData = [];
 
-  Future<void> fetchData() async {
+  Future<void> fetchData(bool statu) async {
     try {
       final snapshot = await firestore
           .collection("deliverydocs")
-          .where("statu", isEqualTo: false)
+          .where("statu", isEqualTo: statu)
           .get();
 
       setState(() {
@@ -37,7 +39,14 @@ class _DownloadDocsExcelState extends State<DownloadDocsExcel> {
     var excel = Excel.createExcel();
     Sheet sheetObject = excel['Sheet1'];
 
-    List<String> headers = ["Tarih", "Müşteri Adı", "Firma", "Tutar"];
+    List<String> headers = [
+      "Tarih",
+      "Müşteri Adı",
+      "Firma",
+      "Tutar",
+      "İlgili",
+      "Son Değiştirilme"
+    ];
 
     for (var i = 0; i < headers.length; i++) {
       sheetObject
@@ -61,6 +70,12 @@ class _DownloadDocsExcelState extends State<DownloadDocsExcel> {
               .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: i + 1))
               .value =
           IntCellValue(int.parse(item.price.split(",")[0].replaceAll(".", "")));
+      sheetObject
+          .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: i + 1))
+          .value = TextCellValue(item.agentName ?? "");
+      sheetObject
+          .cell(CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: i + 1))
+          .value = TextCellValue(item.lastEditedDate ?? "");
     }
 
     var savedFile = excel.save(fileName: "Bekleyen Teslimler.xlsx");
@@ -76,7 +91,7 @@ class _DownloadDocsExcelState extends State<DownloadDocsExcel> {
 
   @override
   void initState() {
-    fetchData();
+    fetchData(widget.statu);
     super.initState();
   }
 
