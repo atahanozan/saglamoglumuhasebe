@@ -11,6 +11,7 @@ import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/completed_delivery_docs_view.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/waiting_delivery_docs_view.dart';
 import 'package:saglamoglu_muhasebe/view/home/home_view.dart';
+import 'package:saglamoglu_muhasebe/view/login/login_view.dart';
 
 class MainViewModel extends GetxController {
   static bool get isRegistered => GetInstance().isRegistered<MainViewModel>();
@@ -117,5 +118,15 @@ class MainViewModel extends GetxController {
     var data = await user.getUserData();
     userAdmin = data.obs;
     update();
+  }
+
+  Future<void> userLogout(BuildContext context) async {
+    user.logout();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => LoginView(),
+      ),
+    );
   }
 }
