@@ -85,17 +85,21 @@ class DeliveryDocGridWidget extends StatelessWidget {
             ],
           ),
         ),
-        Visibility(
-          visible: model.btnVisibility(dataModel.proccesstatu),
-          child: InkWell(
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: Icon(
-                Icons.check_circle_rounded,
-                color: Colors.green.shade800,
-                size: 20,
-              ),
+        InkWell(
+          onTap: () {
+            model.updateDocProccessStatu(
+                docId, dataModel.proccesstatu == true ? false : true);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Icon(
+              dataModel.proccesstatu == false
+                  ? Icons.check_circle_rounded
+                  : Icons.remove_circle_rounded,
+              color: dataModel.proccesstatu == false
+                  ? Colors.green.shade800
+                  : Colors.red.shade800,
+              size: 20,
             ),
           ),
         ),

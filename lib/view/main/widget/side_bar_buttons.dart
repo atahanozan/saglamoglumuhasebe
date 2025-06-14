@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/enums/navigation_enums.dart';
+import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/view/main/main_view_model.dart';
 
@@ -15,10 +16,11 @@ class SideBarButtons extends StatelessWidget {
               color: CustomThemeColors.customWhite,
               letterSpacing: 0,
             );
-    final TextStyle? selected = Theme.of(context)
-        .textTheme
-        .titleMedium
-        ?.copyWith(color: CustomThemeColors.customWhite);
+    final TextStyle? selected =
+        Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: CustomThemeColors.customBlack.c800,
+              fontWeight: FontWeight.bold,
+            );
     return Column(
       children: List.generate(
           model.userAdmin.value.admin == true
@@ -36,18 +38,15 @@ class SideBarButtons extends StatelessWidget {
               child: Container(
                 alignment: Alignment.centerLeft,
                 margin: const EdgeInsets.symmetric(
-                  vertical: 10,
+                  vertical: 2,
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                 decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: model.selectedPageIndex.value == index
-                          ? CustomThemeColors.customWhite
-                          : Colors.transparent,
-                    ),
-                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  color: index == model.selectedPageIndex.value
+                      ? Colors.grey.shade400
+                      : Colors.grey.shade800,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

@@ -12,13 +12,6 @@ class AuthorizedHeaders extends StatelessWidget {
             );
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border(
-            bottom: BorderSide(
-          color: Colors.grey.shade200,
-        )),
-        color: Colors.white,
-      ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [

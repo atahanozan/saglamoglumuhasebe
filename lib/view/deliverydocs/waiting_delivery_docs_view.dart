@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:saglamoglu_muhasebe/core/widget/download_docs_excel.dart';
+import 'package:get/get.dart';
+import 'package:saglamoglu_muhasebe/core/widget/excel/download_docs_excel.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/delivery_docs_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/delivery_doc_grid_widget.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/headers.dart';
@@ -19,36 +20,51 @@ class WaitingDeliveryDocsView extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              ListFilters(),
+              ListFilters(
+                onFilterComplete: () {
+                  model.updateWaitingDataFilterWithSearch();
+                },
+                filterClean: () {
+                  model.cleanWaitingDataFilter();
+                },
+              ),
               Headers(),
               Divider(),
               Flexible(
-                child: StreamBuilder(
-                  stream: model.deliverStream(),
-                  builder: (context, snapshot) {
-                    return !snapshot.hasData
-                        ? CircularProgressIndicator()
-                        : ListView.builder(
-                            itemCount: snapshot.data?.docs.length,
-                            itemBuilder: (context, index) {
-                              Map<String, dynamic> modelData =
-                                  snapshot.data!.docs[index].data();
-                              DocumentSnapshot snapshotData =
-                                  snapshot.data!.docs[index];
-                              return DeliveryDocGridWidget(
-                                model: model,
-                                dataModel: model.deliveryController
-                                    .snapshotModel(modelData, snapshotData.id),
-                                docId: snapshotData.id,
-                              );
-                            },
-                          );
-                  },
+                child: Obx(
+                  () => StreamBuilder(
+                    stream: model.deliverCompletedStream(
+                        false, model.isWaitingDataFiltered.value),
+                    builder: (context, snapshot) {
+                      return !snapshot.hasData
+                          ? CircularProgressIndicator()
+                          : ListView.builder(
+                              itemCount: snapshot.data?.docs.length,
+                              itemBuilder: (context, index) {
+                                Map<String, dynamic> modelData =
+                                    snapshot.data!.docs[index].data();
+                                DocumentSnapshot snapshotData =
+                                    snapshot.data!.docs[index];
+                                return DeliveryDocGridWidget(
+                                  model: model,
+                                  dataModel: model.deliveryController
+                                      .snapshotModel(
+                                          modelData, snapshotData.id),
+                                  docId: snapshotData.id,
+                                );
+                              },
+                            );
+                    },
+                  ),
                 ),
               ),
             ],
           ),
-          DownloadDocsExcel(statu: false),
+          DownloadDocsExcel(
+            statu: false,
+            isTotal: false,
+            secondStatu: true,
+          ),
         ],
       ),
     );

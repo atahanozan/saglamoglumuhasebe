@@ -19,6 +19,7 @@ class AppUser extends GetxController {
 
   void logout() {
     thisUser = AuthModel().obs;
+    setUserData(AuthModel());
     update();
     AuthController().logout();
   }

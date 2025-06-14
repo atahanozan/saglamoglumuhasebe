@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/authorized_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/widget/authorized_grid_widget.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/widget/authorized_headers.dart';
@@ -19,28 +20,30 @@ class AuthorizedView extends StatelessWidget {
           AuthorizedHeaders(),
           const Divider(),
           Flexible(
-            child: StreamBuilder(
-              stream: model.dataStream(),
-              builder: (context, snapshot) {
-                return !snapshot.hasData
-                    ? CircularProgressIndicator()
-                    : ListView.builder(
-                        itemCount: model.allDataList.length,
-                        itemBuilder: (context, index) {
-                          Map<String, dynamic> dataDetail =
-                              snapshot.data!.docs[index].data();
+            child: Obx(
+              () => StreamBuilder(
+                stream: model.dataStream(),
+                builder: (context, snapshot) {
+                  return !snapshot.hasData
+                      ? CircularProgressIndicator()
+                      : ListView.builder(
+                          itemCount: model.allDataList.length,
+                          itemBuilder: (context, index) {
+                            Map<String, dynamic> dataDetail =
+                                snapshot.data!.docs[index].data();
 
-                          DocumentSnapshot snapshotData =
-                              snapshot.data!.docs[index];
-                          return AuthorizedGridWidget(
-                            dataModel: model.authorizedController
-                                .getSingleAuthorizedData(dataDetail),
-                            model: model,
-                            dataId: snapshotData.id,
-                          );
-                        },
-                      );
-              },
+                            DocumentSnapshot snapshotData =
+                                snapshot.data!.docs[index];
+                            return AuthorizedGridWidget(
+                              dataModel: model.authorizedController
+                                  .getSingleAuthorizedData(dataDetail),
+                              model: model,
+                              dataId: snapshotData.id,
+                            );
+                          },
+                        );
+                },
+              ),
             ),
           ),
         ],

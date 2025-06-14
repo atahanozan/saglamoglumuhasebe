@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/core/widget/custom_formfield_widget.dart';
 import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
@@ -55,7 +56,9 @@ class DataGridWidget extends StatelessWidget {
                             model.editCustomerIndex.value == dataIndex
                         ? CustomFormfieldWidget(
                             formName: "",
-                            inputFormatter: [],
+                            inputFormatter: [
+                              UppercaseTextFormatter(),
+                            ],
                             controller: model.editNameController)
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.start,

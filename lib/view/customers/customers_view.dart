@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widget/add_delivery_doc.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widget/customer_grid_headers.dart';
@@ -13,20 +14,19 @@ class CustomersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final CustomersViewModel model = CustomersViewModel.init;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Stack(
-          alignment: Alignment.centerRight,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                CustomerListFilters(),
-                CustomerGridHeaders(),
-                const Divider(),
-                Flexible(
-                  child: StreamBuilder(
-                    stream: model.customerListStream(),
+      body: Stack(
+        alignment: Alignment.centerRight,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              CustomerListFilters(),
+              CustomerGridHeaders(),
+              const Divider(),
+              Flexible(
+                child: Obx(
+                  () => StreamBuilder(
+                    stream: model.dataStream(),
                     builder: (context, snapshot) {
                       return !snapshot.hasData
                           ? CircularProgressIndicator()
@@ -49,11 +49,11 @@ class CustomersView extends StatelessWidget {
                     },
                   ),
                 ),
-              ],
-            ),
-            AddCustomerInfoDoc(),
-          ],
-        ),
+              ),
+            ],
+          ),
+          AddCustomerInfoDoc(),
+        ],
       ),
     );
   }

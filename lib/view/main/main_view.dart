@@ -33,28 +33,31 @@ class MainView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                fixedSize: Size(180, 70),
-                                textStyle:
-                                    Theme.of(context).textTheme.titleMedium),
-                            onPressed: () {
-                              model.changePageSize(
-                                  MediaQuery.of(context).size.width * 0.4);
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.add_rounded,
-                                  size: 45,
-                                ),
-                                Text("Müşteri Ekle"),
-                              ],
+                      Visibility(
+                        visible: !model.addCustomerVisibility.value,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 24),
+                          child: RotatedBox(
+                            quarterTurns: 3,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  fixedSize: Size(180, 70),
+                                  textStyle:
+                                      Theme.of(context).textTheme.titleMedium),
+                              onPressed: () {
+                                model.changePageSize(
+                                    MediaQuery.of(context).size.width * 0.4);
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.add_rounded,
+                                    size: 45,
+                                  ),
+                                  Text("Müşteri Ekle"),
+                                ],
+                              ),
                             ),
                           ),
                         ),

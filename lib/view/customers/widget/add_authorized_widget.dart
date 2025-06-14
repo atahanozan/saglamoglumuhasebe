@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widget/custom_dropdown_btn.dart';
@@ -77,7 +78,7 @@ class AddAuthorizedWidget extends StatelessWidget {
                 ),
                 SizedBox(height: 18),
                 CustomFormfieldWidget(
-                    labelColor: CustomThemeColors.customBlack,
+                    labelColor: CustomThemeColors.customBlack.c800,
                     formName: "Yetki Alan",
                     inputFormatter: [
                       MaskTextInputFormatter(
@@ -87,7 +88,7 @@ class AddAuthorizedWidget extends StatelessWidget {
                     ],
                     controller: model.authorizedTcknController),
                 CustomFormfieldWidget(
-                    labelColor: CustomThemeColors.customBlack,
+                    labelColor: CustomThemeColors.customBlack.c800,
                     formName: "",
                     inputFormatter: [],
                     controller: model.authorizedNameController),

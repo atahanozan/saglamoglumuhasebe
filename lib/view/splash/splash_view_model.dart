@@ -20,25 +20,29 @@ class SplashViewModel extends GetxController {
   Future<void> updateSplash(BuildContext context) async {
     var res = await AppUser.init.getUserData();
 
-    navigateByData = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (res.uid != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MainView(),
-          ),
-        );
-        AppSettings.init.startDataFetch();
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => LoginView(),
-          ),
-        );
+    Future.delayed(const Duration(seconds: 3), () {
+      if (context.mounted) {
+        if (res.uid == null ||
+            res.admin == null ||
+            res.email == null ||
+            res.name == null ||
+            res.lastName == null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => LoginView(),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => MainView(),
+            ),
+          );
+          AppSettings.init.startDataFetch();
+        }
       }
-
-      timer.cancel();
     });
   }
 }

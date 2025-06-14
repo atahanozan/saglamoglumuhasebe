@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/auth_controller.dart';
@@ -19,6 +20,8 @@ class LoginViewModel extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   RxBool obsecureText = true.obs;
+  RxBool errBoxVisibility = false.obs;
+  RxString errContent = "".obs;
 
   void changeObsecure() {
     if (obsecureText.value == true) {
@@ -28,24 +31,41 @@ class LoginViewModel extends GetxController {
     }
   }
 
-  Future<void> login(BuildContext context) async {
-    if (formKey.currentState!.validate()) {
-      var res = await authController.login(
-          emailController.text, passwordController.text);
+  void showErrBox(String errBoxContent) {
+    errBoxVisibility.value = true;
+    errContent.value = errBoxContent;
+  }
 
-      if (res?.uid != null) {
-        appUser.setUser(res!);
-        if (context.mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => MainView(),
-            ),
-          );
+  void closeErrBox() {
+    errBoxVisibility.value = false;
+  }
+
+  Future<void> login(BuildContext context) async {
+    if (emailController.text.isEmpty) {
+      showErrBox("Lütfen geçerli bir email adresi giriniz.");
+    } else if (passwordController.text.isEmpty) {
+      showErrBox("Lütfen şifrenizi giriniz.");
+    } else {
+      if (formKey.currentState!.validate()) {
+        var res = await authController.login(
+            emailController.text, passwordController.text);
+
+        if (res?.uid != null) {
+          appUser.setUser(res!);
+          if (context.mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => MainView(),
+              ),
+            );
+          }
+          AppSettings.init.startDataFetch();
+        } else {
+          if (kDebugMode) {
+            print(res?.uid);
+          }
         }
-        AppSettings.init.startDataFetch();
-      } else {
-        print(res?.uid);
       }
     }
   }

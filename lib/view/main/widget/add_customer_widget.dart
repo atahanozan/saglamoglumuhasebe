@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
+import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widget/custom_formfield_widget.dart';
 import 'package:saglamoglu_muhasebe/view/main/main_view_model.dart';
@@ -18,7 +20,7 @@ class AddCustomerWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 18),
         duration: const Duration(milliseconds: 500),
         decoration: BoxDecoration(
-          color: CustomThemeColors.customBlack,
+          color: CustomThemeColors.customBlack.c800,
         ),
         child: Visibility(
           visible: model.addCustomerVisibility.value,
@@ -26,12 +28,29 @@ class AddCustomerWidget extends StatelessWidget {
             key: model.formKey,
             child: Column(
               children: [
-                Text(
-                  "Müşteri Ekle",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(color: Colors.white),
+                SizedBox(height: 100),
+                Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          model.changePageSize(0);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("Kapat"),
+                            Icon(Icons.close),
+                          ],
+                        )),
+                    Spacer(),
+                    Text(
+                      "Müşteri Ekle",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 26),
                 CustomFormfieldWidget(
@@ -46,7 +65,9 @@ class AddCustomerWidget extends StatelessWidget {
                 ),
                 CustomFormfieldWidget(
                   formName: 'Ad Soyad',
-                  inputFormatter: [],
+                  inputFormatter: [
+                    UppercaseTextFormatter(),
+                  ],
                   controller: model.nameController,
                 ),
                 CustomFormfieldWidget(

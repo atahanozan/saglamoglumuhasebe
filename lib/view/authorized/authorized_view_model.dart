@@ -15,6 +15,8 @@ class AuthorizedViewModel extends GetxController {
 
   AuthorizedController get authorizedController => AuthorizedController();
 
+  final TextEditingController searchController = TextEditingController();
+
   RxList<AuthorizedModel> allDataList = <AuthorizedModel>[].obs;
 
   Future<void> getAllData() async {
@@ -51,12 +53,31 @@ class AuthorizedViewModel extends GetxController {
     );
   }
 
-  Query<Map<String, dynamic>> streamData = FirebaseFirestore.instance
-      .collection("authorizedcustomers")
-      .orderBy("customername");
+  RxBool isDataFiltered = false.obs;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> dataStream() {
-    return streamData.snapshots();
+    switch (isDataFiltered.value) {
+      case true:
+        return FirebaseFirestore.instance
+            .collection("authorizedcustomers")
+            .where("customername",
+                isGreaterThanOrEqualTo: searchController.text)
+            .snapshots();
+      case false:
+        return FirebaseFirestore.instance
+            .collection("authorizedcustomers")
+            .orderBy("customername")
+            .snapshots();
+    }
+  }
+
+  void updateAuthorizedDataFilter() {
+    isDataFiltered.value = true;
+  }
+
+  void cleanFilter() {
+    isDataFiltered.value = false;
+    searchController.clear();
   }
 
   void deleteAuthorized(

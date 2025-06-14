@@ -18,6 +18,7 @@ class DeliveryDocsViewModel extends GetxController {
       Get.find<DeliveryDocsViewModel>();
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final TextEditingController searchController = TextEditingController();
 
   DeliveryDocController get deliveryController => DeliveryDocController();
 
@@ -69,7 +70,7 @@ class DeliveryDocsViewModel extends GetxController {
       case false:
         return true;
       default:
-        return true;
+        return false;
     }
   }
 
@@ -89,24 +90,47 @@ class DeliveryDocsViewModel extends GetxController {
     );
   }
 
-  Query<Map<String, dynamic>> streamData = FirebaseFirestore.instance
-      .collection("deliverydocs")
-      .limit(50)
-      .where("statu", isEqualTo: false)
-      .orderBy("id", descending: true);
+  RxBool isWaitingDataFiltered = false.obs;
+  RxBool isCompletedDataFiltered = false.obs;
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> deliverStream() {
-    return streamData.snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> deliverCompletedStream(
+    bool deliveryStatu,
+    bool isFilteredData,
+  ) {
+    switch (isFilteredData) {
+      case true:
+        return FirebaseFirestore.instance
+            .collection("deliverydocs")
+            .limit(20)
+            .where("statu", isEqualTo: deliveryStatu)
+            .where("name", isGreaterThanOrEqualTo: searchController.text)
+            .snapshots();
+      case false:
+        return FirebaseFirestore.instance
+            .collection("deliverydocs")
+            .where("statu", isEqualTo: deliveryStatu)
+            .orderBy("id", descending: true)
+            .limit(50)
+            .snapshots();
+    }
   }
 
-  Query<Map<String, dynamic>> streamCompleteData = FirebaseFirestore.instance
-      .collection("deliverydocs")
-      .limit(50)
-      .where("statu", isEqualTo: true)
-      .orderBy("id", descending: true);
+  void updateWaitingDataFilterWithSearch() {
+    isWaitingDataFiltered.value = true;
+  }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> deliverCompletedStream() {
-    return streamCompleteData.snapshots();
+  void updateCompleteDataFilterWithSearch() {
+    isCompletedDataFiltered.value = true;
+  }
+
+  void cleanWaitingDataFilter() {
+    isWaitingDataFiltered.value = false;
+    searchController.clear();
+  }
+
+  void cleanCompleteDataFilter() {
+    isCompletedDataFiltered.value = false;
+    searchController.clear();
   }
 
   void deleteDeliveryDoc(
@@ -193,6 +217,18 @@ class DeliveryDocsViewModel extends GetxController {
           Navigator.pop(context);
         },
       ),
+    );
+  }
+
+  void updateDocProccessStatu(
+    String? docId,
+    bool newStatu,
+  ) {
+    deliveryController.editDoc(
+      {
+        "proccesstatu": newStatu,
+      },
+      docId,
     );
   }
 }

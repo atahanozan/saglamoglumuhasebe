@@ -108,6 +108,12 @@ class MainViewModel extends GetxController {
         customerViewModel.getCustomerData();
 
         changePageSize(0.0);
+
+        Future.delayed(const Duration(milliseconds: 100), () {
+          nameController.clear();
+          phoneController.clear();
+          tcknVknController.clear();
+        });
       }
     }
   }

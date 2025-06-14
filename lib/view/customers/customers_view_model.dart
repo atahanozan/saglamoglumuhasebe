@@ -27,6 +27,7 @@ class CustomersViewModel extends GetxController {
   final TextEditingController editTcknController = TextEditingController();
   final TextEditingController editNameController = TextEditingController();
   final TextEditingController editTelNoController = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
   final GlobalKey<FormState> customerFormKey = GlobalKey<FormState>();
 
   CustomerController get customerController => CustomerController();
@@ -35,10 +36,7 @@ class CustomersViewModel extends GetxController {
 
   RxList<CustomerModel> allCustomerData = <CustomerModel>[].obs;
 
-  Query<Map<String, dynamic>> get document => FirebaseFirestore.instance
-      .collection("deliverycustomers")
-      .limit(50)
-      .orderBy("id", descending: true);
+  RxBool isFiltered = false.obs;
 
   Future<void> getCustomerData() async {
     var res = await customerController.getCustomers();
@@ -47,8 +45,31 @@ class CustomersViewModel extends GetxController {
     update();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> customerListStream() {
-    return document.snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> dataStream() {
+    switch (isFiltered.value) {
+      case true:
+        return FirebaseFirestore.instance
+            .collection("deliverycustomers")
+            .where("name", isGreaterThanOrEqualTo: searchController.text)
+            .limit(10)
+            .snapshots();
+
+      case false:
+        return FirebaseFirestore.instance
+            .collection("deliverycustomers")
+            .limit(50)
+            .orderBy("id", descending: true)
+            .snapshots();
+    }
+  }
+
+  void updateFilterWithSearch() {
+    isFiltered.value = true;
+  }
+
+  void cleanilter() {
+    searchController.clear();
+    isFiltered.value = false;
   }
 
   Widget customerStatuIcon(String customerId) {
@@ -183,6 +204,9 @@ class CustomersViewModel extends GetxController {
     );
 
     deliveryDocController.createDeliveryDoc(result);
+    Future.delayed(const Duration(milliseconds: 100), () {
+      priceController.clear();
+    });
   }
 
   RxString customerTckn = "".obs;
@@ -202,6 +226,11 @@ class CustomersViewModel extends GetxController {
     );
 
     authorizedController.createAuthorizedDocument(data);
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      authorizedTcknController.clear();
+      authorizedNameController.clear();
+    });
   }
 
   RxBool editCustomer = false.obs;
