@@ -194,7 +194,7 @@ class CustomersViewModel extends GetxController {
       tcknvkn: model.tcknvkn,
       price: priceController.text,
       company: companyName.value,
-      date: DateTime.now().toString().split(" ")[0],
+      date: initialDate.value.toString().split(" ")[0],
       agentName: AppUser.init.thisUser.value.name,
       agentLastname: AppUser.init.thisUser.value.lastName,
       currency: selectedCurrency.value,
