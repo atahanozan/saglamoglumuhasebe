@@ -25,16 +25,22 @@ class CompletedDeliveryDocsView extends StatelessWidget {
                   model.updateCompleteDataFilterWithSearch();
                 },
                 filterClean: () {
-                  model.cleanCompleteDataFilter();
+                  model.cleanDataFilter();
                 },
               ),
-              Headers(),
+              Headers(
+                datePickFunc: () {
+                  model.updateDateFilter(context);
+                },
+                filterEnum: model.filterTypeCompleted.value,
+                companyPickFunc: () {},
+              ),
               Divider(),
               Flexible(
                 child: Obx(
                   () => StreamBuilder(
                     stream: model.deliverCompletedStream(
-                        true, model.isCompletedDataFiltered.value),
+                        true, model.filterTypeCompleted.value),
                     builder: (context, snapshot) {
                       return !snapshot.hasData
                           ? CircularProgressIndicator()

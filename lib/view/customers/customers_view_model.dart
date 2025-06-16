@@ -9,6 +9,7 @@ import 'package:saglamoglu_muhasebe/core/network/modules/customer_controller.dar
 import 'package:saglamoglu_muhasebe/core/network/modules/delivery_doc_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 import 'package:saglamoglu_muhasebe/core/widget/custom_alert_card.dart';
+import 'package:saglamoglu_muhasebe/core/widget/error_box.dart';
 
 class CustomersViewModel extends GetxController {
   static bool get isRegistered =>
@@ -188,25 +189,33 @@ class CustomersViewModel extends GetxController {
     initialDate.value = result;
   }
 
-  void addDeliveryDoc(CustomerModel model) {
-    var result = DeliveryDocModel(
-      name: model.name,
-      tcknvkn: model.tcknvkn,
-      price: priceController.text,
-      company: companyName.value,
-      date: initialDate.value.toString().split(" ")[0],
-      agentName: AppUser.init.thisUser.value.name,
-      agentLastname: AppUser.init.thisUser.value.lastName,
-      currency: selectedCurrency.value,
-      id: DateTime.now().millisecondsSinceEpoch,
-      statu: false,
-      proccesstatu: false,
-    );
+  void addDeliveryDoc(CustomerModel model, BuildContext context) {
+    if (initialDate.value == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Lütfen Tarih Giriniz"),
+        ),
+      );
+    } else {
+      var result = DeliveryDocModel(
+        name: model.name,
+        tcknvkn: model.tcknvkn,
+        price: priceController.text,
+        company: companyName.value,
+        date: initialDate.value.toString().split(" ")[0],
+        agentName: AppUser.init.thisUser.value.name,
+        agentLastname: AppUser.init.thisUser.value.lastName,
+        currency: selectedCurrency.value,
+        id: DateTime.now().millisecondsSinceEpoch,
+        statu: false,
+        proccesstatu: false,
+      );
 
-    deliveryDocController.createDeliveryDoc(result);
-    Future.delayed(const Duration(milliseconds: 100), () {
-      priceController.clear();
-    });
+      deliveryDocController.createDeliveryDoc(result);
+      Future.delayed(const Duration(milliseconds: 100), () {
+        priceController.clear();
+      });
+    }
   }
 
   RxString customerTckn = "".obs;

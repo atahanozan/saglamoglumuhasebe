@@ -111,7 +111,7 @@ class AddDeliveryDocWidget extends StatelessWidget {
                 Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    model.addDeliveryDoc(model.addDocCustomer.value);
+                    model.addDeliveryDoc(model.addDocCustomer.value, context);
                     model.changeDocWidth(0.0, CustomerModel(), false, "", "");
                   },
                   child: Text("Kaydet"),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saglamoglu_muhasebe/core/enums/delivery_doc_stream_filter_enums.dart';
 import 'package:saglamoglu_muhasebe/core/model/auth_model.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/delivery_doc_controller.dart';
@@ -75,62 +76,113 @@ class DeliveryDocsViewModel extends GetxController {
   }
 
   Widget dateFormat(String? dateTime, BuildContext context) {
-    String day = dateTime.toString().split("-")[2];
-    String month = dateTime.toString().split("-")[1];
+    if (dateTime == "" || dateTime == null) {
+      return Text("");
+    } else {
+      String day = dateTime.toString().split("-")[2];
+      String month = dateTime.toString().split("-")[1];
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          day,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        Text(month),
-      ],
-    );
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            day,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          Text(month),
+        ],
+      );
+    }
   }
 
-  RxBool isWaitingDataFiltered = false.obs;
-  RxBool isCompletedDataFiltered = false.obs;
+  Rx<DeliveryDocStreamFilterEnums> filterTypeWaiting =
+      DeliveryDocStreamFilterEnums.clean.obs;
+  Rx<DeliveryDocStreamFilterEnums> filterTypeCompleted =
+      DeliveryDocStreamFilterEnums.clean.obs;
+  RxString companyFilterSaglam = "Sağlam".obs;
+  RxString companyFilterElmina = "Elmina".obs;
+  RxString companyFilterGeneral = "".obs;
+  RxString dateFilter = DateTime.now().toString().split(" ")[0].obs;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> deliverCompletedStream(
     bool deliveryStatu,
-    bool isFilteredData,
+    DeliveryDocStreamFilterEnums filterEnum,
   ) {
-    switch (isFilteredData) {
-      case true:
-        return FirebaseFirestore.instance
-            .collection("deliverydocs")
-            .limit(20)
-            .where("statu", isEqualTo: deliveryStatu)
+    var documentData = FirebaseFirestore.instance
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: deliveryStatu);
+    switch (filterEnum) {
+      case DeliveryDocStreamFilterEnums.search:
+        return documentData
             .where("name", isGreaterThanOrEqualTo: searchController.text)
+            .limit(10)
             .snapshots();
-      case false:
-        return FirebaseFirestore.instance
-            .collection("deliverydocs")
-            .where("statu", isEqualTo: deliveryStatu)
+      case DeliveryDocStreamFilterEnums.date:
+        return documentData
+            .where("date", isEqualTo: dateFilter.value)
+            .where(
+              Filter.or(
+                Filter("company", isEqualTo: companyFilterSaglam.value),
+                Filter("company", isEqualTo: companyFilterElmina.value),
+              ),
+            )
+            .snapshots();
+      case DeliveryDocStreamFilterEnums.clean:
+        return documentData
             .orderBy("id", descending: true)
-            .limit(50)
+            .where(
+              Filter.or(
+                Filter("company", isEqualTo: companyFilterSaglam.value),
+                Filter("company", isEqualTo: companyFilterElmina.value),
+              ),
+            )
+            .limit(25)
             .snapshots();
     }
   }
 
   void updateWaitingDataFilterWithSearch() {
-    isWaitingDataFiltered.value = true;
+    filterTypeWaiting.value = DeliveryDocStreamFilterEnums.search;
   }
 
   void updateCompleteDataFilterWithSearch() {
-    isCompletedDataFiltered.value = true;
+    filterTypeCompleted.value = DeliveryDocStreamFilterEnums.search;
   }
 
-  void cleanWaitingDataFilter() {
-    isWaitingDataFiltered.value = false;
+  void cleanDataFilter() {
+    filterTypeWaiting.value = DeliveryDocStreamFilterEnums.clean;
+    filterTypeCompleted.value = DeliveryDocStreamFilterEnums.clean;
     searchController.clear();
+    companyFilterSaglam.value = "Sağlam";
+    companyFilterElmina.value = "Elmina";
+    companyFilterGeneral.value = "";
+    dateFilter.value = DateTime.now().toString().split(" ")[0];
+    update();
   }
 
-  void cleanCompleteDataFilter() {
-    isCompletedDataFiltered.value = false;
-    searchController.clear();
+  Future<void> updateDateFilter(
+    BuildContext context,
+  ) async {
+    var newDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2020, 1, 1),
+      lastDate: DateTime(2040, 1, 1),
+      initialDate: DateTime.parse(dateFilter.value),
+    );
+
+    dateFilter.value = newDate.toString().split(" ")[0];
+
+    filterTypeCompleted.value = DeliveryDocStreamFilterEnums.date;
+    filterTypeWaiting.value = DeliveryDocStreamFilterEnums.date;
+
+    update();
+  }
+
+  void updateCompanyFilter(String companyName) {
+    companyFilterSaglam.value = companyName;
+    companyFilterElmina.value = companyName;
+    companyFilterGeneral.value = companyName;
+    update();
   }
 
   void deleteDeliveryDoc(

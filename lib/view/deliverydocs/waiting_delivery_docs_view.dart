@@ -25,16 +25,22 @@ class WaitingDeliveryDocsView extends StatelessWidget {
                   model.updateWaitingDataFilterWithSearch();
                 },
                 filterClean: () {
-                  model.cleanWaitingDataFilter();
+                  model.cleanDataFilter();
                 },
               ),
-              Headers(),
+              Headers(
+                datePickFunc: () {
+                  model.updateDateFilter(context);
+                },
+                filterEnum: model.filterTypeWaiting.value,
+                companyPickFunc: () {},
+              ),
               Divider(),
               Flexible(
                 child: Obx(
                   () => StreamBuilder(
                     stream: model.deliverCompletedStream(
-                        false, model.isWaitingDataFiltered.value),
+                        false, model.filterTypeWaiting.value),
                     builder: (context, snapshot) {
                       return !snapshot.hasData
                           ? CircularProgressIndicator()

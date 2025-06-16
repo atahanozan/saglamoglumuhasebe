@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/core/enums/delivery_doc_stream_filter_enums.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/company_filter.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/date_filter.dart';
 
 class Headers extends StatelessWidget {
-  const Headers({super.key});
+  const Headers({
+    super.key,
+    required this.datePickFunc,
+    required this.companyPickFunc,
+    required this.filterEnum,
+  });
+
+  final VoidCallback datePickFunc;
+  final VoidCallback companyPickFunc;
+  final DeliveryDocStreamFilterEnums filterEnum;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +28,18 @@ class Headers extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         const SizedBox(width: 26),
-        Text(
-          "Tarih",
-          style: pageStyle,
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Tarih",
+              style: pageStyle,
+            ),
+            DateFilter(
+              datePickFunc: datePickFunc,
+              filterEnum: filterEnum,
+            ),
+          ],
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -41,10 +62,17 @@ class Headers extends StatelessWidget {
           ],
         )),
         const SizedBox(width: 5),
-        Text(
-          "Firma",
-          textAlign: TextAlign.left,
-          style: pageStyle,
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Firma",
+              textAlign: TextAlign.left,
+              style: pageStyle,
+            ),
+            CompanyFilter(
+                companyPickFunc: companyPickFunc, filterEnum: filterEnum)
+          ],
         ),
         const SizedBox(width: 5),
         Expanded(
