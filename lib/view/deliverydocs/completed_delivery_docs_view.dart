@@ -22,7 +22,8 @@ class CompletedDeliveryDocsView extends StatelessWidget {
             children: [
               ListFilters(
                 onFilterComplete: () {
-                  model.updateCompleteDataFilterWithSearch();
+                  model.updateCompleteDataFilterWithSearch(
+                      model.searchController.text);
                 },
                 filterClean: () {
                   model.cleanDataFilter();
@@ -40,7 +41,9 @@ class CompletedDeliveryDocsView extends StatelessWidget {
                 child: Obx(
                   () => StreamBuilder(
                     stream: model.deliverCompletedStream(
-                        true, model.filterTypeCompleted.value),
+                      true,
+                      model.filterTypeCompleted.value,
+                    ),
                     builder: (context, snapshot) {
                       return !snapshot.hasData
                           ? CircularProgressIndicator()

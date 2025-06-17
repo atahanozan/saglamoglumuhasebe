@@ -80,6 +80,7 @@ class AddAuthorizedWidget extends StatelessWidget {
                 CustomFormfieldWidget(
                     labelColor: CustomThemeColors.customBlack.c800,
                     formName: "Yetki Alan",
+                    hint: "TCKN",
                     inputFormatter: [
                       MaskTextInputFormatter(
                         mask: '###########',
@@ -90,6 +91,7 @@ class AddAuthorizedWidget extends StatelessWidget {
                 CustomFormfieldWidget(
                     labelColor: CustomThemeColors.customBlack.c800,
                     formName: "",
+                    hint: "Ad Soyad",
                     inputFormatter: [],
                     controller: model.authorizedNameController),
                 ElevatedButton(

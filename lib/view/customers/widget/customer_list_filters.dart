@@ -12,7 +12,7 @@ class CustomerListFilters extends StatelessWidget {
     return SearchField(
       controller: model.searchController,
       onSearchComplete: () {
-        model.updateFilterWithSearch();
+        model.updateFilterWithSearch(model.searchController.text);
       },
       formatters: [
         UppercaseTextFormatter(),

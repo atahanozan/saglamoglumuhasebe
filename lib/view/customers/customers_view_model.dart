@@ -9,7 +9,6 @@ import 'package:saglamoglu_muhasebe/core/network/modules/customer_controller.dar
 import 'package:saglamoglu_muhasebe/core/network/modules/delivery_doc_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 import 'package:saglamoglu_muhasebe/core/widget/custom_alert_card.dart';
-import 'package:saglamoglu_muhasebe/core/widget/error_box.dart';
 
 class CustomersViewModel extends GetxController {
   static bool get isRegistered =>
@@ -34,10 +33,12 @@ class CustomersViewModel extends GetxController {
   CustomerController get customerController => CustomerController();
   DeliveryDocController get deliveryDocController => DeliveryDocController();
   AuthorizedController get authorizedController => AuthorizedController();
+  AppUser get appUser => AppUser.init;
 
   RxList<CustomerModel> allCustomerData = <CustomerModel>[].obs;
 
   RxBool isFiltered = false.obs;
+  RxString searchFilterContent = "".obs;
 
   Future<void> getCustomerData() async {
     var res = await customerController.getCustomers();
@@ -51,26 +52,29 @@ class CustomersViewModel extends GetxController {
       case true:
         return FirebaseFirestore.instance
             .collection("deliverycustomers")
-            .where("name", isGreaterThanOrEqualTo: searchController.text)
+            .where("name", isGreaterThanOrEqualTo: searchFilterContent.value)
             .limit(10)
             .snapshots();
 
       case false:
         return FirebaseFirestore.instance
             .collection("deliverycustomers")
-            .limit(50)
+            .limit(20)
             .orderBy("id", descending: true)
             .snapshots();
     }
   }
 
-  void updateFilterWithSearch() {
+  void updateFilterWithSearch(String filterName) {
     isFiltered.value = true;
+    searchFilterContent.value = filterName;
   }
 
   void cleanilter() {
     searchController.clear();
     isFiltered.value = false;
+    searchFilterContent.value = "";
+    update();
   }
 
   Widget customerStatuIcon(String customerId) {
@@ -124,6 +128,7 @@ class CustomersViewModel extends GetxController {
   RxBool addDocVisibilty = false.obs;
   RxBool addAuthorizeVisibility = false.obs;
   RxBool isDeliveryDoc = false.obs;
+  RxBool errShow = false.obs;
   RxString companyName = "Sağlam".obs;
   RxString docType = "".obs;
   Rx<CustomerModel> addDocCustomer = CustomerModel().obs;
@@ -158,6 +163,14 @@ class CustomersViewModel extends GetxController {
 
   void changeCompanyName(String newCompany) {
     companyName.value = newCompany;
+  }
+
+  void closeErrorBox() {
+    errShow.value = false;
+  }
+
+  void showErrorBox() {
+    errShow.value = true;
   }
 
   List<String> get currencies => ["TL", "USD", "EUR"];
@@ -203,8 +216,8 @@ class CustomersViewModel extends GetxController {
         price: priceController.text,
         company: companyName.value,
         date: initialDate.value.toString().split(" ")[0],
-        agentName: AppUser.init.thisUser.value.name,
-        agentLastname: AppUser.init.thisUser.value.lastName,
+        agentName: appUser.thisUser.value.name,
+        agentLastname: appUser.thisUser.value.lastName,
         currency: selectedCurrency.value,
         id: DateTime.now().millisecondsSinceEpoch,
         statu: false,
@@ -214,6 +227,8 @@ class CustomersViewModel extends GetxController {
       deliveryDocController.createDeliveryDoc(result);
       Future.delayed(const Duration(milliseconds: 100), () {
         priceController.clear();
+        initialDate.value = DateTime.now();
+        update();
       });
     }
   }

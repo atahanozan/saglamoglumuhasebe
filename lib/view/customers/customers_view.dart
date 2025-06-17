@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saglamoglu_muhasebe/core/widget/error_box.dart';
 import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widget/add_delivery_doc.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widget/customer_grid_headers.dart';
@@ -53,6 +54,15 @@ class CustomersView extends StatelessWidget {
             ],
           ),
           AddCustomerInfoDoc(),
+          Obx(
+            () => ErrorBox(
+              boxVisibility: model.errShow.value,
+              content: "Lütfen bilgileri eksiksiz doldurunuz",
+              closeBox: () {
+                model.closeErrorBox();
+              },
+            ),
+          ),
         ],
       ),
     );

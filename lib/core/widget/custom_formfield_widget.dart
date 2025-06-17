@@ -8,12 +8,14 @@ class CustomFormfieldWidget extends StatelessWidget {
     required this.inputFormatter,
     required this.controller,
     this.labelColor,
+    this.hint = "",
   });
 
   final String formName;
   final List<TextInputFormatter> inputFormatter;
   final TextEditingController controller;
   final Color? labelColor;
+  final String? hint;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class CustomFormfieldWidget extends StatelessWidget {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
+              hintText: hint,
             ),
             inputFormatters: inputFormatter,
           ),

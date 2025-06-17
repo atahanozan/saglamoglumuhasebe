@@ -102,6 +102,7 @@ class DeliveryDocsViewModel extends GetxController {
   RxString companyFilterSaglam = "Sağlam".obs;
   RxString companyFilterElmina = "Elmina".obs;
   RxString companyFilterGeneral = "".obs;
+  RxString seacrhFilterContent = "".obs;
   RxString dateFilter = DateTime.now().toString().split(" ")[0].obs;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> deliverCompletedStream(
@@ -114,7 +115,7 @@ class DeliveryDocsViewModel extends GetxController {
     switch (filterEnum) {
       case DeliveryDocStreamFilterEnums.search:
         return documentData
-            .where("name", isGreaterThanOrEqualTo: searchController.text)
+            .where("name", isGreaterThanOrEqualTo: seacrhFilterContent.value)
             .limit(10)
             .snapshots();
       case DeliveryDocStreamFilterEnums.date:
@@ -136,17 +137,19 @@ class DeliveryDocsViewModel extends GetxController {
                 Filter("company", isEqualTo: companyFilterElmina.value),
               ),
             )
-            .limit(25)
+            .limit(20)
             .snapshots();
     }
   }
 
-  void updateWaitingDataFilterWithSearch() {
+  void updateWaitingDataFilterWithSearch(String searchName) {
     filterTypeWaiting.value = DeliveryDocStreamFilterEnums.search;
+    seacrhFilterContent.value = searchName;
   }
 
-  void updateCompleteDataFilterWithSearch() {
+  void updateCompleteDataFilterWithSearch(String searchName) {
     filterTypeCompleted.value = DeliveryDocStreamFilterEnums.search;
+    seacrhFilterContent.value = searchName;
   }
 
   void cleanDataFilter() {
@@ -157,6 +160,7 @@ class DeliveryDocsViewModel extends GetxController {
     companyFilterElmina.value = "Elmina";
     companyFilterGeneral.value = "";
     dateFilter.value = DateTime.now().toString().split(" ")[0];
+    seacrhFilterContent.value = "";
     update();
   }
 
