@@ -86,24 +86,10 @@ class Headers extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         Expanded(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Tutar",
-              textAlign: TextAlign.right,
-              style: pageStyle,
-            ),
-            SizedBox(
-              height: 40,
-              width: 130,
-              child: Flexible(
-                child: PriceFilter(),
-              ),
-            ),
-          ],
+            child: Text(
+          "Tutar",
+          textAlign: TextAlign.right,
+          style: pageStyle,
         )),
         const SizedBox(width: 30),
         Text(
