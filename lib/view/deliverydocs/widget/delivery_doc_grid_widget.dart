@@ -63,6 +63,8 @@ class DeliveryDocGridWidget extends StatelessWidget {
                 ],
               )),
               const SizedBox(width: 5),
+              Expanded(child: Text(model.editedDate(dataModel.lastEditedDate))),
+              const SizedBox(width: 5),
               Text(
                 dataModel.company.toString(),
                 textAlign: TextAlign.left,

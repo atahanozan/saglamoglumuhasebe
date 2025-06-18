@@ -20,13 +20,14 @@ class DeliveryDocsViewModel extends GetxController {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
 
   DeliveryDocController get deliveryController => DeliveryDocController();
 
   RxList<DeliveryDocModel> finalWaitingData = <DeliveryDocModel>[].obs;
   RxList<DeliveryDocModel> finalCompleteData = <DeliveryDocModel>[].obs;
 
-  DateTime get timeStamp => DateTime.now();
+  String get timeStamp => DateTime.now().toString().split(" ")[0];
 
   AppUser get appUser => AppUser.init;
 
@@ -103,6 +104,7 @@ class DeliveryDocsViewModel extends GetxController {
   RxString companyFilterElmina = "Elmina".obs;
   RxString companyFilterGeneral = "".obs;
   RxString seacrhFilterContent = "".obs;
+  RxString priceFilterContent = "".obs;
   RxString dateFilter = DateTime.now().toString().split(" ")[0].obs;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> deliverCompletedStream(
@@ -139,6 +141,12 @@ class DeliveryDocsViewModel extends GetxController {
             )
             .limit(20)
             .snapshots();
+
+      case DeliveryDocStreamFilterEnums.price:
+        return documentData
+            .where("price", isGreaterThanOrEqualTo: priceFilterContent.value)
+            .limit(10)
+            .snapshots();
     }
   }
 
@@ -152,15 +160,23 @@ class DeliveryDocsViewModel extends GetxController {
     seacrhFilterContent.value = searchName;
   }
 
+  void updateDataFilterWithPrice(String priceCont) {
+    filterTypeCompleted.value = DeliveryDocStreamFilterEnums.price;
+    filterTypeWaiting.value = DeliveryDocStreamFilterEnums.price;
+    priceFilterContent.value = priceCont;
+  }
+
   void cleanDataFilter() {
     filterTypeWaiting.value = DeliveryDocStreamFilterEnums.clean;
     filterTypeCompleted.value = DeliveryDocStreamFilterEnums.clean;
     searchController.clear();
+    priceController.clear();
     companyFilterSaglam.value = "Sağlam";
     companyFilterElmina.value = "Elmina";
     companyFilterGeneral.value = "";
     dateFilter.value = DateTime.now().toString().split(" ")[0];
     seacrhFilterContent.value = "";
+    priceFilterContent.value = "";
     update();
   }
 
@@ -252,10 +268,7 @@ class DeliveryDocsViewModel extends GetxController {
   }
 
   void updateDocStatu(
-    String? docId,
-    bool newStatu,
-    BuildContext context,
-  ) {
+      String? docId, bool newStatu, BuildContext context, String dateTime) {
     showDialog(
       context: context,
       builder: (_) => CustomAlertCard(
@@ -266,7 +279,7 @@ class DeliveryDocsViewModel extends GetxController {
           deliveryController.editDoc(
             {
               "statu": newStatu,
-              "lastEditedDate": timeStamp,
+              "lastEditedDate": dateTime,
             },
             docId,
           );
@@ -286,5 +299,20 @@ class DeliveryDocsViewModel extends GetxController {
       },
       docId,
     );
+  }
+
+  String editedDate(String? timeStamp) {
+    if (timeStamp == null) {
+      return "";
+    } else if (timeStamp.startsWith("Time")) {
+      var res = int.parse(timeStamp.split("=")[1].split(",")[0]);
+      return DateTime.fromMillisecondsSinceEpoch(res * 1000)
+          .toString()
+          .split(" ")[0];
+    } else if (timeStamp == "null") {
+      return "";
+    } else {
+      return timeStamp.toString();
+    }
   }
 }

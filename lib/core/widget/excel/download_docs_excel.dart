@@ -4,16 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/widget/excel/excel_controller.dart';
 
 class DownloadDocsExcel extends StatelessWidget {
-  const DownloadDocsExcel({
-    super.key,
-    required this.statu,
-    required this.secondStatu,
-    required this.isTotal,
-  });
-
-  final bool statu;
-  final bool secondStatu;
-  final bool isTotal;
+  const DownloadDocsExcel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +18,7 @@ class DownloadDocsExcel extends StatelessWidget {
           fixedSize: Size(130, 60),
         ),
         onPressed: () {
-          excelController.saveExcel(isTotal, statu, secondStatu);
+          excelController.saveExcel();
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,

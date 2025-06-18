@@ -38,6 +38,7 @@ class CompanyFilter extends StatelessWidget {
                 model.companyFilterGeneral.value == "Elmina"
                     ? Icons.circle
                     : Icons.circle_outlined,
+                size: 14,
               ),
             ),
           ],

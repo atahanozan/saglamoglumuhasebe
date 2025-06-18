@@ -69,11 +69,7 @@ class CompletedDeliveryDocsView extends StatelessWidget {
               ),
             ],
           ),
-          DownloadDocsExcel(
-            statu: true,
-            isTotal: false,
-            secondStatu: false,
-          ),
+          DownloadDocsExcel(),
         ],
       ),
     );

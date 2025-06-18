@@ -69,6 +69,7 @@ class DeliveryDocController {
       id: snapshot["id"] ?? 0,
       statu: snapshot["statu"] ?? false,
       proccesstatu: snapshot["proccesstatu"] ?? false,
+      lastEditedDate: snapshot["lastEditedDate"].toString(),
     );
 
     return data;

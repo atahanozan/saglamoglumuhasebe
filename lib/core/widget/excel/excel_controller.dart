@@ -9,19 +9,6 @@ class ExcelController extends GetxController {
   static ExcelController get init => Get.put(ExcelController());
   static ExcelController get instance => Get.find<ExcelController>();
 
-  RxString docName = "Teslimler".obs;
-  RxString firstSheetName = "Sheet1".obs;
-  RxString secondSheetName = "Sheet2".obs;
-
-  String sheetName(bool statu) {
-    switch (statu) {
-      case true:
-        return "Tamamlanan Teslim";
-      case false:
-        return "Bekleyen Teslim";
-    }
-  }
-
   List<String> get headers => [
         "Tarih",
         "Müşteri Adı",
@@ -29,26 +16,36 @@ class ExcelController extends GetxController {
         "Tutar",
         "İlgili",
         "Son Değiştirilme",
+        "Teslim Durumu"
       ];
 
-  Future<List<DeliveryDocModel>> waitingDeliveryDocsData() async {
-    var res = await FirebaseFirestore.instance
-        .collection("deliverydocs")
-        .where("statu", isEqualTo: false)
-        .get();
-
-    var result = res.docs
-        .map((docsData) => DeliveryDocModel.fromDocument(docsData.data()))
-        .toList();
-
-    return result;
+  String editedDate(String? timeStamp) {
+    if (timeStamp == null) {
+      return "";
+    } else if (timeStamp.startsWith("Time")) {
+      var res = int.parse(timeStamp.split("=")[1].split(",")[0]);
+      return DateTime.fromMillisecondsSinceEpoch(res * 1000)
+          .toString()
+          .split(" ")[0];
+    } else if (timeStamp == "null") {
+      return "";
+    } else {
+      return timeStamp.toString();
+    }
   }
 
-  Future<List<DeliveryDocModel>> completedDeliveryDocsData() async {
-    var res = await FirebaseFirestore.instance
-        .collection("deliverydocs")
-        .where("statu", isEqualTo: true)
-        .get();
+  String statuName(bool statuBool) {
+    switch (statuBool) {
+      case true:
+        return "Tamamlandı";
+
+      case false:
+        return "Bekliyor";
+    }
+  }
+
+  Future<List<DeliveryDocModel>> deliverDocList() async {
+    var res = await FirebaseFirestore.instance.collection("deliverydocs").get();
 
     var result = res.docs
         .map((docsData) => DeliveryDocModel.fromDocument(docsData.data()))
@@ -58,11 +55,10 @@ class ExcelController extends GetxController {
   }
 
   Future<void> createSheet(
-    Excel dataExcel,
-    String sheetName,
-    List<DeliveryDocModel> item,
+    Excel docExcel,
+    List<DeliveryDocModel> docList,
   ) async {
-    Sheet sheet = dataExcel[sheetName];
+    Sheet sheet = docExcel["Sheet1"];
 
     for (int i = 0; i < headers.length; i++) {
       sheet
@@ -70,8 +66,8 @@ class ExcelController extends GetxController {
           .value = TextCellValue(headers[i]);
     }
 
-    for (int i = 0; i < item.length; i++) {
-      DeliveryDocModel itemMode = item[i];
+    for (int i = 0; i < docList.length; i++) {
+      DeliveryDocModel itemMode = docList[i];
 
       sheet
           .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: i + 1))
@@ -89,48 +85,23 @@ class ExcelController extends GetxController {
               itemMode.price.toString().split(",")[0].replaceAll(".", "")));
       sheet
           .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: i + 1))
-          .value = TextCellValue(itemMode.agentName ?? "");
+          .value = TextCellValue(itemMode.agentName.toString());
       sheet
           .cell(CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: i + 1))
-          .value = TextCellValue(itemMode.lastEditedDate ?? "");
+          .value = TextCellValue(editedDate(itemMode.lastEditedDate));
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: i + 1))
+          .value = TextCellValue(statuName(itemMode.statu ?? false));
     }
   }
 
-  Future<void> saveExcel(bool isTotal, bool statu, bool secondStatu) async {
+  Future<void> saveExcel() async {
     Excel excel = Excel.createExcel();
 
-    var firstData = await waitingDeliveryDocsData();
-    var secondData = await completedDeliveryDocsData();
+    var res = await deliverDocList();
 
-    switch (isTotal) {
-      case true:
-        {
-          await createSheet(
-            excel,
-            sheetName(statu),
-            firstData,
-          );
-          await createSheet(
-            excel,
-            sheetName(secondStatu),
-            secondData,
-          );
+    await createSheet(excel, res);
 
-          excel.delete("Sheet1");
-
-          excel.save(fileName: "Teslimler.xlsx");
-        }
-      case false:
-        {
-          await createSheet(
-            excel,
-            sheetName(statu),
-            statu ? secondData : firstData,
-          );
-          excel.delete("Sheet1");
-
-          excel.save(fileName: "Teslimler.xlsx");
-        }
-    }
+    excel.save(fileName: "Teslim Dosyaları.xlsx");
   }
 }

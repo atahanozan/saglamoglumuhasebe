@@ -19,7 +19,10 @@ class GridButtons extends StatelessWidget {
           child: InkWell(
             onTap: () {
               model.updateDocStatu(
-                  docId, dataModel.statu == true ? false : true, context);
+                  docId,
+                  dataModel.statu == true ? false : true,
+                  context,
+                  DateTime.now().toString().split(" ")[0]);
             },
             child: Container(
               padding: const EdgeInsets.all(6),

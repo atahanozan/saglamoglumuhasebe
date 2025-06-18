@@ -39,7 +39,7 @@ class DeliveryDocModel {
       id: data["id"] ?? 0,
       statu: data["statu"] ?? false,
       proccesstatu: data["proccesstatu"] ?? false,
-      lastEditedDate: data["lastEditedDate"] ?? '',
+      lastEditedDate: data["lastEditedDate"].toString(),
     );
   }
 

@@ -69,11 +69,7 @@ class WaitingDeliveryDocsView extends StatelessWidget {
               ),
             ],
           ),
-          DownloadDocsExcel(
-            statu: false,
-            isTotal: false,
-            secondStatu: true,
-          ),
+          DownloadDocsExcel(),
         ],
       ),
     );

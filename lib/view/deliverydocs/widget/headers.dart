@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/enums/delivery_doc_stream_filter_enums.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/company_filter.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/date_filter.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/price_filter.dart';
 
 class Headers extends StatelessWidget {
   const Headers({
@@ -62,7 +63,16 @@ class Headers extends StatelessWidget {
           ],
         )),
         const SizedBox(width: 5),
-        Row(
+        Expanded(
+          child: Text(
+            "Güncelleme",
+            style: pageStyle,
+          ),
+        ),
+        const SizedBox(width: 5),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
@@ -76,10 +86,24 @@ class Headers extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         Expanded(
-            child: Text(
-          "Tutar",
-          textAlign: TextAlign.right,
-          style: pageStyle,
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Tutar",
+              textAlign: TextAlign.right,
+              style: pageStyle,
+            ),
+            SizedBox(
+              height: 40,
+              width: 130,
+              child: Flexible(
+                child: PriceFilter(),
+              ),
+            ),
+          ],
         )),
         const SizedBox(width: 30),
         Text(

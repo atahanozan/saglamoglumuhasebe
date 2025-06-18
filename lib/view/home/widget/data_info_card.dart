@@ -84,11 +84,7 @@ class DataInfoCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 20),
-          DownloadDocsExcel(
-            statu: false,
-            isTotal: true,
-            secondStatu: true,
-          ),
+          DownloadDocsExcel(),
         ],
       ),
     );
