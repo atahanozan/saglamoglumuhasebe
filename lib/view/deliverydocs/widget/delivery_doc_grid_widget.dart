@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
+import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/delivery_docs_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/grid_buttons.dart';
 
@@ -34,9 +35,7 @@ class DeliveryDocGridWidget extends StatelessWidget {
                       .headerColor(dataModel.proccesstatu, dataModel.statu)
                       .shade900,
                 )),
-            color: model
-                .headerColor(dataModel.proccesstatu, dataModel.statu)
-                .shade100,
+            color: CustomThemeColors.customWhite,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.max,
@@ -95,10 +94,10 @@ class DeliveryDocGridWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(3.0),
             child: Icon(
-              dataModel.proccesstatu == false
+              dataModel.proccesstatu == true
                   ? Icons.check_circle_rounded
                   : Icons.remove_circle_rounded,
-              color: dataModel.proccesstatu == false
+              color: dataModel.proccesstatu == true
                   ? Colors.green.shade800
                   : Colors.red.shade800,
               size: 20,
