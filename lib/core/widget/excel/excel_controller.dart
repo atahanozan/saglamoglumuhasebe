@@ -44,8 +44,11 @@ class ExcelController extends GetxController {
     }
   }
 
-  Future<List<DeliveryDocModel>> deliverDocList() async {
-    var res = await FirebaseFirestore.instance.collection("deliverydocs").get();
+  Future<List<DeliveryDocModel>> deliverDocList(bool dataStatu) async {
+    var res = await FirebaseFirestore.instance
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: dataStatu)
+        .get();
 
     var result = res.docs
         .map((docsData) => DeliveryDocModel.fromDocument(docsData.data()))
@@ -95,13 +98,19 @@ class ExcelController extends GetxController {
     }
   }
 
-  Future<void> saveExcel() async {
+  Future<void> saveExcel(bool newDataStatu) async {
     Excel excel = Excel.createExcel();
 
-    var res = await deliverDocList();
+    var res = await deliverDocList(newDataStatu);
 
     await createSheet(excel, res);
 
     excel.save(fileName: "Teslim Dosyaları.xlsx");
+  }
+
+  RxBool dataStatu = false.obs;
+
+  void changeStatu(bool newStatu) {
+    dataStatu.value = newStatu;
   }
 }

@@ -30,7 +30,7 @@ class SideBar extends StatelessWidget {
               ),
             ),
             Text(
-              "Sürüm: 24",
+              "Sürüm: 25",
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: CustomThemeColors.customYellow.c800,
                   ),

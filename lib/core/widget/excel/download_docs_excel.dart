@@ -1,6 +1,8 @@
 // import 'package:universal_html/html.dart' as web;
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:saglamoglu_muhasebe/core/widget/custom_alert_card.dart';
 import 'package:saglamoglu_muhasebe/core/widget/excel/excel_controller.dart';
 
 class DownloadDocsExcel extends StatelessWidget {
@@ -18,7 +20,62 @@ class DownloadDocsExcel extends StatelessWidget {
           fixedSize: Size(130, 60),
         ),
         onPressed: () {
-          excelController.saveExcel();
+          showDialog(
+              context: context,
+              builder: (_) {
+                return Obx(
+                  () => AlertDialog(
+                    title: Text("Dosya durumu"),
+                    content: Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                                backgroundColor:
+                                    excelController.dataStatu.value == false
+                                        ? Colors.amber
+                                        : Colors.transparent),
+                            onPressed: () {
+                              excelController.changeStatu(false);
+                            },
+                            child: Text("Tamamlanmadı"),
+                          ),
+                        ),
+                        SizedBox(width: 18),
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                                backgroundColor:
+                                    excelController.dataStatu.value == true
+                                        ? Colors.amber
+                                        : Colors.transparent),
+                            onPressed: () {
+                              excelController.changeStatu(true);
+                            },
+                            child: Text("Tamamlandı"),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("İptal"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          excelController
+                              .saveExcel(excelController.dataStatu.value);
+                          Navigator.pop(context);
+                        },
+                        child: Text("İndir"),
+                      ),
+                    ],
+                  ),
+                );
+              });
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
