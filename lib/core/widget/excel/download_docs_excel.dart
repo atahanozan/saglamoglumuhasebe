@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saglamoglu_muhasebe/core/widget/custom_alert_card.dart';
 import 'package:saglamoglu_muhasebe/core/widget/excel/excel_controller.dart';
 
 class DownloadDocsExcel extends StatelessWidget {

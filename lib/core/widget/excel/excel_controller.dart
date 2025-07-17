@@ -82,10 +82,8 @@ class ExcelController extends GetxController {
           .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: i + 1))
           .value = TextCellValue(itemMode.company.toString());
       sheet
-              .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: i + 1))
-              .value =
-          IntCellValue(int.parse(
-              itemMode.price.toString().split(",")[0].replaceAll(".", "")));
+          .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: i + 1))
+          .value = TextCellValue(itemMode.price.toString());
       sheet
           .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: i + 1))
           .value = TextCellValue(itemMode.agentName.toString());
