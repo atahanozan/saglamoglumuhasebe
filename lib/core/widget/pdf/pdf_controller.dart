@@ -28,7 +28,9 @@ class PdfController {
     DateTime dateNow = DateTime.now();
     String companyLongName = companyName == "Sağlam"
         ? "SAĞLAMOĞLU ALTIN MÜC.TUR.İNŞ.SAN.VE TİC.A.Ş"
-        : "ELMİNA HEDİYELİK EŞYA TİC. SAN. LTD. ŞTİ";
+        : companyName == "Elmina"
+            ? "ELMİNA HEDİYELİK EŞYA TİC. SAN. LTD. ŞTİ"
+            : "SAĞLAMOĞLU KIYMETLİ MADENLER A.Ş";
 
     pdf.addPage(
       pw.Page(

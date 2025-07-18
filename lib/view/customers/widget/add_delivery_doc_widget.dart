@@ -83,6 +83,20 @@ class AddDeliveryDocWidget extends StatelessWidget {
                         child: Text("Elmina"),
                       ),
                     ),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(double.infinity, 45),
+                            backgroundColor:
+                                model.companyName.value == "Sağlam Kıymetli"
+                                    ? Colors.green.shade300
+                                    : Colors.black12),
+                        onPressed: () {
+                          model.changeCompanyName("Sağlam Kıymetli");
+                        },
+                        child: Text("Sağlam Kıymetli"),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 18),
