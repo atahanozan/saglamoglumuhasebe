@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/model/authorized_model.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/authorized_controller.dart';
-import 'package:saglamoglu_muhasebe/core/widget/custom_alert_card.dart';
+import 'package:saglamoglu_muhasebe/core/widgets/custom_alert_card.dart';
 
 class AuthorizedViewModel extends GetxController {
   static bool get isRegistered =>

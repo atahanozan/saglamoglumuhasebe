@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saglamoglu_muhasebe/core/widget/excel/download_docs_excel.dart';
+import 'package:saglamoglu_muhasebe/core/widgets/excel/download_docs_excel.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/delivery_docs_view_model.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/delivery_doc_grid_widget.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/headers.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/widget/list_filters.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/all_filters_widget.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/delivery_doc_grid_widget.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/headers.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/list_filters.dart';
 
 class CompletedDeliveryDocsView extends StatelessWidget {
   const CompletedDeliveryDocsView({super.key});
@@ -18,6 +19,7 @@ class CompletedDeliveryDocsView extends StatelessWidget {
         alignment: Alignment.bottomLeft,
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
               ListFilters(
@@ -29,13 +31,36 @@ class CompletedDeliveryDocsView extends StatelessWidget {
                   model.cleanDataFilter();
                 },
               ),
-              Headers(
-                datePickFunc: () {
-                  model.updateDateFilter(context);
-                },
-                filterEnum: model.filterTypeCompleted.value,
-                companyPickFunc: () {},
+              Obx(
+                () => AllFiltersWidget(
+                  datePickFunc: () {
+                    model.updateDateFilter(context);
+                  },
+                  btnDate: model.dateFilter.value,
+                  valueName: model.companyFilterGeneral.value,
+                  saglamFunc: () {
+                    model.updateCompanyFilter("Sağlam");
+                  },
+                  elminaFunc: () {
+                    model.updateCompanyFilter("Elmina");
+                  },
+                  saglamKiymetliFunc: () {
+                    model.updateCompanyFilter("Sağlam Kıymetli");
+                  },
+                  controller: model.priceController,
+                  clearFilter: () {
+                    model.cleanDataFilter();
+                  },
+                  openfilterTab: () {
+                    model.changeFilterTabStatu();
+                  },
+                  filterTabStatu: model.filterTabStatu.value,
+                  priceFilterFunc: () {
+                    model.updateDataFilterWithPrice(model.priceController.text);
+                  },
+                ),
               ),
+              Headers(),
               Divider(),
               Flexible(
                 child: Obx(
@@ -69,7 +94,10 @@ class CompletedDeliveryDocsView extends StatelessWidget {
               ),
             ],
           ),
-          DownloadDocsExcel(),
+          DownloadDocsExcel(
+            isTotal: false,
+            dataStatu: true,
+          ),
         ],
       ),
     );

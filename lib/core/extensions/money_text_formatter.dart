@@ -5,8 +5,14 @@ class MoneyTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    final String myText =
-        newValue.text.replaceAll(".", "").replaceAll(RegExp("[a-zA-Z ]"), "");
+    final String newTextBeforeDot = newValue.text.contains(",")
+        ? newValue.text.split(",")[0]
+        : newValue.text;
+
+    final String myText = newTextBeforeDot
+        .replaceAll(".", "")
+        .replaceAll(",", "")
+        .replaceAll(RegExp("[a-zA-Z ]"), "");
     final int firstDot = (myText.characters.length % 3);
 
     final String lastText = firstDot == 1

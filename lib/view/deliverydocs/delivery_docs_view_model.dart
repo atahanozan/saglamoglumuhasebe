@@ -6,8 +6,8 @@ import 'package:saglamoglu_muhasebe/core/model/auth_model.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/delivery_doc_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
-import 'package:saglamoglu_muhasebe/core/widget/custom_alert_card.dart';
-import 'package:saglamoglu_muhasebe/core/widget/pdf/pdf_controller.dart';
+import 'package:saglamoglu_muhasebe/core/widgets/custom_alert_card.dart';
+import 'package:saglamoglu_muhasebe/core/widgets/pdf/pdf_controller.dart';
 
 class DeliveryDocsViewModel extends GetxController {
   static bool get isRegistered =>
@@ -102,6 +102,7 @@ class DeliveryDocsViewModel extends GetxController {
       DeliveryDocStreamFilterEnums.clean.obs;
   RxString companyFilterSaglam = "Sağlam".obs;
   RxString companyFilterElmina = "Elmina".obs;
+  RxString companyFilterSaglamKiymetli = "Sağlam Kıymetli".obs;
   RxString companyFilterGeneral = "".obs;
   RxString seacrhFilterContent = "".obs;
   RxString priceFilterContent = "".obs;
@@ -127,6 +128,7 @@ class DeliveryDocsViewModel extends GetxController {
               Filter.or(
                 Filter("company", isEqualTo: companyFilterSaglam.value),
                 Filter("company", isEqualTo: companyFilterElmina.value),
+                Filter("company", isEqualTo: companyFilterSaglamKiymetli.value),
               ),
             )
             .snapshots();
@@ -137,6 +139,7 @@ class DeliveryDocsViewModel extends GetxController {
               Filter.or(
                 Filter("company", isEqualTo: companyFilterSaglam.value),
                 Filter("company", isEqualTo: companyFilterElmina.value),
+                Filter("company", isEqualTo: companyFilterSaglamKiymetli.value),
               ),
             )
             .limit(20)
@@ -201,6 +204,7 @@ class DeliveryDocsViewModel extends GetxController {
   void updateCompanyFilter(String companyName) {
     companyFilterSaglam.value = companyName;
     companyFilterElmina.value = companyName;
+    companyFilterSaglamKiymetli.value = companyName;
     companyFilterGeneral.value = companyName;
     update();
   }
@@ -314,5 +318,11 @@ class DeliveryDocsViewModel extends GetxController {
     } else {
       return timeStamp.toString();
     }
+  }
+
+  RxBool filterTabStatu = false.obs;
+
+  void changeFilterTabStatu() {
+    filterTabStatu.value = !filterTabStatu.value;
   }
 }

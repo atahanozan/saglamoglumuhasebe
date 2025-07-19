@@ -8,7 +8,7 @@ import 'package:saglamoglu_muhasebe/core/network/modules/authorized_controller.d
 import 'package:saglamoglu_muhasebe/core/network/modules/customer_controller.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/delivery_doc_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
-import 'package:saglamoglu_muhasebe/core/widget/custom_alert_card.dart';
+import 'package:saglamoglu_muhasebe/core/widgets/custom_alert_card.dart';
 
 class CustomersViewModel extends GetxController {
   static bool get isRegistered =>
@@ -20,6 +20,9 @@ class CustomersViewModel extends GetxController {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final TextEditingController priceController = TextEditingController();
+  final TextEditingController priceKurusController = TextEditingController(
+    text: "00",
+  );
   final TextEditingController authorizedTcknController =
       TextEditingController();
   final TextEditingController authorizedNameController =
@@ -213,7 +216,7 @@ class CustomersViewModel extends GetxController {
       var result = DeliveryDocModel(
         name: model.name,
         tcknvkn: model.tcknvkn,
-        price: priceController.text,
+        price: "${priceController.text},${priceKurusController.text}",
         company: companyName.value,
         date: initialDate.value.toString().split(" ")[0],
         agentName: appUser.thisUser.value.name,
