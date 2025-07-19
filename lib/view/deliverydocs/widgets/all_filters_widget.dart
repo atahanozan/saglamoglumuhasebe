@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/money_text_formatter.dart';
+import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/search_field.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/company_filter.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/date_filter.dart';
@@ -39,11 +41,11 @@ class AllFiltersWidget extends StatelessWidget {
     return Column(
       children: [
         AnimatedContainer(
-          height: filterTabStatu ? 320 : 0,
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.only(left: 16, right: 58),
+          height: filterTabStatu ? 310 : 0,
           duration: const Duration(milliseconds: 300),
           decoration: BoxDecoration(
-            color: Colors.grey.shade100,
+            color: CustomThemeColors.customBlack.c800,
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -53,7 +55,7 @@ class AllFiltersWidget extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(18),
-                      margin: EdgeInsets.only(right: 22, bottom: 12),
+                      margin: EdgeInsets.only(bottom: 22),
                       width: 450,
                       height: 120,
                       decoration: BoxDecoration(
@@ -79,9 +81,10 @@ class AllFiltersWidget extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Spacer(),
                     Container(
                       padding: const EdgeInsets.all(18),
-                      margin: EdgeInsets.only(right: 22, bottom: 12),
+                      margin: EdgeInsets.only(bottom: 22),
                       width: 450,
                       height: 120,
                       decoration: BoxDecoration(
@@ -115,7 +118,7 @@ class AllFiltersWidget extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(18),
-                      margin: EdgeInsets.only(right: 22, bottom: 12),
+                      margin: EdgeInsets.only(),
                       width: 450,
                       height: 120,
                       decoration: BoxDecoration(
@@ -147,6 +150,7 @@ class AllFiltersWidget extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Spacer(),
                     ElevatedButton(
                       onPressed: clearFilter,
                       child: Text("Temizle"),
@@ -164,11 +168,14 @@ class AllFiltersWidget extends StatelessWidget {
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
             ),
-            color: Colors.grey.shade100,
+            color: CustomThemeColors.customBlack.c800,
           ),
           child: IconButton(
             onPressed: openfilterTab,
-            icon: Icon(Icons.keyboard_arrow_down_rounded),
+            icon: Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: CustomThemeColors.customWhite,
+            ),
           ),
         ),
         SizedBox(height: 22),

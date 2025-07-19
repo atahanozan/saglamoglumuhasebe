@@ -17,6 +17,7 @@ class AuthorizedView extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           AuthorizedListFilter(),
+          SizedBox(height: 22),
           AuthorizedHeaders(),
           const Divider(),
           Flexible(

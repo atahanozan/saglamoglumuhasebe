@@ -21,6 +21,7 @@ class DataInfoGrid extends StatelessWidget {
           Expanded(
             child: firsWidget ?? SizedBox(),
           ),
+          SizedBox(width: 50),
           Expanded(
             child: secondWidget ?? SizedBox(),
           ),

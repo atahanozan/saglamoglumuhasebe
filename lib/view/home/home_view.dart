@@ -3,6 +3,7 @@ import 'package:get/state_manager.dart';
 import 'package:saglamoglu_muhasebe/view/home/home_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/home/widgets/data_info_card.dart';
 import 'package:saglamoglu_muhasebe/view/home/widgets/data_info_grid.dart';
+import 'package:saglamoglu_muhasebe/view/home/widgets/delivery_doc_line.dart';
 import 'package:saglamoglu_muhasebe/view/home/widgets/header_line_widget.dart';
 
 class HomeView extends StatelessWidget {
@@ -22,6 +23,12 @@ class HomeView extends StatelessWidget {
                 waitingData: model.waitingDeliveryDocCount.toString(),
                 completedData: model.copmleteDeliveryDocCount.toString(),
                 totalData: model.totalDeliveryDocCount.toString(),
+              ),
+              secondWidget: DeliveryDocLine(
+                dataCount: model.deliveryDocDailyCount.length.toString(),
+                listLenght: model.deliveryDocDailyCount.length,
+                xData: model.deliveryDocDays,
+                yData: model.deliveryDocDailyCount,
               ),
             ),
           ],

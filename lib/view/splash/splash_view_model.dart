@@ -20,7 +20,7 @@ class SplashViewModel extends GetxController {
   Future<void> updateSplash(BuildContext context) async {
     var res = await AppUser.init.getUserData();
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (context.mounted) {
         if (res.uid == null ||
             res.admin == null ||

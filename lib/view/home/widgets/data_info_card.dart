@@ -19,6 +19,7 @@ class DataInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme pageStyle = Theme.of(context).textTheme;
     return Container(
+      height: 400,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -28,14 +29,17 @@ class DataInfoCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Teslim Dosyaları"),
-          SizedBox(height: 22),
+          Text(
+            "Teslim Dosyaları Son Durum",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          Spacer(),
           Row(
             children: [
               Expanded(
                 child: Text(
                   waitingData,
-                  style: pageStyle.headlineMedium
+                  style: pageStyle.headlineLarge
                       ?.copyWith(color: Colors.red.shade900),
                   textAlign: TextAlign.left,
                 ),
@@ -43,7 +47,7 @@ class DataInfoCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   completedData,
-                  style: pageStyle.headlineMedium
+                  style: pageStyle.headlineLarge
                       ?.copyWith(color: Colors.green.shade900),
                   textAlign: TextAlign.left,
                 ),
@@ -51,7 +55,7 @@ class DataInfoCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   totalData,
-                  style: pageStyle.headlineMedium,
+                  style: pageStyle.headlineLarge,
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -83,7 +87,7 @@ class DataInfoCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          Spacer(),
           DownloadDocsExcel(
             dataStatu: true,
             isTotal: true,

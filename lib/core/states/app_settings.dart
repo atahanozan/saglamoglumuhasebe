@@ -33,6 +33,7 @@ class AppSettings extends GetxController {
     authorizedViewModel.getAllData();
     homeViewModel.updateDeliveryDocCounts();
     homeViewModel.getUserName();
+    homeViewModel.addDocCount();
     mainViewModel.getUserAdmin();
     deliveryDocViewModel.getUserName();
     setAppUserInfo();

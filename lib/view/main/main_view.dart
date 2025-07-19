@@ -21,6 +21,9 @@ class MainView extends StatelessWidget {
                   flex: 1,
                   child: SideBar(),
                 ),
+                VerticalDivider(
+                  width: 1,
+                ),
                 Expanded(
                   flex: 3,
                   child: model.selectedPage(model.selectedNavigationEnum.value),

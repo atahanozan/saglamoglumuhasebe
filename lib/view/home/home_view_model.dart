@@ -13,12 +13,37 @@ class HomeViewModel extends GetxController {
 
   AppUser get appUser => AppUser.init;
 
+  static DateTime get today => DateTime.now();
+
   Rx<AuthModel> userInfo = AuthModel().obs;
 
   void getUserName() async {
     var name = await appUser.getUserData();
 
     userInfo = name.obs;
+    update();
+  }
+
+  RxList<int> deliveryDocDailyCount = <int>[1].obs;
+  RxList<int> deliveryDocDays = <int>[1].obs;
+
+  Future<void> addDocCount() async {
+    deliveryDocDailyCount.clear();
+    deliveryDocDays.clear();
+    for (var i = 0; i < 7; i++) {
+      await FirebaseFirestore.instance
+          .collection("deliverydocs")
+          .where("statu", isEqualTo: true)
+          .where("lastEditedDate",
+              isEqualTo:
+                  today.subtract(Duration(days: i)).toString().split(" ")[0])
+          .count()
+          .get()
+          .then((value) {
+        deliveryDocDailyCount.add(value.count ?? 0);
+        deliveryDocDays.add(today.subtract(Duration(days: i)).day);
+      });
+    }
     update();
   }
 
