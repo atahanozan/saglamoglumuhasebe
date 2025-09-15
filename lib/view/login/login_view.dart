@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/error_box.dart';
-import 'package:saglamoglu_muhasebe/view/login/login_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/login/model/login_view_model.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});

@@ -7,15 +7,16 @@ import 'package:printing/printing.dart';
 class PdfController {
   String? id = DateTime.now().millisecondsSinceEpoch.toString();
   Future<void> customerDeliveryDoc(
-    String name,
-    String tckn,
-    String companyName,
-    String price,
-    String currency,
-    BuildContext context,
-    DateTime date,
-    bool isPrinting,
-  ) async {
+      String name,
+      String tckn,
+      String companyName,
+      String price,
+      String currency,
+      BuildContext context,
+      DateTime date,
+      bool isPrinting,
+      {bool isDirectPrinting = false,
+      String printerName = ""}) async {
     final pdf = pw.Document();
     final font = await PdfGoogleFonts.poppinsBold();
     final fontLigth = await PdfGoogleFonts.poppinsLight();
@@ -489,6 +490,8 @@ class PdfController {
     );
 
     if (isPrinting) {
+      await Printing.layoutPdf(onLayout: (format) async => pdf.save());
+    } else if (isDirectPrinting) {
       await Printing.layoutPdf(onLayout: (format) async => pdf.save());
     } else {
       var savedFile = await pdf.save();

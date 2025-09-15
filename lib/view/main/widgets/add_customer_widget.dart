@@ -5,14 +5,14 @@ import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/custom_formfield_widget.dart';
-import 'package:saglamoglu_muhasebe/view/main/main_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 
 class AddCustomerWidget extends StatelessWidget {
   const AddCustomerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final MainViewModel model = MainViewModel.init;
+    final MainViewModel model = MainViewModel.instance;
     return Obx(
       () => AnimatedContainer(
         height: double.infinity,
@@ -80,11 +80,15 @@ class AddCustomerWidget extends StatelessWidget {
                   ],
                   controller: model.phoneController,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    model.addCustomer();
-                  },
-                  child: Text("Ekle"),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        model.addCustomer(context);
+                      },
+                      child: Text("Ekle"),
+                    ),
+                  ],
                 ),
               ],
             ),

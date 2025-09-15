@@ -35,6 +35,7 @@ class CustomerController {
       'agentLastname': model.agentLastname,
       'date': model.date,
       'telNo': model.telNo,
+      'frontId': model.frontId,
     });
   }
 

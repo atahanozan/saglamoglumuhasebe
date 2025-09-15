@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 
 class CustomerEditButtons extends StatelessWidget {
   const CustomerEditButtons({super.key, required this.dataId});

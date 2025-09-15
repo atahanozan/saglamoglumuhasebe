@@ -3,7 +3,7 @@ import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/search_field.dart';
-import 'package:saglamoglu_muhasebe/view/authorized/authorized_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/authorized/model/authorized_view_model.dart';
 
 class AuthorizedListFilter extends StatelessWidget {
   const AuthorizedListFilter({super.key});

@@ -96,10 +96,11 @@ class ExcelController extends GetxController {
     }
   }
 
-  Future<void> saveExcel(bool newDataStatu) async {
+  Future<void> saveExcel(
+      bool newDataStatu, Future<List<DeliveryDocModel>> excelDocs) async {
     Excel excel = Excel.createExcel();
 
-    var res = await deliverDocList(newDataStatu);
+    var res = await excelDocs;
 
     await createSheet(excel, res);
 

@@ -3,7 +3,7 @@ import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/search_field.dart';
-import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 
 class CustomerListFilters extends StatelessWidget {
   const CustomerListFilters({super.key});

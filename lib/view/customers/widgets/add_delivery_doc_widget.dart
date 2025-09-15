@@ -6,7 +6,7 @@ import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/custom_dropdown_btn.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/custom_formfield_widget.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/date_picker_widget.dart';
-import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 
 class AddDeliveryDocWidget extends StatelessWidget {
   const AddDeliveryDocWidget({super.key, required this.docVisibility});

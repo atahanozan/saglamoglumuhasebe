@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/model/delivery_docs_view_model.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/grid_buttons.dart';
+import 'package:saglamoglu_muhasebe/view/compdeliverydocs/model/comp_delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_grid_buttons.dart';
 
-class DeliveryDocGridWidget extends StatelessWidget {
-  const DeliveryDocGridWidget({
+class CompDeliveryDocGrid extends StatelessWidget {
+  const CompDeliveryDocGrid({
     super.key,
     required this.model,
     required this.dataModel,
@@ -14,7 +14,7 @@ class DeliveryDocGridWidget extends StatelessWidget {
   });
 
   final DeliveryDocModel dataModel;
-  final DeliveryDocsViewModel model;
+  final CompDeliveryDocsViewModel model;
   final String? docId;
 
   @override
@@ -79,7 +79,7 @@ class DeliveryDocGridWidget extends StatelessWidget {
                 style: GoogleFonts.lexendGiga(),
               )),
               const SizedBox(width: 5),
-              GridButtons(
+              CompGridButtons(
                 docId: docId,
                 dataModel: dataModel,
               ),

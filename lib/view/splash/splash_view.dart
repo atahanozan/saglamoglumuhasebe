@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/view/splash/splash_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/splash/model/splash_view_model.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/core/widgets/excel/download_docs_excel.dart';
 
 class DataInfoCard extends StatelessWidget {
   const DataInfoCard({
@@ -86,11 +85,6 @@ class DataInfoCard extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          Spacer(),
-          DownloadDocsExcel(
-            dataStatu: true,
-            isTotal: true,
           ),
         ],
       ),

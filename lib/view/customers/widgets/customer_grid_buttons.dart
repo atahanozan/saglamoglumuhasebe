@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
-import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 
 class CustomerGridButtons extends StatelessWidget {
   const CustomerGridButtons({

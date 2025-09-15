@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/view/main/main_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/side_bar_buttons.dart';
 
 class SideBar extends StatelessWidget {
@@ -30,7 +30,7 @@ class SideBar extends StatelessWidget {
               ),
             ),
             Text(
-              "Sürüm: 28",
+              "Sürüm: 29",
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: CustomThemeColors.customYellow.c800,
                   ),

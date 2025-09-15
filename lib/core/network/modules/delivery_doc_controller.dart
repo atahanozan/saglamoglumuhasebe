@@ -56,6 +56,33 @@ class DeliveryDocController {
     return result;
   }
 
+  Future<List<DeliveryDocModel>> getDeliverDocListUnLimited(bool statu) async {
+    var res = await _firestore
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: statu)
+        .orderBy("id", descending: true)
+        .get();
+
+    var result = List.generate(
+      res.docs.length,
+      (index) => DeliveryDocModel(
+        name: res.docs[index].data()["name"] ?? "",
+        tcknvkn: res.docs[index].data()["tcknvkn"] ?? "",
+        price: res.docs[index].data()["price"] ?? "",
+        company: res.docs[index].data()["company"] ?? "",
+        date: res.docs[index].data()["date"] ?? "",
+        agentLastname: res.docs[index].data()["agentLastname"] ?? "",
+        agentName: res.docs[index].data()["agentName"] ?? "",
+        currency: res.docs[index].data()["currency"] ?? "TL",
+        id: res.docs[index].data()["id"] ?? 0,
+        statu: res.docs[index].data()["statu"] ?? false,
+        proccesstatu: res.docs[index].data()["proccesstatu"] ?? false,
+      ),
+    );
+
+    return result;
+  }
+
   DeliveryDocModel snapshotModel(Map<String, dynamic> snapshot, String docId) {
     var data = DeliveryDocModel(
       name: snapshot["name"] ?? "",

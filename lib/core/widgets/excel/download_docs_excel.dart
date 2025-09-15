@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/excel/excel_controller.dart';
 
 class DownloadDocsExcel extends StatelessWidget {
@@ -9,10 +10,12 @@ class DownloadDocsExcel extends StatelessWidget {
     super.key,
     required this.dataStatu,
     required this.isTotal,
+    required this.docList,
   });
 
   final bool isTotal;
   final bool dataStatu;
+  final Future<List<DeliveryDocModel>> docList;
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +76,8 @@ class DownloadDocsExcel extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            excelController
-                                .saveExcel(excelController.dataStatu.value);
+                            excelController.saveExcel(
+                                excelController.dataStatu.value, docList);
                             Navigator.pop(context);
                           },
                           child: Text("İndir"),
@@ -84,7 +87,7 @@ class DownloadDocsExcel extends StatelessWidget {
                   );
                 });
           } else {
-            excelController.saveExcel(dataStatu);
+            excelController.saveExcel(dataStatu, docList);
           }
         },
         child: Row(

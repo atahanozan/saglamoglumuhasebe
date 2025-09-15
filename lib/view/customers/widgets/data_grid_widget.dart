@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/custom_formfield_widget.dart';
-import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widgets/customer_edit_buttons.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widgets/customer_grid_buttons.dart';
 

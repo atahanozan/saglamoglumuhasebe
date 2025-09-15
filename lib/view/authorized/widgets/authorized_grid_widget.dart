@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/model/authorized_model.dart';
-import 'package:saglamoglu_muhasebe/view/authorized/authorized_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/authorized/model/authorized_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/widgets/authorized_grid_buttons.dart';
 
 class AuthorizedGridWidget extends StatelessWidget {

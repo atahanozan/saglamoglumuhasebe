@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:saglamoglu_muhasebe/view/main/main_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/add_customer_widget.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/side_bar.dart';
 

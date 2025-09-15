@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saglamoglu_muhasebe/view/authorized/authorized_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/authorized/model/authorized_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/widgets/authorized_grid_widget.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/widgets/authorized_headers.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/widgets/authorized_list_filter.dart';

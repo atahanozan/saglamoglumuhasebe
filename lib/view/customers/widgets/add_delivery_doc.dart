@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widgets/add_authorized_widget.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widgets/add_delivery_doc_widget.dart';
 

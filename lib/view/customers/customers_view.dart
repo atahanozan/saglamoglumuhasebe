@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/error_box.dart';
-import 'package:saglamoglu_muhasebe/view/customers/customers_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widgets/add_delivery_doc.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widgets/customer_grid_headers.dart';
 import 'package:saglamoglu_muhasebe/view/customers/widgets/customer_list_filters.dart';

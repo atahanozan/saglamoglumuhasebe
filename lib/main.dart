@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saglamoglu_muhasebe/core/init/singleton_manager.dart';
 import 'package:saglamoglu_muhasebe/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:saglamoglu_muhasebe/view/splash/splash_view.dart';
@@ -9,6 +10,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  SingletonManager.instance;
+
   runApp(const MyApp());
 }
 

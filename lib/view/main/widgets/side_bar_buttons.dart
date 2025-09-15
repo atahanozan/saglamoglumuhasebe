@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/enums/navigation_enums.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/view/main/main_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 
 class SideBarButtons extends StatelessWidget {
   const SideBarButtons({super.key});

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/model/delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/compdeliverydocs/model/comp_delivery_docs_view_model.dart';
 
-class GridButtons extends StatelessWidget {
-  const GridButtons({super.key, required this.docId, required this.dataModel});
+class CompGridButtons extends StatelessWidget {
+  const CompGridButtons(
+      {super.key, required this.docId, required this.dataModel});
 
   final String? docId;
   final DeliveryDocModel dataModel;
 
   @override
   Widget build(BuildContext context) {
-    final DeliveryDocsViewModel model = DeliveryDocsViewModel.instance;
+    final CompDeliveryDocsViewModel model = CompDeliveryDocsViewModel.instance;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

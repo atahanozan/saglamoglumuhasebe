@@ -3,4 +3,5 @@ enum DeliveryDocStreamFilterEnums {
   date,
   clean,
   price,
+  company,
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/model/delivery_docs_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/widgets/grid_buttons.dart';
 
 class EditDeliveryDoc extends StatelessWidget {
