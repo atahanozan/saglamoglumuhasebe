@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/model/delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
 
 class GridButtons extends StatelessWidget {
   const GridButtons({super.key, required this.docId, required this.dataModel});
@@ -14,30 +14,6 @@ class GridButtons extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Visibility(
-          visible: model.userInfo.value.admin == true ? true : false,
-          child: InkWell(
-            onTap: () {
-              model.updateDocStatu(
-                  docId,
-                  dataModel.statu == true ? false : true,
-                  context,
-                  DateTime.now().toString().split(" ")[0]);
-            },
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: dataModel.statu == true
-                    ? Colors.red.shade300
-                    : Colors.green.shade300,
-              ),
-              child: dataModel.statu == true
-                  ? Icon(Icons.close_rounded)
-                  : Icon(Icons.done_all_rounded),
-            ),
-          ),
-        ),
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(

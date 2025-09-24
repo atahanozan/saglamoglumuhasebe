@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,10 +9,10 @@ import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/customer_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/authorized_view.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/comp_delivery_docs_view.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/compdeliverydocs/comp_delivery_docs_view.dart';
 import 'package:saglamoglu_muhasebe/view/customers/customers_view.dart';
 import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/waiting_delivery_docs_view.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/waiting_delivery_docs_view.dart';
 import 'package:saglamoglu_muhasebe/view/home/home_view.dart';
 import 'package:saglamoglu_muhasebe/view/login/login_view.dart';
 
@@ -25,7 +27,7 @@ class MainViewModel extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   CustomerController get customerController => CustomerController();
-  AppUser get user => AppUser.init;
+  AppUser get user => AppUser.instance;
 
   CustomersViewModel customerViewModel = CustomersViewModel.init;
 
@@ -91,11 +93,36 @@ class MainViewModel extends GetxController {
     }
   }
 
+  // RxString frontIdImage = "".obs;
+  // RxString frontIdImagePath = "".obs;
+
+  // Future<void> pickImage() async {
+  //   final ImagePicker picker = ImagePicker();
+  //   var pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //   if (pickedFile != null) {
+  //     var imageUint8le = await pickedFile.readAsBytes();
+  //     print(imageUint8le);
+  //     final blob = web.Blob([imageUint8le], 'application/png');
+  //     final url = web.Url.createObjectUrlFromBlob(blob);
+  //     frontIdImagePath.value = pickedFile.path;
+  //     print("Resim adresi: $url");
+  //     var base64Data = base64Encode(File(url).readAsBytesSync());
+  //     print(base64Data);
+  //     frontIdImage.value = base64Data;
+  //   }
+  // }
+
   Future<void> addCustomer(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       if (tcknVknController.text.isNotEmpty && nameController.text.isNotEmpty) {
         var result = await FirebaseFirestore.instance
             .collection("deliverycustomers")
+            .where(
+              Filter.or(
+                Filter("customerStatu", isNull: true),
+                Filter("customerStatu", isEqualTo: "A"),
+              ),
+            )
             .where("tcknvkn", isEqualTo: tcknVknController.text)
             .get();
 
@@ -117,14 +144,17 @@ class MainViewModel extends GetxController {
           }
         } else {
           var customer = CustomerModel(
-            id: DateTime.now().millisecondsSinceEpoch,
-            date: DateTime.now().toString().split(" ")[0],
-            name: nameController.text,
-            tcknvkn: tcknVknController.text,
-            telNo: phoneController.text,
-            agentName: userAdmin.value.name,
-            agentLastname: userAdmin.value.lastName,
-          );
+              id: DateTime.now().millisecondsSinceEpoch,
+              date: DateTime.now().toString().split(" ")[0],
+              name: nameController.text,
+              tcknvkn: tcknVknController.text,
+              telNo: phoneController.text,
+              agentName: userAdmin.value.name,
+              agentLastname: userAdmin.value.lastName,
+              customerStatu: "A",
+              agents: [
+                "${DateTime.now()}&${user.thisUser.value.name} ${user.thisUser.value.lastName}"
+              ]);
 
           customerController.createCustomer(customer);
 
@@ -152,11 +182,33 @@ class MainViewModel extends GetxController {
 
   Future<void> userLogout(BuildContext context) async {
     user.logout();
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) => LoginView(),
       ),
     );
+  }
+
+  RxInt loginTime = 600.obs;
+  RxBool loginAgain = false.obs;
+
+  Timer? timer;
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (newTime) {
+      if (loginTime > 0) {
+        loginTime.value--;
+      } else {
+        loginAgain.value = true;
+        newTime.cancel();
+      }
+    });
+  }
+
+  void resetTimer() {
+    loginTime.value = 600;
+    loginAgain.value = false;
   }
 }

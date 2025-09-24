@@ -39,13 +39,20 @@ class CustomersView extends StatelessWidget {
                                     snapshot.data!.docs[index].data();
                                 DocumentSnapshot snapshotData =
                                     snapshot.data!.docs[index];
-                                return DataGridWidget(
-                                  dataModel: model.customerController
-                                      .customerStreamData(
-                                          dataIndex, snapshotData.id),
-                                  dataIndex: index,
-                                  dataId: snapshotData.id,
-                                );
+
+                                return model.customerController
+                                            .customerStreamData(
+                                                dataIndex, snapshotData.id)
+                                            .customerStatu ==
+                                        "D"
+                                    ? SizedBox()
+                                    : DataGridWidget(
+                                        dataModel: model.customerController
+                                            .customerStreamData(
+                                                dataIndex, snapshotData.id),
+                                        dataIndex: index,
+                                        dataId: snapshotData.id,
+                                      );
                               },
                             );
                     },

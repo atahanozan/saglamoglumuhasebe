@@ -13,15 +13,17 @@ class CustomerController {
     var res = List.generate(
         result.docs.length,
         (index) => CustomerModel(
-              docId: result.docs.elementAt(index).id,
-              id: result.docs.elementAt(index).data()['id'] ?? 0,
-              name: result.docs.elementAt(index).data()['name'] ?? "",
-              tcknvkn: result.docs.elementAt(index).data()['tcknvkn'] ?? "",
-              agentName: result.docs.elementAt(index).data()['agentName'] ?? "",
-              agentLastname:
-                  result.docs.elementAt(index).data()['agentLastname'] ?? "",
-              date: result.docs.elementAt(index).data()['date'] ?? "",
-            ));
+            docId: result.docs.elementAt(index).id,
+            id: result.docs.elementAt(index).data()['id'] ?? 0,
+            name: result.docs.elementAt(index).data()['name'] ?? "",
+            tcknvkn: result.docs.elementAt(index).data()['tcknvkn'] ?? "",
+            agentName: result.docs.elementAt(index).data()['agentName'] ?? "",
+            agentLastname:
+                result.docs.elementAt(index).data()['agentLastname'] ?? "",
+            date: result.docs.elementAt(index).data()['date'] ?? "",
+            customerStatu:
+                result.docs.elementAt(index).data()['customerStatu'] ?? "",
+            agents: result.docs.elementAt(index).data()['agents'] ?? []));
 
     return res;
   }
@@ -36,11 +38,16 @@ class CustomerController {
       'date': model.date,
       'telNo': model.telNo,
       'frontId': model.frontId,
+      'customerStatu': model.customerStatu,
+      'agents': model.agents,
     });
   }
 
-  Future<void> deleteCustomer(String? docId) async {
-    await FirebaseFirestore.instance.collection(_basePath).doc(docId).delete();
+  Future<void> deleteCustomer(String? docId, List<dynamic>? agents) async {
+    await FirebaseFirestore.instance.collection(_basePath).doc(docId).update({
+      "customerStatu": "D",
+      "agents": agents,
+    });
   }
 
   Future<void> updateCustomer(
@@ -63,6 +70,8 @@ class CustomerController {
       agentLastname: snapshot['agentLastname'] ?? "",
       date: snapshot['date'] ?? "",
       telNo: snapshot['telNo'] ?? "",
+      customerStatu: snapshot['customerStatu'] ?? "",
+      agents: snapshot['agents'] ?? [],
       docId: docId,
     );
 

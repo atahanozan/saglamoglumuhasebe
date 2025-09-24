@@ -112,19 +112,49 @@ class CustomersViewModel extends GetxController {
     );
   }
 
-  void deleteCustomer(String? docId, String? name, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (_) => CustomAlertCard(
-              title: name.toString(),
-              message: "İlgili müşteri silinecektir.",
-              btnName: "Sil",
-              actionFunc: () {
-                customerController.deleteCustomer(docId);
-                Navigator.pop(context);
-                getCustomerData();
-              },
-            ));
+  void deleteCustomer(
+    String? docId,
+    String? name,
+    BuildContext context,
+    CustomerModel dataModel,
+  ) {
+    var newAgentList = dataModel.agents;
+
+    if (newAgentList != null) {
+      newAgentList.add(
+          "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}");
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (context.mounted) {
+          showDialog(
+              context: context,
+              builder: (_) => CustomAlertCard(
+                    title: name.toString(),
+                    message: "İlgili müşteri silinecektir.",
+                    btnName: "Sil",
+                    actionFunc: () {
+                      customerController.deleteCustomer(docId, newAgentList);
+                      Navigator.pop(context);
+                      getCustomerData();
+                    },
+                  ));
+        }
+      });
+    } else {
+      showDialog(
+          context: context,
+          builder: (_) => CustomAlertCard(
+                title: name.toString(),
+                message: "İlgili müşteri silinecektir.",
+                btnName: "Sil",
+                actionFunc: () {
+                  customerController.deleteCustomer(docId, [
+                    "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}"
+                  ]);
+                  Navigator.pop(context);
+                  getCustomerData();
+                },
+              ));
+    }
   }
 
   RxDouble addDocWidth = 0.0.obs;
@@ -225,6 +255,11 @@ class CustomersViewModel extends GetxController {
         id: DateTime.now().millisecondsSinceEpoch,
         statu: false,
         proccesstatu: false,
+        agents: [
+          "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}&Döküman Oluşturuldu"
+        ],
+        newProccessStatu: "İmza Bekliyor",
+        newDocStatu: "İmzalı Döküman Bekleniyor",
       );
 
       deliveryDocController.createDeliveryDoc(result);
@@ -280,21 +315,42 @@ class CustomersViewModel extends GetxController {
     }
   }
 
-  void updateCustomerData(String? dataId) {
-    if (editCustomer.value == true) {
-      customerController.updateCustomer(dataId, {
-        "name": editNameController.text,
-        "tcknvkn": editTcknController.text,
-        "telNo": editTelNoController.text,
-      });
+  void updateCustomerData(String? dataId, CustomerModel dataModel) {
+    var newAgentList = dataModel.agents;
 
-      Future.delayed(const Duration(milliseconds: 100), () {
-        editCustomer.value = false;
-        editCustomerIndex.value = 0;
-        editNameController.clear();
-        editTcknController.clear();
-        editTelNoController.clear();
+    if (newAgentList != null) {
+      newAgentList.add(
+          "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}");
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (editCustomer.value == true) {
+          customerController.updateCustomer(dataId, {
+            "name": editNameController.text,
+            "tcknvkn": editTcknController.text,
+            "telNo": editTelNoController.text,
+            "agents": newAgentList,
+          });
+
+          Future.delayed(const Duration(milliseconds: 100), () {
+            editCustomer.value = false;
+            editCustomerIndex.value = 0;
+            editNameController.clear();
+            editTcknController.clear();
+            editTelNoController.clear();
+          });
+        }
       });
+    }
+  }
+
+  String agentName(CustomerModel dataModel) {
+    if (dataModel.agents != null) {
+      if (dataModel.agents!.isNotEmpty) {
+        return dataModel.agents?.last.toString().split("&")[1] ?? "";
+      } else {
+        return "${dataModel.agentName.toString()} ${dataModel.agentLastname.toString()}";
+      }
+    } else {
+      return "${dataModel.agentName.toString()} ${dataModel.agentLastname.toString()}";
     }
   }
 }

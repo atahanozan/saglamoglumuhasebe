@@ -1,6 +1,6 @@
 class AuthModel {
   final String? email, name, lastName, uid;
-  final bool? admin;
+  final bool? admin, passwordNew;
 
   AuthModel({
     this.email,
@@ -8,6 +8,7 @@ class AuthModel {
     this.lastName,
     this.uid,
     this.admin,
+    this.passwordNew,
   });
 
   AuthModel fromJson(Map<String, dynamic> json) {
@@ -17,6 +18,7 @@ class AuthModel {
       lastName: json["lastName"],
       uid: json["uid"],
       admin: json["admin"],
+      passwordNew: json["passwordNew"],
     );
   }
 
@@ -27,6 +29,7 @@ class AuthModel {
       'lastName': lastName,
       'uid': uid,
       'admin': admin,
+      'passwordNew': passwordNew,
     };
   }
 }

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 
 class CustomerEditButtons extends StatelessWidget {
-  const CustomerEditButtons({super.key, required this.dataId});
+  const CustomerEditButtons({
+    super.key,
+    required this.dataId,
+    required this.dataModel,
+  });
 
   final String? dataId;
+  final CustomerModel dataModel;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +19,10 @@ class CustomerEditButtons extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            model.updateCustomerData(dataId);
+            model.updateCustomerData(
+              dataId,
+              dataModel,
+            );
           },
           child: Container(
               padding: const EdgeInsets.all(8),

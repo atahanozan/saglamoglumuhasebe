@@ -78,7 +78,9 @@ class AddAuthorizedWidget extends StatelessWidget {
                 ),
                 SizedBox(height: 18),
                 CustomFormfieldWidget(
+                    isPassword: false,
                     labelColor: CustomThemeColors.customBlack.c800,
+                    isObsecure: false,
                     formName: "Yetki Alan",
                     hint: "TCKN",
                     inputFormatter: [
@@ -89,7 +91,9 @@ class AddAuthorizedWidget extends StatelessWidget {
                     ],
                     controller: model.authorizedTcknController),
                 CustomFormfieldWidget(
+                    isPassword: false,
                     labelColor: CustomThemeColors.customBlack.c800,
+                    isObsecure: false,
                     formName: "",
                     hint: "Ad Soyad",
                     inputFormatter: [],

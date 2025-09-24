@@ -12,6 +12,12 @@ class AuthorizedListFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthorizedViewModel model = AuthorizedViewModel.init;
     return SearchField(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 90,
+        top: 20,
+        bottom: 20,
+      ),
       controller: model.searchController,
       onSearchComplete: () {
         model.updateAuthorizedDataFilter();

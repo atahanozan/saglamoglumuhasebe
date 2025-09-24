@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
-import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/model/comp_delivery_docs_view_model.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_grid_buttons.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/widgets/grid_buttons.dart';
 
-class CompDeliveryDocGrid extends StatelessWidget {
-  const CompDeliveryDocGrid({
+class EditDeliveryDoc extends StatelessWidget {
+  const EditDeliveryDoc({
     super.key,
     required this.model,
     required this.dataModel,
@@ -14,7 +13,7 @@ class CompDeliveryDocGrid extends StatelessWidget {
   });
 
   final DeliveryDocModel dataModel;
-  final CompDeliveryDocsViewModel model;
+  final DeliveryDocsViewModel model;
   final String? docId;
 
   @override
@@ -35,13 +34,17 @@ class CompDeliveryDocGrid extends StatelessWidget {
                       .headerColor(dataModel.proccesstatu, dataModel.statu)
                       .shade900,
                 )),
-            color: CustomThemeColors.customWhite,
+            color: model
+                .headerColor(dataModel.proccesstatu, dataModel.statu)
+                .shade100,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
               const SizedBox(width: 20),
-              model.dateFormat(dataModel.date, context),
+              Text(
+                model.createdDate(dataModel, context),
+              ),
               const SizedBox(width: 12),
               Expanded(
                   child: Column(
@@ -62,8 +65,6 @@ class CompDeliveryDocGrid extends StatelessWidget {
                 ],
               )),
               const SizedBox(width: 5),
-              Expanded(child: Text(model.editedDate(dataModel.lastEditedDate))),
-              const SizedBox(width: 5),
               Text(
                 dataModel.company.toString(),
                 textAlign: TextAlign.left,
@@ -79,7 +80,7 @@ class CompDeliveryDocGrid extends StatelessWidget {
                 style: GoogleFonts.lexendGiga(),
               )),
               const SizedBox(width: 5),
-              CompGridButtons(
+              GridButtons(
                 docId: docId,
                 dataModel: dataModel,
               ),
@@ -89,15 +90,18 @@ class CompDeliveryDocGrid extends StatelessWidget {
         InkWell(
           onTap: () {
             model.updateDocProccessStatu(
-                docId, dataModel.proccesstatu == true ? false : true);
+                docId,
+                dataModel.proccesstatu == true ? false : true,
+                dataModel,
+                model.newProccessStatu.value);
           },
           child: Padding(
             padding: const EdgeInsets.all(3.0),
             child: Icon(
-              dataModel.proccesstatu == true
+              dataModel.proccesstatu == false
                   ? Icons.check_circle_rounded
                   : Icons.remove_circle_rounded,
-              color: dataModel.proccesstatu == true
+              color: dataModel.proccesstatu == false
                   ? Colors.green.shade800
                   : Colors.red.shade800,
               size: 20,

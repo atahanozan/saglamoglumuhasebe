@@ -12,6 +12,12 @@ class CustomerListFilters extends StatelessWidget {
   Widget build(BuildContext context) {
     final CustomersViewModel model = CustomersViewModel.init;
     return SearchField(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 90,
+        top: 20,
+        bottom: 20,
+      ),
       controller: model.searchController,
       onSearchComplete: () {
         model.updateFilterWithSearch(model.searchController.text);

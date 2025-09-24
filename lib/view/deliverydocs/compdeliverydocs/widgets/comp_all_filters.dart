@@ -3,8 +3,8 @@ import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/money_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/search_field.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_company_filter.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_date_filter.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/compdeliverydocs/widgets/comp_company_filter.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/compdeliverydocs/widgets/comp_date_filter.dart';
 
 class CompAllFilters extends StatelessWidget {
   const CompAllFilters({
@@ -137,7 +137,12 @@ class CompAllFilters extends StatelessWidget {
                           Expanded(
                             flex: 3,
                             child: SearchField(
-                              horizontalPadding: 0,
+                              padding: const EdgeInsets.only(
+                                left: 20,
+                                right: 60,
+                                top: 12,
+                                bottom: 12,
+                              ),
                               controller: controller,
                               onSearchComplete: priceFilterFunc,
                               cleanFilter: () {},

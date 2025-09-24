@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/enums/delivery_doc_stream_filter_enums.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/excel/download_docs_excel.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/model/comp_delivery_docs_view_model.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_all_filters.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_delivery_doc_grid.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_headers.dart';
-import 'package:saglamoglu_muhasebe/view/compdeliverydocs/widgets/comp_list_filters.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/widgets/all_filters_widget.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/widgets/delivery_doc_grid_widget.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/widgets/headers.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/widgets/list_filters.dart';
 
-class CompDeliveryDocsView extends StatelessWidget {
-  const CompDeliveryDocsView({super.key});
+class WaitingDeliveryDocsView extends StatelessWidget {
+  const WaitingDeliveryDocsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final CompDeliveryDocsViewModel model = CompDeliveryDocsViewModel.instance;
+    final DeliveryDocsViewModel model = DeliveryDocsViewModel.instance;
     return Scaffold(
       body: Stack(
         alignment: Alignment.bottomLeft,
@@ -22,7 +22,7 @@ class CompDeliveryDocsView extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              CompListFilters(
+              ListFilters(
                 onFilterComplete: () {
                   model.setDeliveryDocStream(
                       newCompanyFilter: model.companyFilter.value,
@@ -36,7 +36,7 @@ class CompDeliveryDocsView extends StatelessWidget {
                 },
               ),
               Obx(
-                () => CompAllFilters(
+                () => AllFiltersWidget(
                   datePickFunc: () {
                     model.updateDataFilterWithDate(context);
                   },
@@ -81,7 +81,7 @@ class CompDeliveryDocsView extends StatelessWidget {
                   },
                 ),
               ),
-              CompHeaders(),
+              Headers(),
               Divider(),
               Flexible(
                 child: Obx(
@@ -97,7 +97,7 @@ class CompDeliveryDocsView extends StatelessWidget {
                                     snapshot.data!.docs[index].data();
                                 DocumentSnapshot snapshotData =
                                     snapshot.data!.docs[index];
-                                return CompDeliveryDocGrid(
+                                return DeliveryDocGridWidget(
                                   model: model,
                                   dataModel: model.deliveryController
                                       .snapshotModel(

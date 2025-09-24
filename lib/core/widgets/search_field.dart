@@ -12,8 +12,7 @@ class SearchField extends StatelessWidget {
     required this.backColor,
     this.hintText = "Müşteri adı ile ara...",
     this.cleanBtnVisibility = true,
-    this.horizontalPadding = 16,
-    this.verticalPadding = 22,
+    this.padding,
   });
 
   final TextEditingController controller;
@@ -23,16 +22,12 @@ class SearchField extends StatelessWidget {
   final String hintText;
   final Color backColor;
   final bool cleanBtnVisibility;
-  final double horizontalPadding;
-  final double verticalPadding;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: verticalPadding,
-      ),
+      padding: padding,
       decoration: BoxDecoration(
         color: backColor,
       ),

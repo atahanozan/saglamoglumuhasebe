@@ -78,7 +78,7 @@ class CustomerGridButtons extends StatelessWidget {
                   child: Icon(Icons.edit_rounded)),
               GestureDetector(
                 onTap: () {
-                  model.deleteCustomer(docId, customerName, context);
+                  model.deleteCustomer(docId, customerName, context, dataModel);
                 },
                 child: Icon(Icons.delete_rounded),
               ),

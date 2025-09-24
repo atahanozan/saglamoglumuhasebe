@@ -123,7 +123,9 @@ class AddDeliveryDocWidget extends StatelessWidget {
                   children: [
                     Flexible(
                       child: CustomFormfieldWidget(
+                          isPassword: false,
                           formName: "",
+                          isObsecure: false,
                           inputFormatter: [
                             MoneyTextFormatter(),
                           ],
@@ -135,7 +137,9 @@ class AddDeliveryDocWidget extends StatelessWidget {
                     SizedBox(
                       width: 80,
                       child: CustomFormfieldWidget(
+                          isPassword: false,
                           formName: "",
+                          isObsecure: false,
                           inputFormatter: [
                             TextInputFormatter.withFunction(
                                 (oldValue, newValue) {

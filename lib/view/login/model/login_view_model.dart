@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/auth_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_settings.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
+import 'package:saglamoglu_muhasebe/view/changepassword/change_password_view.dart';
 import 'package:saglamoglu_muhasebe/view/main/main_view.dart';
+import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 
 class LoginViewModel extends GetxController {
   static bool get isRegistered => GetInstance().isRegistered<LoginViewModel>();
@@ -53,12 +55,23 @@ class LoginViewModel extends GetxController {
         if (res?.uid != null) {
           appUser.setUser(res!);
           if (context.mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MainView(),
-              ),
-            );
+            if (res.passwordNew == false) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChangePasswordView(),
+                ),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MainView(),
+                ),
+              );
+              MainViewModel.instance.resetTimer();
+              MainViewModel.instance.startTimer();
+            }
           }
           AppSettings.init.startDataFetch();
         } else {

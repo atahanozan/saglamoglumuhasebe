@@ -22,14 +22,28 @@ class AuthController {
           await _firestore.collection("users").doc(response.user?.uid).get();
 
       var result = AuthModel(
-          email: email,
-          name: user["name"],
-          lastName: user["lastname"],
-          uid: response.user?.uid,
-          admin: user["admin"]);
+        email: email,
+        name: user["name"],
+        lastName: user["lastname"],
+        uid: response.user?.uid,
+        admin: user["admin"],
+        passwordNew: user["passwordNew"],
+      );
 
       return result;
     }
+  }
+
+  Future<bool> changePassword(String newPassword, User newUser) async {
+    await newUser.updatePassword(newPassword).then((newValue) {
+      return true;
+    }).catchError((err) {
+      print(err);
+
+      return false;
+    });
+
+    return true;
   }
 
   Future<void> logout() async {

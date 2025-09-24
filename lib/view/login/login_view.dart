@@ -11,7 +11,7 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginViewModel model = LoginViewModel.init;
+    final LoginViewModel model = LoginViewModel.instance;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -63,27 +63,29 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 25),
-                    TextFormField(
-                      controller: model.passwordController,
-                      obscureText: model.obsecureText.value,
-                      onEditingComplete: () {
-                        model.login(context);
-                      },
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          prefixIcon: Icon(Icons.key),
-                          labelText: "Şifre",
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          hintText: "**********",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              model.changeObsecure();
-                            },
-                            icon: Icon(Icons.remove_red_eye),
-                          )),
-                    ),
+                    Obx(() {
+                      return TextFormField(
+                        controller: model.passwordController,
+                        obscureText: model.obsecureText.value,
+                        onEditingComplete: () {
+                          model.login(context);
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            prefixIcon: Icon(Icons.key),
+                            labelText: "Şifre",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintText: "**********",
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                model.changeObsecure();
+                              },
+                              icon: Icon(Icons.remove_red_eye),
+                            )),
+                      );
+                    }),
                     SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: () {

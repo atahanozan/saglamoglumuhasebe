@@ -69,23 +69,42 @@ class CompDeliveryDocsViewModel extends GetxController {
     }
   }
 
-  Widget dateFormat(String? dateTime, BuildContext context) {
-    if (dateTime == "" || dateTime == null) {
-      return Text("");
+  String createdDate(DeliveryDocModel docModel, BuildContext context) {
+    if (docModel.date == "" || docModel.date == null) {
+      return "";
     } else {
-      String day = dateTime.toString().split("-")[2];
-      String month = dateTime.toString().split("-")[1];
+      String day = docModel.date.toString().split("-")[2];
+      String month = docModel.date.toString().split("-")[1];
+      String year = docModel.date.toString().split("-")[0];
 
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            day,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          Text(month),
-        ],
-      );
+      return "$day.$month.$year";
+    }
+  }
+
+  String lastUpdateDate(DeliveryDocModel docModel, BuildContext context) {
+    var newAgentList = docModel.agents;
+    if (newAgentList != null) {
+      if (newAgentList.isEmpty) {
+        String day = docModel.date.toString().split("-")[2];
+        String month = docModel.date.toString().split("-")[1];
+        String year = docModel.date.toString().split("-")[0];
+
+        return "$day.$month.$year";
+      } else {
+        var lastUpdate =
+            newAgentList.last.toString().split("&")[0].split(" ")[0];
+        String day = lastUpdate.split("-")[2];
+        String month = lastUpdate.split("-")[1];
+        String year = lastUpdate.split("-")[0];
+
+        return "$day.$month.$year";
+      }
+    } else {
+      String day = docModel.date.toString().split("-")[2];
+      String month = docModel.date.toString().split("-")[1];
+      String year = docModel.date.toString().split("-")[0];
+
+      return "$day.$month.$year";
     }
   }
 
@@ -312,38 +331,90 @@ class CompDeliveryDocsViewModel extends GetxController {
     );
   }
 
-  void updateDocStatu(
-      String? docId, bool newStatu, BuildContext context, String dateTime) {
-    showDialog(
-      context: context,
-      builder: (_) => CustomAlertCard(
-        title: "Statu değiştir",
-        message: "Teslim belgesinin durumu değiştirilecektir",
-        btnName: "Değiştir",
-        actionFunc: () {
-          deliveryController.editDoc(
-            {
-              "statu": newStatu,
-              "lastEditedDate": dateTime,
-            },
-            docId,
+  void updateDocStatu(String? docId, bool newStatu, BuildContext context,
+      String dateTime, DeliveryDocModel docModel) {
+    var newAgentList = docModel.agents;
+    if (newAgentList != null) {
+      newAgentList.add(
+          "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}");
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (_) => CustomAlertCard(
+              title: "Statu değiştir",
+              message: "Teslim belgesinin durumu değiştirilecektir",
+              btnName: "Değiştir",
+              actionFunc: () {
+                deliveryController.editDoc(
+                  {
+                    "statu": newStatu,
+                    "lastEditedDate": dateTime,
+                    "newDocStatu": "İmzalı Döküman Bekleniyor",
+                    "agents": newAgentList,
+                  },
+                  docId,
+                );
+                Navigator.pop(context);
+              },
+            ),
           );
-          Navigator.pop(context);
-        },
-      ),
-    );
+        }
+      });
+    } else {
+      showDialog(
+        context: context,
+        builder: (_) => CustomAlertCard(
+          title: "Statu değiştir",
+          message: "Teslim belgesinin durumu değiştirilecektir",
+          btnName: "Değiştir",
+          actionFunc: () {
+            deliveryController.editDoc(
+              {
+                "statu": newStatu,
+                "lastEditedDate": dateTime,
+                "newDocStatu": "İmzalı Döküman Bekleniyor",
+                "agents": [
+                  "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}"
+                ],
+              },
+              docId,
+            );
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
   }
 
-  void updateDocProccessStatu(
-    String? docId,
-    bool newStatu,
-  ) {
-    deliveryController.editDoc(
-      {
-        "proccesstatu": newStatu,
-      },
-      docId,
-    );
+  void updateDocProccessStatu(String? docId, bool newStatu,
+      DeliveryDocModel docModel, String newManuelProccessStatu) {
+    var newAgentList = docModel.agents;
+    if (newAgentList != null) {
+      newAgentList.add(
+          "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}");
+      Future.delayed(const Duration(milliseconds: 200), () {
+        deliveryController.editDoc(
+          {
+            "proccesstatu": newStatu,
+            "newProccessStatu": newManuelProccessStatu,
+            "agents": newAgentList,
+          },
+          docId,
+        );
+      });
+    } else {
+      deliveryController.editDoc(
+        {
+          "proccesstatu": newStatu,
+          "newProccessStatu": newManuelProccessStatu,
+          "agents": [
+            "${DateTime.now()}&${appUser.thisUser.value.name} ${appUser.thisUser.value.lastName}"
+          ],
+        },
+        docId,
+      );
+    }
   }
 
   String editedDate(String? timeStamp) {
@@ -365,5 +436,45 @@ class CompDeliveryDocsViewModel extends GetxController {
 
   void changeFilterTabStatu() {
     filterTabStatu.value = !filterTabStatu.value;
+  }
+
+  String agentName(DeliveryDocModel docModel) {
+    if (docModel.agents != null) {
+      if (docModel.agents!.isNotEmpty) {
+        return docModel.agents?.last.toString().split("&")[1] ?? "";
+      } else {
+        return "${docModel.agentName} ${docModel.agentLastname}";
+      }
+    } else {
+      return "${docModel.agentName} ${docModel.agentLastname}";
+    }
+  }
+
+  String docProccessStatu(DeliveryDocModel docModel) {
+    if (docModel.newProccessStatu != null) {
+      if (docModel.newProccessStatu != "") {
+        return docModel.newProccessStatu.toString();
+      } else {
+        if (docModel.proccesstatu == true) {
+          return "İmzalandı";
+        } else {
+          return "İmza Bekliyor";
+        }
+      }
+    } else {
+      if (docModel.proccesstatu == true) {
+        return "İmzalandı";
+      } else {
+        return "İmza Bekliyor";
+      }
+    }
+  }
+
+  RxString newProccessStatu = "".obs;
+  RxString docStatu = "".obs;
+  final MenuController menuController = MenuController();
+
+  void changeNewProccessStat(String newStatu) {
+    newProccessStatu.value = newStatu;
   }
 }

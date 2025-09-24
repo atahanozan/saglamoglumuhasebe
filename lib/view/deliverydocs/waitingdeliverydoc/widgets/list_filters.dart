@@ -3,7 +3,7 @@ import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/search_field.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/model/delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
 
 class ListFilters extends StatelessWidget {
   const ListFilters({
@@ -19,6 +19,12 @@ class ListFilters extends StatelessWidget {
   Widget build(BuildContext context) {
     final DeliveryDocsViewModel model = DeliveryDocsViewModel.instance;
     return SearchField(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 90,
+        top: 20,
+        bottom: 20,
+      ),
       controller: model.searchController,
       onSearchComplete: onFilterComplete,
       formatters: [

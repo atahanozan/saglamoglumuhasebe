@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
-import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/side_bar_buttons.dart';
 
 class SideBar extends StatelessWidget {
@@ -10,7 +9,6 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MainViewModel model = MainViewModel.init;
     return Container(
         height: double.infinity,
         width: double.infinity,
@@ -29,38 +27,17 @@ class SideBar extends StatelessWidget {
                 BlendMode.srcIn,
               ),
             ),
+            const SizedBox(height: 50),
+            Flexible(child: SideBarButtons()),
+            Spacer(),
+            Divider(
+              color: Colors.grey.shade100,
+            ),
             Text(
-              "Sürüm: 29",
+              "Sürüm: 30",
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: CustomThemeColors.customYellow.c800,
                   ),
-            ),
-            const SizedBox(height: 50),
-            Flexible(child: SideBarButtons()),
-            Divider(
-              color: CustomThemeColors.customBlack.c300,
-            ),
-            TextButton(
-              onPressed: () {
-                model.userLogout(context);
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.power_settings_new_rounded,
-                    color: Colors.amber,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    "Çıkış",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: Colors.amber),
-                  ),
-                ],
-              ),
             ),
             SizedBox(height: 18),
           ],

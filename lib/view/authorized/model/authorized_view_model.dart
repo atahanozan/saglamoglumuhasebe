@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/model/authorized_model.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/authorized_controller.dart';
+import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/custom_alert_card.dart';
 
 class AuthorizedViewModel extends GetxController {
@@ -16,6 +17,7 @@ class AuthorizedViewModel extends GetxController {
   AuthorizedController get authorizedController => AuthorizedController();
 
   final TextEditingController searchController = TextEditingController();
+  AppUser get appUser => AppUser.instance;
 
   RxList<AuthorizedModel> allDataList = <AuthorizedModel>[].obs;
 
@@ -34,23 +36,22 @@ class AuthorizedViewModel extends GetxController {
     }
   }
 
-  Widget dateFormat(String? dateTime, BuildContext context) {
-    String day = dateTime.toString().split("-")[2];
-    String month = dateTime.toString().split("-")[1];
+  Widget createdDate(BuildContext context, AuthorizedModel docModel) {
+    var newDate = docModel.firstdate.toString();
+    String day = newDate.toString().split("-")[2];
+    String month = newDate.toString().split("-")[1];
+    String year = newDate.toString().split("-")[0];
 
-    return SizedBox(
-      width: 100,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            day,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          Text(month),
-        ],
-      ),
-    );
+    return Text("$day.$month.$year");
+  }
+
+  Widget lastDate(BuildContext context, AuthorizedModel docModel) {
+    var newDate = docModel.seconddate.toString();
+    String day = newDate.toString().split("-")[2];
+    String month = newDate.toString().split("-")[1];
+    String year = newDate.toString().split("-")[0];
+
+    return Text("$day.$month.$year");
   }
 
   RxBool isDataFiltered = false.obs;

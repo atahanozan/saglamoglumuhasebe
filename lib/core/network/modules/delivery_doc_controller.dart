@@ -17,6 +17,9 @@ class DeliveryDocController {
       "id": model.id,
       "statu": model.statu,
       "proccesstatu": model.proccesstatu,
+      "agents": model.agents,
+      "newProccessStatu": model.newProccessStatu,
+      "newDocStatu": model.newDocStatu,
     });
   }
 
@@ -50,6 +53,9 @@ class DeliveryDocController {
         id: res.docs[index].data()["id"] ?? 0,
         statu: res.docs[index].data()["statu"] ?? false,
         proccesstatu: res.docs[index].data()["proccesstatu"] ?? false,
+        agents: res.docs[index].data()["agents"] ?? [],
+        newProccessStatu: res.docs[index].data()["newProccessStatu"] ?? "",
+        newDocStatu: res.docs[index].data()["newDocStatu"] ?? "",
       ),
     );
 
@@ -77,6 +83,9 @@ class DeliveryDocController {
         id: res.docs[index].data()["id"] ?? 0,
         statu: res.docs[index].data()["statu"] ?? false,
         proccesstatu: res.docs[index].data()["proccesstatu"] ?? false,
+        agents: res.docs[index].data()["agents"] ?? [],
+        newProccessStatu: res.docs[index].data()["newProccessStatu"] ?? "",
+        newDocStatu: res.docs[index].data()["newDocStatu"] ?? "",
       ),
     );
 
@@ -97,6 +106,9 @@ class DeliveryDocController {
       statu: snapshot["statu"] ?? false,
       proccesstatu: snapshot["proccesstatu"] ?? false,
       lastEditedDate: snapshot["lastEditedDate"].toString(),
+      agents: snapshot["agents"] ?? [],
+      newProccessStatu: snapshot["newProccessStatu"] ?? "",
+      newDocStatu: snapshot["newDocStatu"] ?? "",
     );
 
     return data;

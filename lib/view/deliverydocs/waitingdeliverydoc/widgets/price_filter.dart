@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/enums/delivery_doc_stream_filter_enums.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/money_text_formatter.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/model/delivery_docs_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
 
 class PriceFilter extends StatelessWidget {
   const PriceFilter({super.key});

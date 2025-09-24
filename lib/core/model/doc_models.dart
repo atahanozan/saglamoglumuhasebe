@@ -7,9 +7,12 @@ class DeliveryDocModel {
       agentName,
       agentLastname,
       currency,
-      lastEditedDate;
+      lastEditedDate,
+      newProccessStatu,
+      newDocStatu;
   final int? id;
   final bool? statu, proccesstatu;
+  List<dynamic>? agents;
 
   DeliveryDocModel({
     this.name,
@@ -24,6 +27,9 @@ class DeliveryDocModel {
     this.statu,
     this.proccesstatu,
     this.lastEditedDate,
+    this.agents,
+    this.newProccessStatu,
+    this.newDocStatu,
   });
 
   factory DeliveryDocModel.fromDocument(Map<String, dynamic> data) {
@@ -40,6 +46,9 @@ class DeliveryDocModel {
       statu: data["statu"] ?? false,
       proccesstatu: data["proccesstatu"] ?? false,
       lastEditedDate: data["lastEditedDate"].toString(),
+      agents: data["agents"] ?? [],
+      newProccessStatu: data["newProccessStatu"] ?? "",
+      newDocStatu: data["newDocStatu"] ?? "",
     );
   }
 
@@ -57,6 +66,9 @@ class DeliveryDocModel {
       statu: json["statu"],
       proccesstatu: json["proccesstatu"],
       lastEditedDate: json["lastEditedDate"],
+      agents: json["agents"],
+      newProccessStatu: json["newProccessStatu"],
+      newDocStatu: json["newDocStatu"],
     );
   }
 
@@ -74,6 +86,9 @@ class DeliveryDocModel {
       'statu': statu,
       'proccesstatu': proccesstatu,
       'lastEditedDate': lastEditedDate,
+      'agents': agents,
+      'newProccessStatu': newProccessStatu,
+      'newDocStatu': newDocStatu,
     };
   }
 }

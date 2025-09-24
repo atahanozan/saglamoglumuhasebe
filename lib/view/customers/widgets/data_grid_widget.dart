@@ -46,7 +46,9 @@ class DataGridWidget extends StatelessWidget {
                     child: model.editCustomer.value &&
                             model.editCustomerIndex.value == dataIndex
                         ? CustomFormfieldWidget(
+                            isPassword: false,
                             formName: "",
+                            isObsecure: false,
                             inputFormatter: [],
                             controller: model.editTcknController)
                         : Text(dataModel.tcknvkn.toString())),
@@ -55,7 +57,9 @@ class DataGridWidget extends StatelessWidget {
                     child: model.editCustomer.value &&
                             model.editCustomerIndex.value == dataIndex
                         ? CustomFormfieldWidget(
+                            isPassword: false,
                             formName: "",
+                            isObsecure: false,
                             inputFormatter: [
                               UppercaseTextFormatter(),
                             ],
@@ -71,7 +75,7 @@ class DataGridWidget extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                "${dataModel.agentName} ${dataModel.agentLastname}",
+                                model.agentName(dataModel),
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
@@ -81,7 +85,9 @@ class DataGridWidget extends StatelessWidget {
                     child: model.editCustomer.value &&
                             model.editCustomerIndex.value == dataIndex
                         ? CustomFormfieldWidget(
+                            isPassword: false,
                             formName: "",
+                            isObsecure: false,
                             inputFormatter: [],
                             controller: model.editTelNoController)
                         : Text(dataModel.telNo.toString())),
@@ -91,6 +97,7 @@ class DataGridWidget extends StatelessWidget {
                           model.editCustomerIndex.value == dataIndex
                       ? CustomerEditButtons(
                           dataId: dataId,
+                          dataModel: dataModel,
                         )
                       : CustomerGridButtons(
                           docId: dataModel.docId,

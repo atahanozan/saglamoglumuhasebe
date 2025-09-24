@@ -53,8 +53,24 @@ class AddCustomerWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 26),
+                // GestureDetector(onTap: () {
+                //   model.pickImage();
+                // }, child: Obx(() {
+                //   return Container(
+                //     height: 100,
+                //     width: 200,
+                //     decoration: BoxDecoration(
+                //       image: DecorationImage(
+                //           image: model.frontIdImage.value.isEmpty
+                //               ? AssetImage("assets/images/front.png")
+                //               : FileImage(File(model.frontIdImagePath.value))),
+                //     ),
+                //   );
+                // })),
                 CustomFormfieldWidget(
+                  isPassword: false,
                   formName: 'TCKN / VKN',
+                  isObsecure: false,
                   inputFormatter: [
                     MaskTextInputFormatter(
                       mask: '###########',
@@ -64,14 +80,18 @@ class AddCustomerWidget extends StatelessWidget {
                   controller: model.tcknVknController,
                 ),
                 CustomFormfieldWidget(
+                  isPassword: false,
                   formName: 'Ad Soyad',
+                  isObsecure: false,
                   inputFormatter: [
                     UppercaseTextFormatter(),
                   ],
                   controller: model.nameController,
                 ),
                 CustomFormfieldWidget(
+                  isPassword: false,
                   formName: 'Tel No',
+                  isObsecure: false,
                   inputFormatter: [
                     MaskTextInputFormatter(
                       mask: '0### ### ## ##',
