@@ -23,7 +23,8 @@ class CustomerController {
             date: result.docs.elementAt(index).data()['date'] ?? "",
             customerStatu:
                 result.docs.elementAt(index).data()['customerStatu'] ?? "",
-            agents: result.docs.elementAt(index).data()['agents'] ?? []));
+            agents: result.docs.elementAt(index).data()['agents'] ?? [],
+            tesStatu: result.docs.elementAt(index).data()['tesStatu'] ?? "0"));
 
     return res;
   }
@@ -40,6 +41,7 @@ class CustomerController {
       'frontId': model.frontId,
       'customerStatu': model.customerStatu,
       'agents': model.agents,
+      'tesStatu': model.tesStatu,
     });
   }
 
@@ -72,6 +74,7 @@ class CustomerController {
       telNo: snapshot['telNo'] ?? "",
       customerStatu: snapshot['customerStatu'] ?? "",
       agents: snapshot['agents'] ?? [],
+      tesStatu: snapshot['tesStatu'] ?? "0",
       docId: docId,
     );
 

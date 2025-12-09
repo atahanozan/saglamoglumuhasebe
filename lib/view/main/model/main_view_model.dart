@@ -15,6 +15,7 @@ import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.da
 import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/waiting_delivery_docs_view.dart';
 import 'package:saglamoglu_muhasebe/view/home/home_view.dart';
 import 'package:saglamoglu_muhasebe/view/login/login_view.dart';
+import 'package:saglamoglu_muhasebe/view/tesdocs/tesdoc_view.dart';
 
 class MainViewModel extends GetxController {
   static bool get isRegistered => GetInstance().isRegistered<MainViewModel>();
@@ -38,12 +39,14 @@ class MainViewModel extends GetxController {
         NavigationEnums.home,
         NavigationEnums.waitingdeliverydoc,
         NavigationEnums.authorized,
+        NavigationEnums.tesdoc,
       ];
 
   List<Widget> get nonAdminPages => [
         HomeView(),
         WaitingDeliveryDocsView(),
         AuthorizedView(),
+        TesdocView(),
       ];
 
   Rx<NavigationEnums> selectedNavigationEnum = NavigationEnums.home.obs;
@@ -61,6 +64,7 @@ class MainViewModel extends GetxController {
         WaitingDeliveryDocsView(),
         CompDeliveryDocsView(),
         AuthorizedView(),
+        TesdocView(),
       ];
 
   Widget selectedPage(NavigationEnums navEnum) {
@@ -75,6 +79,8 @@ class MainViewModel extends GetxController {
         return CompDeliveryDocsView();
       case NavigationEnums.authorized:
         return AuthorizedView();
+      case NavigationEnums.tesdoc:
+        return TesdocView();
     }
   }
 

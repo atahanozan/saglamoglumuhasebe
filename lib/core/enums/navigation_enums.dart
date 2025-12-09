@@ -7,6 +7,7 @@ enum NavigationEnums {
   waitingdeliverydoc,
   completeddeliverydoc,
   authorized,
+  tesdoc,
 }
 
 extension NavigationEnumsExtension on NavigationEnums {
@@ -22,6 +23,8 @@ extension NavigationEnumsExtension on NavigationEnums {
         return "Tamamlanan Teslimler";
       case NavigationEnums.authorized:
         return "Yetki Belgeleri";
+      case NavigationEnums.tesdoc:
+        return "Tes Belgeleri";
     }
   }
 
@@ -50,6 +53,11 @@ extension NavigationEnumsExtension on NavigationEnums {
       case NavigationEnums.authorized:
         return Icon(
           Icons.contact_page_rounded,
+          color: CustomThemeColors.customWhite,
+        );
+      case NavigationEnums.tesdoc:
+        return Icon(
+          Icons.edit_document,
           color: CustomThemeColors.customWhite,
         );
     }

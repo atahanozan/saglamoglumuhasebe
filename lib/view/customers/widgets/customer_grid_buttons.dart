@@ -22,6 +22,22 @@ class CustomerGridButtons extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        Visibility(
+          visible: dataModel.tesStatu == "0" ? true : false,
+          child: ElevatedButton(
+            onPressed: () {
+              model.startTesOperation(
+                context,
+                customerName,
+                dataModel.tcknvkn,
+                dataModel.telNo,
+                docId,
+                "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.lastName}",
+              );
+            },
+            child: Text("TES"),
+          ),
+        ),
         GestureDetector(
           onTap: () {
             model.changeDocWidth(

@@ -5,6 +5,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:saglamoglu_muhasebe/view/home/model/home_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/add_customer_widget.dart';
+import 'package:saglamoglu_muhasebe/view/main/widgets/add_user_button.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/login_again_widget.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/profile_button.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/side_bar.dart';
@@ -37,12 +38,28 @@ class MainView extends StatelessWidget {
                 ),
               ],
             ),
-            ProfileButton(
-                userName:
-                    "${homeModel.userInfo.value.name.toString()} ${homeModel.userInfo.value.lastName.toString()}",
-                logoutFunc: () {
-                  model.userLogout(context);
-                }),
+            Positioned(
+              top: 10,
+              right: 10,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    child: model.user.thisUser.value.email ==
+                            "ozantokdemir@saglamoglugroup.com"
+                        ? AddUserButton()
+                        : Text(""),
+                  ),
+                  SizedBox(width: 12),
+                  ProfileButton(
+                      userName:
+                          "${homeModel.userInfo.value.name.toString()} ${homeModel.userInfo.value.lastName.toString()}",
+                      logoutFunc: () {
+                        model.userLogout(context);
+                      }),
+                ],
+              ),
+            ),
             model.userAdmin.value.admin == true
                 ? Row(
                     mainAxisSize: MainAxisSize.min,

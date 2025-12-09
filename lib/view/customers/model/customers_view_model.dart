@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/model/authorized_model.dart';
 import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/core/model/doc_models.dart';
+import 'package:saglamoglu_muhasebe/core/model/tesdoc_model.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/authorized_controller.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/customer_controller.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/delivery_doc_controller.dart';
+import 'package:saglamoglu_muhasebe/core/network/modules/tesdoc_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/custom_alert_card.dart';
 
@@ -36,6 +38,7 @@ class CustomersViewModel extends GetxController {
   CustomerController get customerController => CustomerController();
   DeliveryDocController get deliveryDocController => DeliveryDocController();
   AuthorizedController get authorizedController => AuthorizedController();
+  TesdocController get tesdocController => TesdocController();
   AppUser get appUser => AppUser.init;
 
   RxList<CustomerModel> allCustomerData = <CustomerModel>[].obs;
@@ -352,5 +355,115 @@ class CustomersViewModel extends GetxController {
     } else {
       return "${dataModel.agentName.toString()} ${dataModel.agentLastname.toString()}";
     }
+  }
+
+  void startTesOperation(
+    BuildContext context,
+    String? customerName,
+    String? customerTckn,
+    String? customerPhone,
+    String? customerUid,
+    String agentName,
+  ) {
+    DateTime now = DateTime.now();
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                width: 350,
+                height: 400,
+                padding: EdgeInsets.all(12),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "TES sürecini başlatın",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    Spacer(),
+                    ElevatedButton(
+                      onPressed: () {
+                        final tesdocModel = TesdocModel(
+                          id: now.millisecondsSinceEpoch,
+                          dateTime: now.toString(),
+                          customerName: customerName,
+                          customerTckn: customerTckn,
+                          customerPhone: customerPhone,
+                          starterUser: agentName,
+                          ikaStarterUser: agentName,
+                          tesStatu: "1",
+                          ikaStatu: "1",
+                          onlyTes: false,
+                          customerUid: customerUid,
+                          ikaStartDateTime: now.toString(),
+                        );
+                        FirebaseFirestore.instance
+                            .collection("tesdoccustomers")
+                            .doc(tesdocModel.customerTckn)
+                            .set(tesdocModel.toJson());
+                        FirebaseFirestore.instance
+                            .collection("deliverycustomers")
+                            .doc(customerUid)
+                            .update({
+                          "tesStatu": "1",
+                        });
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(MediaQuery.of(context).size.width, 40),
+                      ),
+                      child: Text("TES ve İkametgah Talebi"),
+                    ),
+                    SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        final tesdocModel = TesdocModel(
+                          id: now.millisecondsSinceEpoch,
+                          dateTime: now.toString(),
+                          customerName: customerName,
+                          customerTckn: customerTckn,
+                          customerPhone: customerPhone,
+                          starterUser: agentName,
+                          tesStatu: "1",
+                          ikaStatu: "0",
+                          onlyTes: true,
+                          customerUid: customerUid,
+                        );
+                        FirebaseFirestore.instance
+                            .collection("tesdoccustomers")
+                            .doc(tesdocModel.customerTckn)
+                            .set(tesdocModel.toJson());
+                        FirebaseFirestore.instance
+                            .collection("deliverycustomers")
+                            .doc(customerUid)
+                            .update({
+                          "tesStatu": "1",
+                        });
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(MediaQuery.of(context).size.width, 40),
+                      ),
+                      child: Text("TES Talebi"),
+                    ),
+                    SizedBox(height: 8),
+                    OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        fixedSize: Size(MediaQuery.of(context).size.width, 40),
+                      ),
+                      child: Text("İptal"),
+                    ),
+                  ],
+                ),
+              ),
+            ));
   }
 }

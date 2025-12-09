@@ -15,62 +15,57 @@ class ProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 10,
-      right: 10,
-      child: MenuAnchor(
-        builder: (context, controller, child) {
-          return InkWell(
-            onTap: () {
-              if (controller.isOpen) {
-                controller.close();
-              } else {
-                controller.open();
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: CustomThemeColors.customYellow.c700,
-              ),
-              child: Text(
-                userName.characters.first,
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: CustomThemeColors.customBlack.c700,
-                    ),
-              ),
+    return MenuAnchor(
+      builder: (context, controller, child) {
+        return InkWell(
+          onTap: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: CustomThemeColors.customYellow.c700,
             ),
-          );
-        },
-        menuChildren: [
-          Container(
-            margin: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(userName,
-                    style: Theme.of(context).textTheme.headlineMedium),
-                Divider(),
-                SizedBox(height: 12),
-                TextButton(
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => ChangePasswordView())),
-                  child: Text("Şifre Değiştir"),
-                ),
-                SizedBox(height: 12),
-                TextButton(
-                  onPressed: logoutFunc,
-                  child: Text("Çıkış"),
-                ),
-                SizedBox(height: 12),
-              ],
+            child: Text(
+              userName.characters.first,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    color: CustomThemeColors.customBlack.c700,
+                  ),
             ),
           ),
-        ],
-      ),
+        );
+      },
+      menuChildren: [
+        Container(
+          margin: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(userName, style: Theme.of(context).textTheme.headlineMedium),
+              Divider(),
+              SizedBox(height: 12),
+              TextButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => ChangePasswordView())),
+                child: Text("Şifre Değiştir"),
+              ),
+              SizedBox(height: 12),
+              TextButton(
+                onPressed: logoutFunc,
+                child: Text("Çıkış"),
+              ),
+              SizedBox(height: 12),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

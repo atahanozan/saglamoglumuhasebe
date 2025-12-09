@@ -7,7 +7,7 @@ class CustomerModel {
   String? agentName;
   String? agentLastname;
   String? telNo;
-  String? frontId, customerStatu;
+  String? frontId, customerStatu, tesStatu;
   List<dynamic>? agents;
 
   CustomerModel({
@@ -22,6 +22,7 @@ class CustomerModel {
     this.frontId,
     this.customerStatu,
     this.agents,
+    this.tesStatu,
   });
 
   CustomerModel fromJson(Map<String, dynamic> json) {
@@ -37,6 +38,7 @@ class CustomerModel {
       frontId: json["frontId"],
       customerStatu: json["customerStatu"],
       agents: json["agents"],
+      tesStatu: json["tesStatu"],
     );
   }
 
@@ -53,6 +55,7 @@ class CustomerModel {
       'frontId': frontId,
       'customerStatu': customerStatu,
       'agents': agents,
+      'tesStatu': tesStatu,
     };
   }
 }

@@ -52,7 +52,7 @@ class LoginViewModel extends GetxController {
         var res = await authController.login(
             emailController.text, passwordController.text);
 
-        if (res?.uid != null) {
+        if (res?.uid != null && res?.statu == true) {
           appUser.setUser(res!);
           if (context.mounted) {
             if (res.passwordNew == false) {
