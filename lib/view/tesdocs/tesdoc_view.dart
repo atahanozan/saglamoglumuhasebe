@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
+import 'package:saglamoglu_muhasebe/core/extensions/uppercase_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/core/model/tesdoc_model.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
+import 'package:saglamoglu_muhasebe/core/widgets/search_field.dart';
 import 'package:saglamoglu_muhasebe/view/tesdocs/model/tesdoc_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/tesdocs/widgets/tesdoc_data_line.dart';
 
@@ -12,7 +15,8 @@ class TesdocView extends StatelessWidget {
   Widget build(BuildContext context) {
     final TesdocViewModel model = TesdocViewModel.init;
     return Scaffold(
-      body: Column(
+        body: Obx(
+      () => Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
@@ -23,12 +27,26 @@ class TesdocView extends StatelessWidget {
               color: CustomThemeColors.customBlack.c800,
             ),
             child: Text(
-              "TES ve İkametgah Belgeleri",
+              "KYC ve İkametgah Belgeleri",
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
+          ),
+          SearchField(
+            controller: model.searchContoller,
+            onSearchComplete: () {
+              model.searchWithValue(model.searchContoller.text);
+            },
+            cleanFilter: () {
+              model.clearSearch();
+            },
+            formatters: [
+              UppercaseTextFormatter(),
+            ],
+            backColor: CustomThemeColors.customBlack.c800 ?? Colors.transparent,
+            padding: EdgeInsets.only(bottom: 18),
           ),
           SizedBox(height: 18),
           Padding(
@@ -44,7 +62,7 @@ class TesdocView extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    "TES İşlemleri",
+                    "KYC İşlemleri",
                     style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),
@@ -63,10 +81,7 @@ class TesdocView extends StatelessWidget {
           SizedBox(height: 18),
           Flexible(
               child: StreamBuilder(
-            stream: model.firestore
-                .collection("tesdoccustomers")
-                .limit(20)
-                .snapshots(),
+            stream: model.tesStream.value,
             builder: (context, snapshot) {
               return !snapshot.hasData
                   ? CircularProgressIndicator()
@@ -157,6 +172,6 @@ class TesdocView extends StatelessWidget {
           )),
         ],
       ),
-    );
+    ));
   }
 }

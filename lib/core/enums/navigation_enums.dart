@@ -24,7 +24,7 @@ extension NavigationEnumsExtension on NavigationEnums {
       case NavigationEnums.authorized:
         return "Yetki Belgeleri";
       case NavigationEnums.tesdoc:
-        return "Tes Belgeleri";
+        return "KYC Belgeleri";
     }
   }
 

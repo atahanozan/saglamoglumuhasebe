@@ -12,9 +12,32 @@ class TesdocViewModel extends GetxController {
 
   static TesdocViewModel get instance => Get.find<TesdocViewModel>();
 
+  final TextEditingController searchContoller = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   TesdocController get tesdocController => TesdocController();
   AppUser get appUser => AppUser.init;
+
+  Rx<Stream> tesStream = FirebaseFirestore.instance
+      .collection("tesdoccustomers")
+      .limit(20)
+      .snapshots()
+      .obs;
+
+  void searchWithValue(String searchValue) {
+    tesStream.value = FirebaseFirestore.instance
+        .collection("tesdoccustomers")
+        .where("customerName", isGreaterThanOrEqualTo: searchValue)
+        .limit(20)
+        .snapshots();
+  }
+
+  void clearSearch() {
+    searchContoller.clear();
+    tesStream.value = FirebaseFirestore.instance
+        .collection("tesdoccustomers")
+        .limit(20)
+        .snapshots();
+  }
 
   void deleteTesDoc(
     String user,

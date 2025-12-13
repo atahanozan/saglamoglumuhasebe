@@ -384,7 +384,7 @@ class CustomersViewModel extends GetxController {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "TES sürecini başlatın",
+                      "KYC sürecini başlatın",
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     Spacer(),
@@ -419,7 +419,7 @@ class CustomersViewModel extends GetxController {
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(MediaQuery.of(context).size.width, 40),
                       ),
-                      child: Text("TES ve İkametgah Talebi"),
+                      child: Text("KYC ve İkametgah Talebi"),
                     ),
                     SizedBox(height: 8),
                     ElevatedButton(
@@ -451,7 +451,7 @@ class CustomersViewModel extends GetxController {
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(MediaQuery.of(context).size.width, 40),
                       ),
-                      child: Text("TES Talebi"),
+                      child: Text("KYC Talebi"),
                     ),
                     SizedBox(height: 8),
                     OutlinedButton(

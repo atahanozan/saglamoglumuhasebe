@@ -35,7 +35,7 @@ class CustomerGridButtons extends StatelessWidget {
                 "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.lastName}",
               );
             },
-            child: Text("TES"),
+            child: Text("KYC"),
           ),
         ),
         GestureDetector(
