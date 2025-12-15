@@ -1,9 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:saglamoglu_muhasebe/view/home/model/home_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/main/model/main_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/add_customer_widget.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/add_user_button.dart';
+import 'package:saglamoglu_muhasebe/view/main/widgets/login_again_widget.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/profile_button.dart';
 import 'package:saglamoglu_muhasebe/view/main/widgets/side_bar.dart';
 
@@ -96,23 +99,23 @@ class MainView extends StatelessWidget {
                     ],
                   )
                 : SizedBox(),
-            // model.loginAgain.value == true
-            //      BackdropFilter(
-            //         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-            //         child: Container(
-            //           height: MediaQuery.of(context).size.height,
-            //           width: MediaQuery.of(context).size.width,
-            //           decoration: BoxDecoration(
-            //             color: Colors.white38,
-            //           ),
-            //           child: Center(
-            //             child: LoginAgainWidget(onButtonPressed: () {
-            //               model.userLogout(context);
-            //             }),
-            //           ),
-            //         ),
-            //       )
-            //     : SizedBox(),
+            model.loginAgain.value == true
+                ? BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.white38,
+                      ),
+                      child: Center(
+                        child: LoginAgainWidget(onButtonPressed: () {
+                          model.userLogout(context);
+                        }),
+                      ),
+                    ),
+                  )
+                : SizedBox(),
           ],
         ),
       ),
