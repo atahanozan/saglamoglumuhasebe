@@ -332,18 +332,19 @@ class DeliveryDocsViewModel extends GetxController {
     if (result.length < 10) {
       for (var i = 0; i < result.length; i++) {
         var data = result.elementAt(i);
-
-        PdfController().customerDeliveryDoc(
-            data.name ?? "",
-            data.tcknvkn ?? "",
-            data.company ?? "",
-            data.price ?? "",
-            data.currency ?? "",
-            context,
-            DateTime.parse(data.date ?? "2025-01-01"),
-            false,
-            isDirectPrinting: true,
-            printerName: "Canon GX7000 series");
+        if (context.mounted) {
+          PdfController().customerDeliveryDoc(
+              data.name ?? "",
+              data.tcknvkn ?? "",
+              data.company ?? "",
+              data.price ?? "",
+              data.currency ?? "",
+              context,
+              DateTime.parse(data.date ?? "2025-01-01"),
+              false,
+              isDirectPrinting: true,
+              printerName: "Canon GX7000 series");
+        }
       }
     }
   }

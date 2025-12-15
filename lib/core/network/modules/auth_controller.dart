@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:saglamoglu_muhasebe/core/model/auth_model.dart';
 
 class AuthController {
@@ -68,7 +69,9 @@ class AuthController {
         });
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -76,7 +79,9 @@ class AuthController {
     await newUser.updatePassword(newPassword).then((newValue) {
       return true;
     }).catchError((err) {
-      print(err);
+      if (kDebugMode) {
+        print(err);
+      }
 
       return false;
     });
