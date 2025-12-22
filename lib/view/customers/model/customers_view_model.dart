@@ -392,7 +392,7 @@ class CustomersViewModel extends GetxController {
                       onPressed: () {
                         final tesdocModel = TesdocModel(
                           id: now.millisecondsSinceEpoch,
-                          dateTime: now.toString(),
+                          dateTime: Timestamp.fromDate(now),
                           customerName: customerName,
                           customerTckn: customerTckn,
                           customerPhone: customerPhone,
@@ -402,7 +402,7 @@ class CustomersViewModel extends GetxController {
                           ikaStatu: "1",
                           onlyTes: false,
                           customerUid: customerUid,
-                          ikaStartDateTime: now.toString(),
+                          ikaStartDateTime: Timestamp.fromDate(now),
                         );
                         FirebaseFirestore.instance
                             .collection("tesdoccustomers")
@@ -426,7 +426,7 @@ class CustomersViewModel extends GetxController {
                       onPressed: () {
                         final tesdocModel = TesdocModel(
                           id: now.millisecondsSinceEpoch,
-                          dateTime: now.toString(),
+                          dateTime: Timestamp.fromDate(now),
                           customerName: customerName,
                           customerTckn: customerTckn,
                           customerPhone: customerPhone,

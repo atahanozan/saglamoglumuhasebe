@@ -5,7 +5,6 @@ enum NavigationEnums {
   home,
   customer,
   waitingdeliverydoc,
-  completeddeliverydoc,
   authorized,
   tesdoc,
 }
@@ -19,8 +18,6 @@ extension NavigationEnumsExtension on NavigationEnums {
         return "Müşteriler";
       case NavigationEnums.waitingdeliverydoc:
         return "Bekleyen Teslimler";
-      case NavigationEnums.completeddeliverydoc:
-        return "Tamamlanan Teslimler";
       case NavigationEnums.authorized:
         return "Yetki Belgeleri";
       case NavigationEnums.tesdoc:
@@ -41,11 +38,6 @@ extension NavigationEnumsExtension on NavigationEnums {
           color: CustomThemeColors.customWhite,
         );
       case NavigationEnums.waitingdeliverydoc:
-        return Icon(
-          Icons.list_alt_rounded,
-          color: CustomThemeColors.customWhite,
-        );
-      case NavigationEnums.completeddeliverydoc:
         return Icon(
           Icons.list_alt_rounded,
           color: CustomThemeColors.customWhite,

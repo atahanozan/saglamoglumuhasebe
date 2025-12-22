@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:saglamoglu_muhasebe/core/enums/tesdoc_enums.dart';
 
 class TesdocModel {
   final int? id;
-  final String? dateTime,
-      customerName,
+  final Timestamp? dateTime,
+      ikaStartDateTime,
+      signDateTime,
+      ikaSignDateTime,
+      checkDateTime,
+      ikaCheckDateTime;
+  final String? customerName,
       customerTckn,
       customerPhone,
       starterUser,
@@ -12,11 +18,6 @@ class TesdocModel {
       ikaSignUser,
       checkUser,
       ikaCheckUser,
-      ikaStartDateTime,
-      signDateTime,
-      ikaSignDateTime,
-      checkDateTime,
-      ikaCheckDateTime,
       tesStatu,
       ikaStatu,
       customerUid;
@@ -47,7 +48,7 @@ class TesdocModel {
   factory TesdocModel.fromDocument(Map<String, dynamic> data) {
     return TesdocModel(
       id: data["id"] ?? 0,
-      dateTime: data["dateTime"] ?? '',
+      dateTime: data["dateTime"],
       customerName: data["customerName"] ?? '',
       customerTckn: data["customerTckn"] ?? '',
       customerPhone: data["customerPhone"] ?? '',
@@ -57,11 +58,11 @@ class TesdocModel {
       ikaSignUser: data["ikaSignUser"] ?? '',
       checkUser: data["checkUser"] ?? '',
       ikaCheckUser: data["ikaCheckUser"] ?? '',
-      ikaStartDateTime: data["ikaStartDateTime"] ?? '',
-      signDateTime: data["signDateTime"] ?? '',
-      ikaSignDateTime: data["ikaSignDateTime"] ?? '',
-      checkDateTime: data["checkDateTime"] ?? '',
-      ikaCheckDateTime: data["ikaCheckDateTime"] ?? '',
+      ikaStartDateTime: data["ikaStartDateTime"],
+      signDateTime: data["signDateTime"],
+      ikaSignDateTime: data["ikaSignDateTime"],
+      checkDateTime: data["checkDateTime"],
+      ikaCheckDateTime: data["ikaCheckDateTime"],
       tesStatu: data["tesStatu"] ?? '',
       ikaStatu: data["ikaStatu"] ?? '',
       onlyTes: data["onlyTes"] ?? true,
@@ -120,8 +121,8 @@ class TesdocModel {
   }
 
   String finalDate() {
-    if (dateTime != null && dateTime != "") {
-      DateTime newDate = DateTime.parse(dateTime!);
+    if (dateTime != null) {
+      DateTime newDate = dateTime!.toDate();
       String day =
           newDate.day < 10 ? "0${newDate.day}" : newDate.day.toString();
       String month =
@@ -134,8 +135,8 @@ class TesdocModel {
   }
 
   String finalIkaDate() {
-    if (ikaStartDateTime != null && ikaStartDateTime != "") {
-      DateTime newDate = DateTime.parse(ikaStartDateTime!);
+    if (ikaStartDateTime != null) {
+      DateTime newDate = ikaStartDateTime!.toDate();
       String day =
           newDate.day < 10 ? "0${newDate.day}" : newDate.day.toString();
       String month =
@@ -148,8 +149,8 @@ class TesdocModel {
   }
 
   String finalsignDate() {
-    if (signDateTime != null && signDateTime != "") {
-      DateTime newDate = DateTime.parse(signDateTime!);
+    if (signDateTime != null) {
+      DateTime newDate = signDateTime!.toDate();
       String day =
           newDate.day < 10 ? "0${newDate.day}" : newDate.day.toString();
       String month =
@@ -162,8 +163,8 @@ class TesdocModel {
   }
 
   String finalIkaSignDate() {
-    if (ikaSignDateTime != null && ikaSignDateTime != "") {
-      DateTime newDate = DateTime.parse(ikaSignDateTime!);
+    if (ikaSignDateTime != null) {
+      DateTime newDate = ikaSignDateTime!.toDate();
       String day =
           newDate.day < 10 ? "0${newDate.day}" : newDate.day.toString();
       String month =
@@ -176,8 +177,8 @@ class TesdocModel {
   }
 
   String finalCheckDate() {
-    if (checkDateTime != null && checkDateTime != "") {
-      DateTime newDate = DateTime.parse(checkDateTime!);
+    if (checkDateTime != null) {
+      DateTime newDate = checkDateTime!.toDate();
       String day =
           newDate.day < 10 ? "0${newDate.day}" : newDate.day.toString();
       String month =
@@ -190,8 +191,8 @@ class TesdocModel {
   }
 
   String finalIkaCheckDate() {
-    if (ikaCheckDateTime != null && ikaCheckDateTime != "") {
-      DateTime newDate = DateTime.parse(ikaCheckDateTime!);
+    if (ikaCheckDateTime != null) {
+      DateTime newDate = ikaCheckDateTime!.toDate();
       String day =
           newDate.day < 10 ? "0${newDate.day}" : newDate.day.toString();
       String month =

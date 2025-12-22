@@ -39,8 +39,16 @@ class DeliveryDocsViewModel extends GetxController {
     update();
   }
 
-  Future<void> getAllData() async {
-    var res = await deliveryController.getDeliverDocList(false);
+  RxBool docStatuInfo = false.obs;
+
+  void changeDocStatuInfo(bool newStatu) {
+    docStatuInfo.value = newStatu;
+    deliveryStream.value =
+        deliveryController.deliveryDocStream(newStatu, 0, "", "");
+  }
+
+  Future<void> getAllData(bool newStatu) async {
+    var res = await deliveryController.getDeliverDocList(newStatu);
 
     finalWaitingData = res.obs;
     update();
@@ -112,115 +120,57 @@ class DeliveryDocsViewModel extends GetxController {
   RxString companyFilter = "".obs;
   RxString seacrhFilterContent = "".obs;
   RxString priceFilterContent = "".obs;
-  RxBool isDated = false.obs;
   RxString dateFilter = DateTime.now().toString().split(" ")[0].obs;
+  Rx<DateTime> filteredDate = DateTime.now().obs;
 
-  Rx<Query<Map<String, dynamic>>> deliveryStream = FirebaseFirestore.instance
-      .collection("deliverydocs")
-      .where("statu", isEqualTo: false)
-      .orderBy("id", descending: true)
-      .obs;
+  Rx<Stream> deliveryStream =
+      DeliveryDocController().deliveryDocStream(false, 0, "", "").obs;
 
-  Future<void> setDeliveryDocStream({
-    String newCompanyFilter = "",
-    String newSearchFilter = "",
-    String newPriceFilter = "",
-    bool newIsDated = false,
-    String newDateFilter = "",
-    DeliveryDocStreamFilterEnums filterEnum =
-        DeliveryDocStreamFilterEnums.clean,
-  }) async {
-    var documentData = FirebaseFirestore.instance
-        .collection("deliverydocs")
-        .where("statu", isEqualTo: false);
+  void searchDeliverDoc(
+    bool newStatu,
+    String filterName,
+    String filterValue,
+  ) {
+    var res = deliveryController.deliveryDocStream(
+        newStatu, 1, filterName, filterValue);
+    deliveryStream.value = res;
+  }
 
-    if (newIsDated == true && newCompanyFilter.isNotEmpty) {
-      var res = documentData
-          .where("company", isEqualTo: newCompanyFilter)
-          .where("date", isEqualTo: newDateFilter);
+  void filterDeliveryDoc(
+    bool newStatu,
+    String filterName,
+    String filterValue,
+  ) {
+    var res = deliveryController.deliveryDocStream(
+        newStatu, 2, filterName, filterValue);
 
-      if (filterEnum == DeliveryDocStreamFilterEnums.search) {
-        var data =
-            await res.where("name", isEqualTo: newSearchFilter).count().get();
+    deliveryStream.value = res;
+  }
 
-        deliveryStream.value = data.count! > 0
-            ? res.where("name", isEqualTo: newSearchFilter)
-            : res.where("name", isGreaterThanOrEqualTo: newSearchFilter);
-        update();
-      } else if (filterEnum == DeliveryDocStreamFilterEnums.price) {
-        deliveryStream.value =
-            res.where("price", isGreaterThanOrEqualTo: newPriceFilter);
-        update();
-      } else {
-        deliveryStream.value = res;
-        update();
-      }
-    } else if (newIsDated == true && newCompanyFilter.isEmpty) {
-      var res = documentData.where("date", isEqualTo: newDateFilter);
+  Future<void> setFilterDate(
+      BuildContext context, DateTime selectedDate) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2025),
+      lastDate: DateTime.now(),
+    );
 
-      if (filterEnum == DeliveryDocStreamFilterEnums.search) {
-        var data =
-            await res.where("name", isEqualTo: newSearchFilter).count().get();
-
-        deliveryStream.value = data.count! > 0
-            ? res.where("name", isEqualTo: newSearchFilter)
-            : res.where("name", isGreaterThanOrEqualTo: newSearchFilter);
-        update();
-      } else if (filterEnum == DeliveryDocStreamFilterEnums.price) {
-        deliveryStream.value =
-            res.where("price", isGreaterThanOrEqualTo: newPriceFilter);
-        update();
-      } else {
-        deliveryStream.value = res;
-        update();
-      }
-    } else if (newIsDated == false && newCompanyFilter.isNotEmpty) {
-      var res = documentData.where("company", isEqualTo: newCompanyFilter);
-
-      if (filterEnum == DeliveryDocStreamFilterEnums.search) {
-        var data =
-            await res.where("name", isEqualTo: newSearchFilter).count().get();
-
-        deliveryStream.value = data.count! > 0
-            ? res.where("name", isEqualTo: newSearchFilter)
-            : res.where("name", isGreaterThanOrEqualTo: newSearchFilter);
-        update();
-      } else if (filterEnum == DeliveryDocStreamFilterEnums.price) {
-        deliveryStream.value =
-            res.where("price", isGreaterThanOrEqualTo: newPriceFilter);
-        update();
-      } else {
-        deliveryStream.value = res;
-        update();
-      }
-    } else {
-      if (filterEnum == DeliveryDocStreamFilterEnums.search) {
-        var data = await documentData
-            .where("name", isEqualTo: newSearchFilter)
-            .count()
-            .get();
-
-        deliveryStream.value = data.count! > 0
-            ? documentData.where("name", isEqualTo: newSearchFilter)
-            : documentData.where("name",
-                isGreaterThanOrEqualTo: newSearchFilter);
-        update();
-      } else if (filterEnum == DeliveryDocStreamFilterEnums.price) {
-        deliveryStream.value =
-            documentData.where("price", isGreaterThanOrEqualTo: newPriceFilter);
-        update();
-      } else {
-        deliveryStream.value = documentData;
-        update();
-      }
-      update();
+    if (pickedDate != null && pickedDate != selectedDate) {
+      filteredDate.value = pickedDate;
     }
-    update();
+  }
+
+  void changeCompanyFilter(String newCompany) {
+    companyFilter.value = newCompany;
   }
 
   Future<List<DeliveryDocModel>> deliverDocsFilteryExcelFilteredData(
-      Query<Map<String, dynamic>> queryData) async {
-    var res = await queryData.get();
+      bool newStatu) async {
+    var res = await FirebaseFirestore.instance
+        .collection("deliverydocs")
+        .where("statu", isEqualTo: newStatu)
+        .get();
 
     var result = res.docs
         .map((docsData) => DeliveryDocModel.fromDocument(docsData.data()))
@@ -229,7 +179,7 @@ class DeliveryDocsViewModel extends GetxController {
     return result;
   }
 
-  void cleanDataFilter() {
+  void cleanDataFilter(bool newStatu) {
     filterType.value = DeliveryDocStreamFilterEnums.clean;
     searchController.clear();
     priceController.clear();
@@ -238,34 +188,8 @@ class DeliveryDocsViewModel extends GetxController {
     dateFilter.value = DateTime.now().toString().split(" ")[0];
     seacrhFilterContent.value = "";
     priceFilterContent.value = "";
-    isDated.value = false;
-    deliveryStream.value = FirebaseFirestore.instance
-        .collection("deliverydocs")
-        .where("statu", isEqualTo: false)
-        .orderBy("id", descending: true);
-    update();
-  }
-
-  Future<void> updateDataFilterWithDate(
-    BuildContext context,
-  ) async {
-    var newDate = await showDatePicker(
-      context: context,
-      firstDate: DateTime(2020, 1, 1),
-      lastDate: DateTime(2040, 1, 1),
-      initialDate: DateTime.parse(dateFilter.value),
-    );
-
-    dateFilter.value = newDate.toString().split(" ")[0];
-
-    filterType.value = DeliveryDocStreamFilterEnums.date;
-    isDated.value = true;
-    setDeliveryDocStream(
-        newIsDated: true,
-        newDateFilter: newDate.toString().split(" ")[0],
-        newCompanyFilter: companyFilter.value);
-
-    update();
+    deliveryStream.value =
+        deliveryController.deliveryDocStream(newStatu, 0, "", "");
   }
 
   void deleteDeliveryDoc(

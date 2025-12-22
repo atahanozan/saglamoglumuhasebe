@@ -7,11 +7,15 @@ class ProfileButton extends StatelessWidget {
   const ProfileButton({
     super.key,
     required this.userName,
+    required this.usersVisibility,
     required this.logoutFunc,
+    required this.usersFunc,
   });
 
   final String userName;
+  final bool usersVisibility;
   final VoidCallback logoutFunc;
+  final VoidCallback usersFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +54,14 @@ class ProfileButton extends StatelessWidget {
             children: [
               Text(userName, style: Theme.of(context).textTheme.headlineMedium),
               Divider(),
+              SizedBox(height: 12),
+              Visibility(
+                visible: usersVisibility,
+                child: TextButton(
+                  onPressed: usersFunc,
+                  child: Text("Kullanıcılar"),
+                ),
+              ),
               SizedBox(height: 12),
               TextButton(
                 onPressed: () => Navigator.push(context,

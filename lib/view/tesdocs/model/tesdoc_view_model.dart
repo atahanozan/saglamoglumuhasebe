@@ -17,26 +17,23 @@ class TesdocViewModel extends GetxController {
   TesdocController get tesdocController => TesdocController();
   AppUser get appUser => AppUser.init;
 
-  Rx<Stream> tesStream = FirebaseFirestore.instance
-      .collection("tesdoccustomers")
-      .limit(20)
-      .snapshots()
-      .obs;
+  Rx<Stream> tesStream = TesdocController().tesDocStream(0, "", "").obs;
+  RxString filterStatu = "".obs;
 
   void searchWithValue(String searchValue) {
-    tesStream.value = FirebaseFirestore.instance
-        .collection("tesdoccustomers")
-        .where("customerName", isGreaterThanOrEqualTo: searchValue)
-        .limit(20)
-        .snapshots();
+    tesStream.value =
+        tesdocController.tesDocStream(2, "customerName", searchValue);
   }
 
   void clearSearch() {
     searchContoller.clear();
-    tesStream.value = FirebaseFirestore.instance
-        .collection("tesdoccustomers")
-        .limit(20)
-        .snapshots();
+    tesStream.value = tesdocController.tesDocStream(0, "", "");
+    filterStatu.value = "";
+  }
+
+  void filterData(String filterName, String? filterValue) {
+    tesStream.value = tesdocController.tesDocStream(1, filterName, filterValue);
+    filterStatu.value = "$filterName-$filterValue";
   }
 
   void deleteTesDoc(
@@ -56,25 +53,7 @@ class TesdocViewModel extends GetxController {
         ),
       );
     } else {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text(
-              "${tesdocModel.customerName} isimli müşteri için açılan talep silinecektir."),
-          actions: [
-            OutlinedButton(
-                onPressed: () => Navigator.pop(context), child: Text("İptal")),
-            ElevatedButton(
-                onPressed: () async {
-                  var res = await tesdocController.deleteData(tesdocModel);
-                  if (res && context.mounted) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text("Sil")),
-          ],
-        ),
-      );
+      tesdocController.deleteData(tesdocModel, context);
     }
   }
 
@@ -83,25 +62,6 @@ class TesdocViewModel extends GetxController {
     BuildContext context,
     String? docId,
   ) {
-    showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              title: Text("Müşteri durumu güncellenecek onaylıyor musunuz?"),
-              actions: [
-                OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text("İptal"),
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      var res =
-                          await tesdocController.updateData(newData, docId);
-                      if (res && context.mounted) {
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text("Evet"))
-              ],
-            ));
+    tesdocController.updateData(newData, docId, context);
   }
 }

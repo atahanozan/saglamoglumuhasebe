@@ -179,22 +179,41 @@ class DeliveryDocGridWidget extends StatelessWidget {
       ),
       secondTransaction: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.red.shade50,
-          foregroundColor: Colors.red.shade800,
-          side: BorderSide(color: Colors.red.shade800),
+          backgroundColor: model.docStatuInfo.value == false
+              ? Colors.red.shade50
+              : Colors.green.shade50,
+          foregroundColor: model.docStatuInfo.value == false
+              ? Colors.red.shade800
+              : Colors.green.shade800,
+          side: BorderSide(
+              color: model.docStatuInfo.value == false
+                  ? Colors.red.shade800
+                  : Colors.green.shade800),
         ),
         onPressed: () {
           if (model.appUser.thisUser.value.admin == true) {
-            model.updateDocStatu(
-              docId,
-              true,
-              context,
-              DateTime.now().toString().split(" ")[0],
-              dataModel,
-            );
+            if (model.docStatuInfo.value == false) {
+              model.updateDocStatu(
+                docId,
+                true,
+                context,
+                DateTime.now().toString().split(" ")[0],
+                dataModel,
+              );
+            } else {
+              model.updateDocStatu(
+                docId,
+                false,
+                context,
+                DateTime.now().toString().split(" ")[0],
+                dataModel,
+              );
+            }
           }
         },
-        child: Text("İmzalı Döküman Bekleniyor"),
+        child: model.docStatuInfo.value == false
+            ? Text("İmzalı Döküman Bekleniyor")
+            : Text("Döküman Teslim Alındı"),
       ),
     );
   }

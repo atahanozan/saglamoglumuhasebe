@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:saglamoglu_muhasebe/core/enums/delivery_doc_stream_filter_enums.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/money_text_formatter.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
 
@@ -12,9 +11,8 @@ class PriceFilter extends StatelessWidget {
     return TextField(
       controller: model.priceController,
       onEditingComplete: () {
-        model.setDeliveryDocStream(
-            filterEnum: DeliveryDocStreamFilterEnums.price,
-            newPriceFilter: model.priceController.text);
+        model.searchDeliverDoc(
+            model.docStatuInfo.value, "price", model.priceController.text);
       },
       inputFormatters: [
         MoneyTextFormatter(),

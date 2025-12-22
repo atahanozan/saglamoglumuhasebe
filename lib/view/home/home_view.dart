@@ -3,8 +3,8 @@ import 'package:get/state_manager.dart';
 import 'package:saglamoglu_muhasebe/view/home/model/home_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/home/widgets/data_info_card.dart';
 import 'package:saglamoglu_muhasebe/view/home/widgets/data_info_grid.dart';
-import 'package:saglamoglu_muhasebe/view/home/widgets/delivery_doc_line.dart';
 import 'package:saglamoglu_muhasebe/view/home/widgets/header_line_widget.dart';
+import 'package:saglamoglu_muhasebe/view/home/widgets/kyc_info_card.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -16,6 +16,8 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () => Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HeaderLineWidget(userName: model.userInfo.value.name ?? ""),
             DataInfoGrid(
@@ -24,11 +26,8 @@ class HomeView extends StatelessWidget {
                 completedData: model.copmleteDeliveryDocCount.toString(),
                 totalData: model.totalDeliveryDocCount.toString(),
               ),
-              secondWidget: DeliveryDocLine(
-                dataCount: model.deliveryDocDailyCount.length.toString(),
-                listLenght: model.deliveryDocDailyCount.length,
-                xData: model.deliveryDocDays,
-                yData: model.deliveryDocDailyCount,
+              secondWidget: KycInfoCard(
+                model: model,
               ),
             ),
           ],

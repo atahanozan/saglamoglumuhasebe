@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saglamoglu_muhasebe/core/enums/delivery_doc_stream_filter_enums.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/excel/download_docs_excel.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/widgets/all_filters_widget.dart';
@@ -24,61 +23,71 @@ class WaitingDeliveryDocsView extends StatelessWidget {
             children: [
               ListFilters(
                 onFilterComplete: () {
-                  model.setDeliveryDocStream(
-                      newCompanyFilter: model.companyFilter.value,
-                      newDateFilter: model.dateFilter.value,
-                      newIsDated: model.isDated.value,
-                      filterEnum: DeliveryDocStreamFilterEnums.search,
-                      newSearchFilter: model.searchController.text);
+                  model.searchDeliverDoc(model.docStatuInfo.value, "name",
+                      model.searchController.text);
                 },
                 filterClean: () {
-                  model.cleanDataFilter();
+                  model.cleanDataFilter(model.docStatuInfo.value);
                 },
               ),
               Obx(
                 () => AllFiltersWidget(
-                  datePickFunc: () {
-                    model.updateDataFilterWithDate(context);
+                  datePickFunc: () async {
+                    await model.setFilterDate(
+                        context, model.filteredDate.value);
+                    if (!model.docStatuInfo.value) {
+                      model.searchDeliverDoc(
+                        model.docStatuInfo.value,
+                        "date",
+                        model.filteredDate.value.toString().split(" ")[0],
+                      );
+                    } else {
+                      model.searchDeliverDoc(
+                        model.docStatuInfo.value,
+                        "lastEditedDate",
+                        model.filteredDate.value.toString().split(" ")[0],
+                      );
+                    }
                   },
-                  btnDate: model.dateFilter.value,
+                  btnDate: model.filteredDate.value.toString().split(" ")[0],
                   valueName: model.companyFilter.value,
                   saglamFunc: () {
-                    model.setDeliveryDocStream(
-                      newCompanyFilter: "Sağlam",
-                      newDateFilter: model.dateFilter.value,
-                      newIsDated: model.isDated.value,
+                    model.changeCompanyFilter("Sağlam");
+                    model.filterDeliveryDoc(
+                      model.docStatuInfo.value,
+                      "company",
+                      "Sağlam",
                     );
                   },
                   elminaFunc: () {
-                    model.setDeliveryDocStream(
-                      newCompanyFilter: "Elmina",
-                      newDateFilter: model.dateFilter.value,
-                      newIsDated: model.isDated.value,
+                    model.changeCompanyFilter("Elmina");
+                    model.filterDeliveryDoc(
+                      model.docStatuInfo.value,
+                      "company",
+                      "Elmina",
                     );
                   },
                   saglamKiymetliFunc: () {
-                    model.setDeliveryDocStream(
-                      newCompanyFilter: "Sağlam Kıymetli",
-                      newDateFilter: model.dateFilter.value,
-                      newIsDated: model.isDated.value,
+                    model.changeCompanyFilter("Sağlam Kıymetli");
+                    model.filterDeliveryDoc(
+                      model.docStatuInfo.value,
+                      "company",
+                      "Sağlam Kıymetli",
                     );
                   },
                   controller: model.priceController,
                   clearFilter: () {
-                    model.cleanDataFilter();
+                    model.cleanDataFilter(model.docStatuInfo.value);
                   },
                   openfilterTab: () {
                     model.changeFilterTabStatu();
                   },
                   filterTabStatu: model.filterTabStatu.value,
                   priceFilterFunc: () {
-                    model.setDeliveryDocStream(
-                        newCompanyFilter: model.companyFilter.value,
-                        newDateFilter: model.dateFilter.value,
-                        newIsDated: model.isDated.value,
-                        filterEnum: DeliveryDocStreamFilterEnums.price,
-                        newPriceFilter: model.priceController.text);
+                    model.searchDeliverDoc(model.docStatuInfo.value, "price",
+                        model.priceController.text);
                   },
+                  model: model,
                 ),
               ),
               Headers(),
@@ -86,7 +95,7 @@ class WaitingDeliveryDocsView extends StatelessWidget {
               Flexible(
                 child: Obx(
                   () => StreamBuilder(
-                    stream: model.deliveryStream.value.limit(20).snapshots(),
+                    stream: model.deliveryStream.value,
                     builder: (context, snapshot) {
                       return !snapshot.hasData
                           ? CircularProgressIndicator()
@@ -117,7 +126,7 @@ class WaitingDeliveryDocsView extends StatelessWidget {
               dataStatu: false,
               isTotal: false,
               docList: model.deliverDocsFilteryExcelFilteredData(
-                  model.deliveryStream.value),
+                  model.docStatuInfo.value),
             );
           })
         ],

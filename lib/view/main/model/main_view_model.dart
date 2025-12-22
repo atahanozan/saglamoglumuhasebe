@@ -9,7 +9,6 @@ import 'package:saglamoglu_muhasebe/core/model/customer_model.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/customer_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/authorized_view.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/compdeliverydocs/comp_delivery_docs_view.dart';
 import 'package:saglamoglu_muhasebe/view/customers/customers_view.dart';
 import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/waiting_delivery_docs_view.dart';
@@ -62,7 +61,6 @@ class MainViewModel extends GetxController {
         HomeView(),
         CustomersView(),
         WaitingDeliveryDocsView(),
-        CompDeliveryDocsView(),
         AuthorizedView(),
         TesdocView(),
       ];
@@ -75,8 +73,6 @@ class MainViewModel extends GetxController {
         return CustomersView();
       case NavigationEnums.waitingdeliverydoc:
         return WaitingDeliveryDocsView();
-      case NavigationEnums.completeddeliverydoc:
-        return CompDeliveryDocsView();
       case NavigationEnums.authorized:
         return AuthorizedView();
       case NavigationEnums.tesdoc:

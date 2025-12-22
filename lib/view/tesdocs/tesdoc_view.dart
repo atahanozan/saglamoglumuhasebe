@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/extensions/colors_extension.dart';
@@ -6,6 +7,7 @@ import 'package:saglamoglu_muhasebe/core/model/tesdoc_model.dart';
 import 'package:saglamoglu_muhasebe/core/theme/custom_colors.dart';
 import 'package:saglamoglu_muhasebe/core/widgets/search_field.dart';
 import 'package:saglamoglu_muhasebe/view/tesdocs/model/tesdoc_view_model.dart';
+import 'package:saglamoglu_muhasebe/view/tesdocs/widgets/filter_section.dart';
 import 'package:saglamoglu_muhasebe/view/tesdocs/widgets/tesdoc_data_line.dart';
 
 class TesdocView extends StatelessWidget {
@@ -19,21 +21,6 @@ class TesdocView extends StatelessWidget {
       () => Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            height: 100,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: CustomThemeColors.customBlack.c800,
-            ),
-            child: Text(
-              "KYC ve İkametgah Belgeleri",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineLarge
-                  ?.copyWith(color: Colors.white),
-            ),
-          ),
           SearchField(
             controller: model.searchContoller,
             onSearchComplete: () {
@@ -46,8 +33,9 @@ class TesdocView extends StatelessWidget {
               UppercaseTextFormatter(),
             ],
             backColor: CustomThemeColors.customBlack.c800 ?? Colors.transparent,
-            padding: EdgeInsets.only(bottom: 18),
+            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 12),
           ),
+          FilterSection(model: model),
           SizedBox(height: 18),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -104,8 +92,9 @@ class TesdocView extends StatelessWidget {
                               model.updateTesDoc({
                                 "ikaStatu": "1",
                                 "ikaStarterUser":
-                                    "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.name}",
-                                "ikaStartDateTime": DateTime.now().toString(),
+                                    "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.lastName}",
+                                "ikaStartDateTime":
+                                    Timestamp.fromDate(DateTime.now()),
                               }, context, snapData.id);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -118,8 +107,9 @@ class TesdocView extends StatelessWidget {
                               model.updateTesDoc({
                                 "tesStatu": "2",
                                 "signUser":
-                                    "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.name}",
-                                "signDateTime": DateTime.now().toString(),
+                                    "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.lastName}",
+                                "signDateTime":
+                                    Timestamp.fromDate(DateTime.now()),
                               }, context, snapData.id);
                             }
                           },
@@ -128,8 +118,9 @@ class TesdocView extends StatelessWidget {
                               model.updateTesDoc({
                                 "ikaStatu": "2",
                                 "ikaSignUser":
-                                    "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.name}",
-                                "ikaSignDateTime": DateTime.now().toString(),
+                                    "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.lastName}",
+                                "ikaSignDateTime":
+                                    Timestamp.fromDate(DateTime.now()),
                               }, context, snapData.id);
                             }
                           },
@@ -139,8 +130,9 @@ class TesdocView extends StatelessWidget {
                                 model.updateTesDoc({
                                   "tesStatu": "3",
                                   "checkUser":
-                                      "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.name}",
-                                  "checkDateTime": DateTime.now().toString(),
+                                      "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.lastName}",
+                                  "checkDateTime":
+                                      Timestamp.fromDate(DateTime.now()),
                                 }, context, snapData.id);
                               }
                             } else {
@@ -155,8 +147,9 @@ class TesdocView extends StatelessWidget {
                                 model.updateTesDoc({
                                   "ikaStatu": "3",
                                   "ikaCheckUser":
-                                      "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.name}",
-                                  "ikaCheckDateTime": DateTime.now().toString(),
+                                      "${model.appUser.thisUser.value.name} ${model.appUser.thisUser.value.lastName}",
+                                  "ikaCheckDateTime":
+                                      Timestamp.fromDate(DateTime.now()),
                                 }, context, snapData.id);
                               }
                             } else {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,19 @@ class LoginView extends StatelessWidget {
                     TextFormField(
                       controller: model.emailController,
                       onEditingComplete: () {
-                        model.login(context);
+                        if (kDebugMode) {
+                          model.login(
+                            context,
+                            "ozantokdemir@saglamoglugroup.com",
+                            "123456",
+                          );
+                        } else {
+                          model.login(
+                            context,
+                            model.emailController.text,
+                            model.passwordController.text,
+                          );
+                        }
                       },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -68,7 +81,19 @@ class LoginView extends StatelessWidget {
                         controller: model.passwordController,
                         obscureText: model.obsecureText.value,
                         onEditingComplete: () {
-                          model.login(context);
+                          if (kDebugMode) {
+                            model.login(
+                              context,
+                              "ozantokdemir@saglamoglugroup.com",
+                              "123456",
+                            );
+                          } else {
+                            model.login(
+                              context,
+                              model.emailController.text,
+                              model.passwordController.text,
+                            );
+                          }
                         },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -89,7 +114,19 @@ class LoginView extends StatelessWidget {
                     SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: () {
-                        model.login(context);
+                        if (kDebugMode) {
+                          model.login(
+                            context,
+                            "ozantokdemir@saglamoglugroup.com",
+                            "123456",
+                          );
+                        } else {
+                          model.login(
+                            context,
+                            model.emailController.text,
+                            model.passwordController.text,
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(

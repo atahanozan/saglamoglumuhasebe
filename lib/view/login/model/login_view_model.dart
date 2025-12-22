@@ -42,15 +42,15 @@ class LoginViewModel extends GetxController {
     errBoxVisibility.value = false;
   }
 
-  Future<void> login(BuildContext context) async {
-    if (emailController.text.isEmpty) {
+  Future<void> login(
+      BuildContext context, String email, String password) async {
+    if (emailController.text.isEmpty && !kDebugMode) {
       showErrBox("Lütfen geçerli bir email adresi giriniz.");
-    } else if (passwordController.text.isEmpty) {
+    } else if (passwordController.text.isEmpty && !kDebugMode) {
       showErrBox("Lütfen şifrenizi giriniz.");
     } else {
       if (formKey.currentState!.validate()) {
-        var res = await authController.login(
-            emailController.text, passwordController.text);
+        var res = await authController.login(email, password);
 
         if (res?.uid != null && res?.statu == true) {
           appUser.setUser(res!);

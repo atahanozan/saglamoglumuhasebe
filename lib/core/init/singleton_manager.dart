@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/view/adduser/model/add_user_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/model/authorized_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/changepassword/model/change_passwor_view_model.dart';
-import 'package:saglamoglu_muhasebe/view/deliverydocs/compdeliverydocs/model/comp_delivery_docs_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/deliverydocs/waitingdeliverydoc/model/delivery_docs_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/home/model/home_view_model.dart';
@@ -21,7 +20,6 @@ class SingletonManager {
     Get.put(LoginViewModel());
     Get.put(MainViewModel());
     Get.put(SplashViewModel());
-    Get.put(CompDeliveryDocsViewModel());
     Get.put(ChangePassworViewModel());
     Get.put(DoubleLoginViewModel());
     Get.put(AddUserViewModel());
