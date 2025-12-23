@@ -31,7 +31,11 @@ class TesdocDataLine extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
       decoration: BoxDecoration(
-        color: Color(0xffE0E0E0),
+        color: DateTime.now().difference(model.dateTime!.toDate()) >
+                    const Duration(hours: 12) &&
+                model.tesStatu == "1"
+            ? Colors.red.shade100
+            : Color(0xffE0E0E0),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

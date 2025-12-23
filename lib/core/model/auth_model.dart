@@ -17,7 +17,7 @@ class AuthModel {
     return AuthModel(
       email: json["email"],
       name: json["name"],
-      lastName: json["lastName"],
+      lastName: json["lastname"],
       uid: json["uid"],
       date: json["date"],
       admin: json["admin"],
@@ -30,12 +30,20 @@ class AuthModel {
     return {
       'email': email,
       'name': name,
-      'lastName': lastName,
+      'lastname': lastName,
       'uid': uid,
       'date': date,
       'admin': admin,
       'passwordNew': passwordNew,
       'statu': statu,
     };
+  }
+
+  String userCompany() {
+    if (admin == true) {
+      return "Merkez";
+    } else {
+      return "Şube";
+    }
   }
 }

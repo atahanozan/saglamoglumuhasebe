@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:saglamoglu_muhasebe/core/model/auth_model.dart';
 
 class AuthController {
@@ -10,29 +11,39 @@ class AuthController {
   Future<AuthModel?> login(
     String email,
     String password,
+    BuildContext context,
   ) async {
-    var response = await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-
-    if (response.user == null) {
-      return AuthModel();
-    } else {
-      var user =
-          await _firestore.collection("users").doc(response.user?.uid).get();
-
-      var result = AuthModel(
+    try {
+      var response = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
-        name: user["name"],
-        lastName: user["lastname"],
-        uid: response.user?.uid,
-        admin: user["admin"],
-        passwordNew: user["passwordNew"],
-        statu: user["statu"],
+        password: password,
       );
 
-      return result;
+      if (response.user == null) {
+        return AuthModel();
+      } else {
+        var user =
+            await _firestore.collection("users").doc(response.user?.uid).get();
+
+        var result = AuthModel(
+          email: email,
+          name: user["name"],
+          lastName: user["lastname"],
+          uid: response.user?.uid,
+          admin: user["admin"],
+          passwordNew: user["passwordNew"],
+          statu: user["statu"],
+        );
+
+        return result;
+      }
+    } on FirebaseAuthException catch (err) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(err.code)));
+      }
+
+      return AuthModel();
     }
   }
 
@@ -57,16 +68,10 @@ class AuthController {
           passwordNew: true,
           statu: true,
         );
-        _firestore.collection("users").doc(user.user?.uid).set({
-          "uid": newUser.uid,
-          "name": newUser.name,
-          "lastname": newUser.lastName,
-          "email": newUser.email,
-          "date": newUser.date,
-          "admin": newUser.admin,
-          "passwordNew": newUser.passwordNew,
-          "statu": newUser.statu,
-        });
+        _firestore
+            .collection("users")
+            .doc(user.user?.uid)
+            .set(newUser.toJson());
       }
     } catch (e) {
       if (kDebugMode) {
@@ -97,5 +102,21 @@ class AuthController {
     _firestore.collection('users').doc(uid).update({
       "statu": false,
     });
+  }
+
+  Future<void> updateUserInfo(
+    String? userUid,
+    Map<String, dynamic> newData,
+    BuildContext context,
+  ) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userUid)
+        .update(newData);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Kullanıcı bilgisi güncellendi.")));
+    }
   }
 }

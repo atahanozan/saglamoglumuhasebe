@@ -50,12 +50,12 @@ class LoginViewModel extends GetxController {
       showErrBox("Lütfen şifrenizi giriniz.");
     } else {
       if (formKey.currentState!.validate()) {
-        var res = await authController.login(email, password);
+        var res = await authController.login(email, password, context);
 
         if (res?.uid != null && res?.statu == true) {
           appUser.setUser(res!);
           if (context.mounted) {
-            if (res.passwordNew == false) {
+            if (res.passwordNew == true) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

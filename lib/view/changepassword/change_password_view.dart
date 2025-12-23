@@ -50,18 +50,33 @@ class ChangePasswordView extends StatelessWidget {
                   },
                   inputFormatter: [
                     TextInputFormatter.withFunction((oldText, newText) {
-                      if (newText.text.contains(RegExp(r'[a-zA-Z]'))) {
+                      if (newText.text.contains(RegExp(r'^(?=.*?[a-zA-Z])'))) {
                         model.changeContainLetter(true);
                       }
-                      if (newText.text.contains(RegExp(r'[0-9]'))) {
+                      if (newText.text.contains(RegExp(r'^(?=.*?[0-9])'))) {
                         model.changeContainNumber(true);
                       }
-                      if (newText.text.contains(RegExp(r'[!#+=?-_.,*%]'))) {
+                      if (newText.text
+                          .contains(RegExp(r'^(?=.*?[!@#\$&*~])'))) {
                         model.changeContainSpecialCharacter(true);
                       }
 
                       if (newText.text.characters.length > 7) {
                         model.changeIsLongerEnough(true);
+                      }
+                      if (!newText.text.contains(RegExp(r'^(?=.*?[a-zA-Z])'))) {
+                        model.changeContainLetter(false);
+                      }
+                      if (!newText.text.contains(RegExp(r'^(?=.*?[0-9])'))) {
+                        model.changeContainNumber(false);
+                      }
+                      if (!newText.text
+                          .contains(RegExp(r'^(?=.*?[!@#\$&*~])'))) {
+                        model.changeContainSpecialCharacter(false);
+                      }
+
+                      if (newText.text.characters.length <= 7) {
+                        model.changeIsLongerEnough(false);
                       }
                       return newText;
                     })
@@ -112,7 +127,7 @@ class ChangePasswordView extends StatelessWidget {
               Obx(() {
                 return NewPasswordStatuTexts(
                     isContains: model.isContainsSpecialCharacter.value,
-                    content: "Özel karakter içeriyor (!#+=?-_.,*%).");
+                    content: r'Özel karakter içeriyor (!@#\$&*~).');
               }),
               Obx(() {
                 return NewPasswordStatuTexts(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/model/auth_model.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/tesdoc_controller.dart';
+import 'package:saglamoglu_muhasebe/core/states/app_settings.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 
 class HomeViewModel extends GetxController {
@@ -15,6 +16,7 @@ class HomeViewModel extends GetxController {
   TesdocController get tesdocController => TesdocController();
 
   AppUser get appUser => AppUser.init;
+  AppSettings get appSettings => AppSettings.init;
 
   static DateTime get today => DateTime.now();
 
@@ -83,7 +85,7 @@ class HomeViewModel extends GetxController {
   RxInt ikaSign = 0.obs;
   RxInt ikaComplete = 0.obs;
   Rx<DateTime> tesDocFilterStartDate = DateTime(2025, 12, 16).obs;
-  Rx<DateTime> tesDocFilterEndDateDate = DateTime.now().obs;
+  Rx<DateTime> tesDocFilterEndDate = DateTime.now().obs;
 
   Future<void> pickStartDate(
     BuildContext context,
@@ -94,34 +96,35 @@ class HomeViewModel extends GetxController {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2025, 12, 16),
-      lastDate: lastDate,
+      lastDate: DateTime.now(),
     );
 
-    if (pickedDate != null && pickedDate != selectedDate) {
+    if (pickedDate != null &&
+        pickedDate != selectedDate &&
+        pickedDate.isBefore(lastDate.add(const Duration(days: 1)))) {
       tesDocFilterStartDate.value = pickedDate;
     }
   }
 
   Future<void> pickEndDate(
-    BuildContext context,
-    DateTime selectedDate,
-    DateTime startDate,
-  ) async {
+      BuildContext context, DateTime selectedDate, DateTime startDate) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: startDate,
+      firstDate: DateTime(2025, 12, 16),
       lastDate: DateTime.now(),
     );
 
-    if (pickedDate != null && pickedDate != selectedDate) {
-      tesDocFilterEndDateDate.value = pickedDate;
+    if (pickedDate != null &&
+        pickedDate != selectedDate &&
+        pickedDate.isAfter(startDate.subtract(const Duration(days: 1)))) {
+      tesDocFilterEndDate.value = pickedDate;
     }
   }
 
   void clearKycDateFilter() {
     tesDocFilterStartDate.value = DateTime(2025, 12, 16);
-    tesDocFilterEndDateDate.value = DateTime.now();
+    tesDocFilterEndDate.value = DateTime.now();
   }
 
   Future<void> updateKycStatuCounts(
@@ -168,5 +171,53 @@ class HomeViewModel extends GetxController {
       filterEndDate,
     );
     ikaComplete.value = ikaComp ?? 0;
+  }
+
+  Future<void> downloadExcelDocKyc(
+      DateTime startDate, DateTime endDate, BuildContext context) async {
+    await tesdocController.saveAsExcelDoc(startDate, endDate);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("KYC Durum Raporu.xlsx indirildi")));
+    }
+  }
+
+  Future<void> updateKycCustomer(
+    String? docId,
+    BuildContext context,
+    String user,
+  ) async {
+    await tesdocController.updateData(
+      {
+        "signDateTime": Timestamp.fromDate(DateTime.now()),
+        "signUser": user,
+        "tesStatu": "2",
+      },
+      docId,
+      context,
+    );
+    await appSettings.getOldKycCustomers();
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Müşteri işlem durumu güncellendi."),
+        ),
+      );
+    }
+  }
+
+  bool kycExcelButtonVisibility(String? email) {
+    switch (email) {
+      case "olivia@saglamoglugroup.com":
+        return true;
+      case "canni@saglamoglugroup.com":
+        return true;
+      case "ozantokdemir@saglamoglugroup.com":
+        return true;
+      case "gabriel@saglamoglugroup.com":
+        return true;
+      default:
+        return false;
+    }
   }
 }

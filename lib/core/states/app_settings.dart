@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:saglamoglu_muhasebe/core/model/tesdoc_model.dart';
+import 'package:saglamoglu_muhasebe/core/network/modules/tesdoc_controller.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 import 'package:saglamoglu_muhasebe/view/authorized/model/authorized_view_model.dart';
 import 'package:saglamoglu_muhasebe/view/customers/model/customers_view_model.dart';
@@ -20,6 +22,7 @@ class AppSettings extends GetxController {
   HomeViewModel get homeViewModel => HomeViewModel.instance;
   MainViewModel get mainViewModel => MainViewModel.instance;
   AppUser get appUser => AppUser.instance;
+  TesdocController get tesController => TesdocController();
 
   final DateTime now = DateTime.now();
   final DateTime startDate = DateTime(2025, 12, 16);
@@ -30,7 +33,16 @@ class AppSettings extends GetxController {
     appUser.setUser(res);
   }
 
+  RxList<TesdocModel> oldKycCustomers = <TesdocModel>[].obs;
+
+  Future<void> getOldKycCustomers() async {
+    var res = await tesController.getOldCustomers();
+
+    oldKycCustomers.value = res;
+  }
+
   Future<void> startDataFetch() async {
+    getOldKycCustomers();
     customerViewMode.getCustomerData();
     deliveryDocViewModel.getAllData(false);
     authorizedViewModel.getAllData();

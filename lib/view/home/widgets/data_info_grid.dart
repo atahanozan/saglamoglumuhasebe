@@ -17,6 +17,7 @@ class DataInfoGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: firsWidget ?? SizedBox(),

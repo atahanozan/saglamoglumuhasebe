@@ -33,6 +33,13 @@ class SplashViewModel extends GetxController {
               builder: (_) => LoginView(),
             ),
           );
+        } else if (res.passwordNew == true) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => MainView(),
+            ),
+          );
         } else {
           Navigator.pushReplacement(
             context,

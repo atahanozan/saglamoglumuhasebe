@@ -231,4 +231,34 @@ class TesdocModel {
     }
     throw TesdocEnums.none;
   }
+
+  String tesStatuName() {
+    switch (tesStatu) {
+      case "0":
+        return "Başlanmadı";
+      case "1":
+        return "Süreç Başlatıldı İmza Bekleniyor";
+      case "2":
+        return "İmza Alındı";
+      case "3":
+        return "Tamamlandı";
+      default:
+        return "Başlanmadı";
+    }
+  }
+
+  String ikaStatuName() {
+    switch (ikaStatu) {
+      case "0":
+        return "Başlanmadı";
+      case "1":
+        return "Süreç Başlatıldı İmza Bekleniyor";
+      case "2":
+        return "İmza Alındı";
+      case "3":
+        return "Tamamlandı";
+      default:
+        return "Başlanmadı";
+    }
+  }
 }

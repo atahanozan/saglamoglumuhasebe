@@ -71,4 +71,46 @@ class AddUserViewModel extends GetxController {
       ),
     );
   }
+
+  Widget userStatuIcon(bool? userStatu) {
+    if (userStatu == true) {
+      return Icon(
+        Icons.check_circle,
+        color: Colors.green,
+      );
+    } else {
+      return Icon(
+        Icons.remove_circle,
+        color: Colors.red.shade200,
+      );
+    }
+  }
+
+  Widget userPasswordStatuIcon(bool? userStatu) {
+    if (userStatu == true) {
+      return Icon(
+        Icons.circle_rounded,
+        color: Colors.green,
+      );
+    } else {
+      return Icon(
+        Icons.circle_rounded,
+        color: Colors.black26,
+      );
+    }
+  }
+
+  Widget userStatuButtonIcon(bool? userStatu) {
+    if (userStatu == true) {
+      return Icon(
+        Icons.delete,
+        color: Colors.red,
+      );
+    } else {
+      return Icon(
+        Icons.add,
+        color: Colors.green,
+      );
+    }
+  }
 }

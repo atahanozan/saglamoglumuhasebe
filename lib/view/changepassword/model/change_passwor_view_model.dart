@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/auth_controller.dart';
+import 'package:saglamoglu_muhasebe/core/states/app_settings.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 
 class ChangePassworViewModel extends GetxController {
@@ -15,6 +16,7 @@ class ChangePassworViewModel extends GetxController {
 
   AppUser get appUser => AppUser.init;
   AuthController get authController => AuthController();
+  AppSettings get appSettings => AppSettings.init;
 
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
@@ -62,15 +64,19 @@ class ChangePassworViewModel extends GetxController {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Şifre boşluk içermemelidir.")));
       } else {
-        authController.changePassword(newPassword, thisUser);
+        await authController.changePassword(newPassword, thisUser);
         FirebaseFirestore.instance
             .collection("users")
             .doc(thisUser.uid)
             .update({
-          "passwordNew": true,
+          "passwordNew": false,
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Şifreniz başarı ile değiştirildi")));
+        appSettings.startDataFetch();
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Şifreniz başarı ile değiştirildi")));
+        }
       }
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saglamoglu_muhasebe/core/model/tesdoc_model.dart';
 import 'package:saglamoglu_muhasebe/core/network/modules/tesdoc_controller.dart';
+import 'package:saglamoglu_muhasebe/core/states/app_settings.dart';
 import 'package:saglamoglu_muhasebe/core/states/app_user.dart';
 
 class TesdocViewModel extends GetxController {
@@ -16,6 +17,7 @@ class TesdocViewModel extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   TesdocController get tesdocController => TesdocController();
   AppUser get appUser => AppUser.init;
+  AppSettings get appSettings => AppSettings.init;
 
   Rx<Stream> tesStream = TesdocController().tesDocStream(0, "", "").obs;
   RxString filterStatu = "".obs;
